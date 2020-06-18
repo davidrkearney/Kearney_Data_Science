@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-06-17T18:59:33-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Data Science, Big Data and Healthcare Research</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post.html" rel="alternate" type="text/html" title="Data Science, Big Data and Healthcare Research" /><published>2020-06-08T00:00:00-05:00</published><updated>2020-06-08T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post.html">&lt;h1 id=&quot;data-science-big-data-and-healthcare-research&quot;&gt;Data Science, Big Data and Healthcare Research&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-06-17T19:03:16-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Data Science, Big Data and Healthcare Research</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post.html" rel="alternate" type="text/html" title="Data Science, Big Data and Healthcare Research" /><published>2020-06-08T00:00:00-05:00</published><updated>2020-06-08T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/08/1st-markdown-post.html">&lt;h1 id=&quot;data-science-big-data-and-healthcare-research&quot;&gt;Data Science, Big Data and Healthcare Research&lt;/h1&gt;
 
 &lt;h2 id=&quot;this-post-will-consider-the-use-of-hive-spark-and-for-machine-learning-pipelines-and-workflows-heres-a-footnote-&quot;&gt;This post will consider the use of hive, spark, and for machine learning pipelines and workflows. Here’s a footnote &lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/h2&gt;
 
@@ -204,6 +204,161 @@
 &lt;/div&gt;
 &lt;/p&gt;
     &lt;/details&gt;
+&lt;/div&gt;
+    
+
+    
+    
+&lt;div class=&quot;cell border-box-sizing code_cell rendered&quot;&gt;
+&lt;div class=&quot;input&quot;&gt;
+
+&lt;div class=&quot;inner_cell&quot;&gt;
+    &lt;div class=&quot;input_area&quot;&gt;
+&lt;div class=&quot; highlight hl-ipython3&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;favorite_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;multiply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;divide&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;count_vowels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;aeiou&amp;#39;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+    
+
+    
+    
+&lt;div class=&quot;cell border-box-sizing code_cell rendered&quot;&gt;
+&lt;div class=&quot;input&quot;&gt;
+
+&lt;div class=&quot;inner_cell&quot;&gt;
+    &lt;div class=&quot;input_area&quot;&gt;
+&lt;div class=&quot; highlight hl-ipython3&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;example_module&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sm&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;favorite_number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# add two numbers together&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# count the number of vowels in a string&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count_vowels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Testing&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+    
+
+    
+    
+&lt;div class=&quot;cell border-box-sizing code_cell rendered&quot;&gt;
+&lt;div class=&quot;input&quot;&gt;
+
+&lt;div class=&quot;inner_cell&quot;&gt;
+    &lt;div class=&quot;input_area&quot;&gt;
+&lt;div class=&quot; highlight hl-ipython3&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;alive_progress&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alive_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;showtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;show_bars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;show_spinners&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config_handler&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;config_handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_global&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;theme&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;ascii&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spinner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;notes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;solid&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alive_bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;../../data/csvs/example.csv&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;file read, printing file&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;data printed ok, printing methods of data&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;process complete&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;output_wrapper&quot;&gt;
+&lt;div class=&quot;output&quot;&gt;
+
+&lt;div class=&quot;output_area&quot;&gt;
+
+&lt;div class=&quot;output_subarea output_text output_error&quot;&gt;
+&lt;pre&gt;
+&lt;span class=&quot;ansi-red-fg&quot;&gt;---------------------------------------------------------------------------&lt;/span&gt;
+&lt;span class=&quot;ansi-red-fg&quot;&gt;FileNotFoundError&lt;/span&gt;                         Traceback (most recent call last)
+&lt;span class=&quot;ansi-green-fg&quot;&gt;&amp;lt;ipython-input-3-24a2950a8375&amp;gt;&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;&amp;lt;module&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;      4&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;      5&lt;/span&gt; &lt;span class=&quot;ansi-green-fg&quot;&gt;with&lt;/span&gt; alive_bar&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ansi-cyan-fg&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ansi-green-fg&quot;&gt;as&lt;/span&gt; bar&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;ansi-green-fg&quot;&gt;----&amp;gt; 6&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;     &lt;/span&gt;df &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; pd&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;read_csv&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#39;../../data/csvs/example.csv&amp;#39;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;      7&lt;/span&gt;     bar&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#39;file read, printing file&amp;#39;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;      8&lt;/span&gt;     print&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;head&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;~/anaconda3/envs/insight/lib/python3.7/site-packages/pandas/io/parsers.py&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;parser_f&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, dialect, error_bad_lines, warn_bad_lines, delim_whitespace, low_memory, memory_map, float_precision)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    674&lt;/span&gt;         )
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    675&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-fg&quot;&gt;--&amp;gt; 676&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;ansi-green-fg&quot;&gt;return&lt;/span&gt; _read&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;filepath_or_buffer&lt;span class=&quot;ansi-blue-fg&quot;&gt;,&lt;/span&gt; kwds&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    677&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    678&lt;/span&gt;     parser_f&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;__name__ &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; name
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;~/anaconda3/envs/insight/lib/python3.7/site-packages/pandas/io/parsers.py&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;_read&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;(filepath_or_buffer, kwds)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    446&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    447&lt;/span&gt;     &lt;span class=&quot;ansi-red-fg&quot;&gt;# Create the parser.&lt;/span&gt;
+&lt;span class=&quot;ansi-green-fg&quot;&gt;--&amp;gt; 448&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;     &lt;/span&gt;parser &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; TextFileReader&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;fp_or_buf&lt;span class=&quot;ansi-blue-fg&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;**&lt;/span&gt;kwds&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    449&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    450&lt;/span&gt;     &lt;span class=&quot;ansi-green-fg&quot;&gt;if&lt;/span&gt; chunksize &lt;span class=&quot;ansi-green-fg&quot;&gt;or&lt;/span&gt; iterator&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;~/anaconda3/envs/insight/lib/python3.7/site-packages/pandas/io/parsers.py&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;(self, f, engine, **kwds)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    878&lt;/span&gt;             self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;options&lt;span class=&quot;ansi-blue-fg&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;has_index_names&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; kwds&lt;span class=&quot;ansi-blue-fg&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;has_index_names&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    879&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-fg&quot;&gt;--&amp;gt; 880&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;         &lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;_make_engine&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;engine&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    881&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;    882&lt;/span&gt;     &lt;span class=&quot;ansi-green-fg&quot;&gt;def&lt;/span&gt; close&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;~/anaconda3/envs/insight/lib/python3.7/site-packages/pandas/io/parsers.py&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;_make_engine&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;(self, engine)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1112&lt;/span&gt;     &lt;span class=&quot;ansi-green-fg&quot;&gt;def&lt;/span&gt; _make_engine&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;,&lt;/span&gt; engine&lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;c&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1113&lt;/span&gt;         &lt;span class=&quot;ansi-green-fg&quot;&gt;if&lt;/span&gt; engine &lt;span class=&quot;ansi-blue-fg&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;c&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;ansi-green-fg&quot;&gt;-&amp;gt; 1114&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;             &lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;_engine &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; CParserWrapper&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;f&lt;span class=&quot;ansi-blue-fg&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;**&lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;options&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1115&lt;/span&gt;         &lt;span class=&quot;ansi-green-fg&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1116&lt;/span&gt;             &lt;span class=&quot;ansi-green-fg&quot;&gt;if&lt;/span&gt; engine &lt;span class=&quot;ansi-blue-fg&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;python&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;:&lt;/span&gt;
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;~/anaconda3/envs/insight/lib/python3.7/site-packages/pandas/io/parsers.py&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;(self, src, **kwds)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1889&lt;/span&gt;         kwds&lt;span class=&quot;ansi-blue-fg&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;&amp;#34;usecols&amp;#34;&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;usecols
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1890&lt;/span&gt; 
+&lt;span class=&quot;ansi-green-fg&quot;&gt;-&amp;gt; 1891&lt;/span&gt;&lt;span class=&quot;ansi-red-fg&quot;&gt;         &lt;/span&gt;self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;_reader &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; parsers&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;TextReader&lt;span class=&quot;ansi-blue-fg&quot;&gt;(&lt;/span&gt;src&lt;span class=&quot;ansi-blue-fg&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ansi-blue-fg&quot;&gt;**&lt;/span&gt;kwds&lt;span class=&quot;ansi-blue-fg&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1892&lt;/span&gt;         self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;unnamed_cols &lt;span class=&quot;ansi-blue-fg&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;_reader&lt;span class=&quot;ansi-blue-fg&quot;&gt;.&lt;/span&gt;unnamed_cols
+&lt;span class=&quot;ansi-green-intense-fg ansi-bold&quot;&gt;   1893&lt;/span&gt; 
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;pandas/_libs/parsers.pyx&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;pandas._libs.parsers.TextReader.__cinit__&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;ansi-green-fg&quot;&gt;pandas/_libs/parsers.pyx&lt;/span&gt; in &lt;span class=&quot;ansi-cyan-fg&quot;&gt;pandas._libs.parsers.TextReader._setup_parser_source&lt;/span&gt;&lt;span class=&quot;ansi-blue-fg&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;ansi-red-fg&quot;&gt;FileNotFoundError&lt;/span&gt;: [Errno 2] File ../../data/csvs/example.csv does not exist: &amp;#39;../../data/csvs/example.csv&amp;#39;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
 &lt;/div&gt;
     
 
