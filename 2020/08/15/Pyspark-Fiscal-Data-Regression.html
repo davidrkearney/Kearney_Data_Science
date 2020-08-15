@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Title | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Title" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-15T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","@type":"BlogPosting","headline":"Title","dateModified":"2020-08-15T00:00:00-05:00","datePublished":"2020-08-15T00:00:00-05:00","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Title | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Title" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-15T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","@type":"BlogPosting","headline":"Title","dateModified":"2020-08-15T00:00:00-05:00","datePublished":"2020-08-15T00:00:00-05:00","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Title</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-15T00:00:00-05:00" itemprop="datePublished">
+        Aug 15, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-08-15-Pyspark-Fiscal-Data-Regression.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-08-15-Pyspark-Fiscal-Data-Regression.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-08-15-Pyspark-Fiscal-Data-Regression.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-08-15-Pyspark-Fiscal-Data-Regression.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">StringType</span><span class="p">,</span><span class="n">BooleanType</span><span class="p">,</span><span class="n">DateType</span><span class="p">,</span><span class="n">IntegerType</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Load data from a CSV</span>
+<span class="n">file_location</span> <span class="o">=</span> <span class="s2">&quot;/FileStore/tables/df_panel_fix.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;CSV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_location</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .table-result-container {
+    max-height: 300px;
+    overflow: auto;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style><div class="table-result-container"><table class="table-result"><thead style="background-color: white"><tr><th>_c0</th><th>province</th><th>specific</th><th>general</th><th>year</th><th>gdp</th><th>fdi</th><th>rnr</th><th>rr</th><th>i</th><th>fr</th><th>reg</th><th>it</th></tr></thead><tbody><tr><td>0</td><td>Anhui</td><td>147002.0</td><td>null</td><td>1996</td><td>2093.3</td><td>50661</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1128873</td><td>East China</td><td>631930</td></tr><tr><td>1</td><td>Anhui</td><td>151981.0</td><td>null</td><td>1997</td><td>2347.32</td><td>43443</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1356287</td><td>East China</td><td>657860</td></tr><tr><td>2</td><td>Anhui</td><td>174930.0</td><td>null</td><td>1998</td><td>2542.96</td><td>27673</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1518236</td><td>East China</td><td>889463</td></tr><tr><td>3</td><td>Anhui</td><td>285324.0</td><td>null</td><td>1999</td><td>2712.34</td><td>26131</td><td>null</td><td>null</td><td>null</td><td>1646891</td><td>East China</td><td>1227364</td></tr><tr><td>4</td><td>Anhui</td><td>195580.0</td><td>32100.0</td><td>2000</td><td>2902.09</td><td>31847</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1601508</td><td>East China</td><td>1499110</td></tr></tbody></table></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;fiscal_stats&quot;</span><span class="p">)</span>
+
+<span class="n">sums</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select year, sum(it) as total_yearly_it, sum(fr) as total_yearly_fr</span>
+<span class="s2">from fiscal_stats</span>
+<span class="s2">group by 1</span>
+<span class="s2">order by year asc</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">sums</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+---------------+---------------+
+year|total_yearly_it|total_yearly_fr|
++----+---------------+---------------+
+1996|       19825341|    2.9579215E7|
+1997|       21391321|    2.9110765E7|
+1998|       25511453|    3.8154711E7|
+1999|       31922107|    4.2128627E7|
+2000|       38721293|    4.8288092E7|
+2001|       50754944|    5.8910649E7|
+2002|       62375881|    6.2071474E7|
+2003|       69316709|    7.2479293E7|
+2004|       88626786|           null|
+2005|       98263665|           null|
+2006|      119517822|    1.3349148E8|
+2007|      153467611|   2.27385701E8|
++----+---------------+---------------+
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>summary</th>
+      <td>count</td>
+      <td>mean</td>
+      <td>stddev</td>
+      <td>min</td>
+      <td>max</td>
+    </tr>
+    <tr>
+      <th>_c0</th>
+      <td>360</td>
+      <td>179.5</td>
+      <td>104.06728592598157</td>
+      <td>0</td>
+      <td>359</td>
+    </tr>
+    <tr>
+      <th>province</th>
+      <td>360</td>
+      <td>None</td>
+      <td>None</td>
+      <td>Anhui</td>
+      <td>Zhejiang</td>
+    </tr>
+    <tr>
+      <th>specific</th>
+      <td>356</td>
+      <td>583470.7303370787</td>
+      <td>654055.3290782663</td>
+      <td>8964.0</td>
+      <td>3937966.0</td>
+    </tr>
+    <tr>
+      <th>general</th>
+      <td>169</td>
+      <td>309127.53846153844</td>
+      <td>355423.5760674793</td>
+      <td>0.0</td>
+      <td>1737800.0</td>
+    </tr>
+    <tr>
+      <th>year</th>
+      <td>360</td>
+      <td>2001.5</td>
+      <td>3.4568570586927794</td>
+      <td>1996</td>
+      <td>2007</td>
+    </tr>
+    <tr>
+      <th>gdp</th>
+      <td>360</td>
+      <td>4428.653416666667</td>
+      <td>4484.668659976412</td>
+      <td>64.98</td>
+      <td>31777.01</td>
+    </tr>
+    <tr>
+      <th>fdi</th>
+      <td>360</td>
+      <td>196139.38333333333</td>
+      <td>303043.97011891654</td>
+      <td>2</td>
+      <td>1743140</td>
+    </tr>
+    <tr>
+      <th>rnr</th>
+      <td>294</td>
+      <td>0.0355944252244898</td>
+      <td>0.16061503029299648</td>
+      <td>0.0</td>
+      <td>1.214285714</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>296</td>
+      <td>0.059688621057432424</td>
+      <td>0.15673351824073453</td>
+      <td>0.0</td>
+      <td>0.84</td>
+    </tr>
+    <tr>
+      <th>i</th>
+      <td>287</td>
+      <td>0.08376351662369343</td>
+      <td>0.1838933104683607</td>
+      <td>0.0</td>
+      <td>1.05</td>
+    </tr>
+    <tr>
+      <th>fr</th>
+      <td>295</td>
+      <td>2522449.0034013605</td>
+      <td>3491329.8613106664</td>
+      <td>#REF!</td>
+      <td>9898522</td>
+    </tr>
+    <tr>
+      <th>reg</th>
+      <td>360</td>
+      <td>None</td>
+      <td>None</td>
+      <td>East China</td>
+      <td>Southwest China</td>
+    </tr>
+    <tr>
+      <th>it</th>
+      <td>360</td>
+      <td>2165819.2583333333</td>
+      <td>1769294.2935487411</td>
+      <td>147897</td>
+      <td>10533312</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;gdp&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;gdp&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;specific&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;specific&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;general&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;general&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;fdi&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;fdi&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;rnr&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;rnr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;rr&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;rr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span> \
+<span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;fr&quot;</span><span class="p">,</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;fr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">root
+-- _c0: integer (nullable = true)
+-- province: string (nullable = true)
+-- specific: integer (nullable = true)
+-- general: integer (nullable = true)
+-- year: integer (nullable = true)
+-- gdp: integer (nullable = true)
+-- fdi: integer (nullable = true)
+-- rnr: integer (nullable = true)
+-- rr: integer (nullable = true)
+-- i: integer (nullable = true)
+-- fr: integer (nullable = true)
+-- reg: string (nullable = true)
+-- it: integer (nullable = true)
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">VectorAssembler</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.regression</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gdp&#39;</span><span class="p">,</span> <span class="s1">&#39;fdi&#39;</span><span class="p">],</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">assembler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;specific&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+--------+----+
+specific|year|
++--------+----+
+  147002|1996|
+  151981|1997|
+  174930|1998|
+  285324|1999|
+  195580|2000|
+  250898|2001|
+  434149|2002|
+  619201|2003|
+  898441|2004|
+  898441|2005|
+ 1457872|2006|
+ 2213991|2007|
+  165957|1996|
+  165957|1997|
+  245198|1998|
+  388083|1999|
+  281769|2000|
+  441923|2001|
+  558569|2002|
+  642581|2003|
++--------+----+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lr</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">featuresCol</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">labelCol</span><span class="o">=</span><span class="s1">&#39;it&#39;</span><span class="p">)</span>
+<span class="n">lr_model</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+
+<span class="n">trainingSummary</span> <span class="o">=</span> <span class="n">lr_model</span><span class="o">.</span><span class="n">summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coefficients: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lr_model</span><span class="o">.</span><span class="n">coefficients</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMSE: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">trainingSummary</span><span class="o">.</span><span class="n">rootMeanSquaredError</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R2: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">trainingSummary</span><span class="o">.</span><span class="n">r2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Coefficients: [495.05888709337756,-4.968141828763066]
+RMSE: 1234228.673087
+R2: 0.512023
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lr_predictions</span> <span class="o">=</span> <span class="n">lr_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">lr_predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span><span class="s2">&quot;it&quot;</span><span class="p">,</span><span class="s2">&quot;features&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.evaluation</span> <span class="kn">import</span> <span class="n">RegressionEvaluator</span>
+<span class="n">lr_evaluator</span> <span class="o">=</span> <span class="n">RegressionEvaluator</span><span class="p">(</span><span class="n">predictionCol</span><span class="o">=</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span> \
+                 <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;it&quot;</span><span class="p">,</span><span class="n">metricName</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+------------------+-------+----------------+
+        prediction|     it|        features|
++------------------+-------+----------------+
+1732528.7382477913| 631930|[2093.0,50661.0]|
+1894133.7432895212| 657860|[2347.0,43443.0]|
+2069017.8229123235| 889463|[2542.0,27673.0]|
+2160838.7084181504|1227364|[2712.0,26131.0]|
+2226501.9982726825|1499110|[2902.0,31847.0]|
++------------------+-------+----------------+
+only showing top 5 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R Squared (R2) on test data = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">lr_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">lr_predictions</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">R Squared (R2) on test data = 0.512023
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;numIterations: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">trainingSummary</span><span class="o">.</span><span class="n">totalIterations</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;objectiveHistory: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">trainingSummary</span><span class="o">.</span><span class="n">objectiveHistory</span><span class="p">))</span>
+<span class="n">trainingSummary</span><span class="o">.</span><span class="n">residuals</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">numIterations: 1
+objectiveHistory: [0.0]
++-------------------+
+          residuals|
++-------------------+
+-1100598.7382477913|
+-1236273.7432895212|
+-1179554.8229123235|
+ -933474.7084181504|
+ -727391.9982726825|
+-222546.39659531135|
+ -94585.30175113119|
+ 108072.63313654158|
+ 389732.58121094666|
+  621021.2194867637|
+  1885768.997742407|
+  3938310.059555837|
+  -554084.125169754|
+ -615660.3899049093|
+ -352195.3468934437|
+-348450.00565795833|
+ -918476.5594253046|
+ -710059.9133252408|
+-1148661.0062004486|
+  -911572.322055324|
++-------------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">lr_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
+<span class="n">predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span><span class="s2">&quot;it&quot;</span><span class="p">,</span><span class="s2">&quot;features&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+------------------+-------+---------------+
+        prediction|     it|       features|
++------------------+-------+---------------+
+ 976371.9212205639| 306114|   [64.0,679.0]|
+ 990722.2032541803| 415547|   [91.0,481.0]|
+1016348.0830204486| 983251|  [139.0,106.0]|
+1036290.7062801318| 218361|  [184.0,576.0]|
+1034023.4471330958| 178668| [202.0,2826.0]|
+1060130.0768520113| 274994| [245.0,1856.0]|
+1023513.0851009073| 546541|[263.0,11020.0]|
+   1053250.6267921| 361358| [264.0,5134.0]|
+1123768.8091592425| 866691| [377.0,2200.0]|
+1128604.8330225947| 948521| [390.0,2522.0]|
+ 810587.2575938476| 177748|[442.0,71715.0]|
+ 1159703.254297337| 736165| [445.0,1743.0]|
+ 1066975.770986663|1260633|[466.0,22500.0]|
+1288507.6625716756|1423771| [725.0,3718.0]|
+ 1320055.238474972| 573905| [793.0,4144.0]|
+1188611.0570700848|2347862|[797.0,31000.0]|
+ 1321857.482976733| 582711| [805.0,4977.0]|
+1033849.5995896922| 746784|[819.0,64343.0]|
+ 1445051.792853667|1216605|[1029.0,2501.0]|
+1437887.1056682135|1258100|[1052.0,6235.0]|
++------------------+-------+---------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.regression</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">featuresCol</span> <span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">labelCol</span> <span class="o">=</span> <span class="s1">&#39;it&#39;</span><span class="p">)</span>
+<span class="n">dt_model</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">dt_predictions</span> <span class="o">=</span> <span class="n">dt_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">dt_evaluator</span> <span class="o">=</span> <span class="n">RegressionEvaluator</span><span class="p">(</span>
+    <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;it&quot;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span> <span class="n">metricName</span><span class="o">=</span><span class="s2">&quot;rmse&quot;</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">dt_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">dt_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Root Mean Squared Error (RMSE) on test data = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rmse</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Root Mean Squared Error (RMSE) on test data = 1.01114e+06
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.regression</span> <span class="kn">import</span> <span class="n">GBTRegressor</span>
+<span class="n">gbt</span> <span class="o">=</span> <span class="n">GBTRegressor</span><span class="p">(</span><span class="n">featuresCol</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">labelCol</span> <span class="o">=</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="n">maxIter</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">gbt_model</span> <span class="o">=</span> <span class="n">gbt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">gbt_predictions</span> <span class="o">=</span> <span class="n">gbt_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+<span class="n">gbt_predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+
+<span class="n">gbt_evaluator</span> <span class="o">=</span> <span class="n">RegressionEvaluator</span><span class="p">(</span>
+    <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;it&quot;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span> <span class="n">metricName</span><span class="o">=</span><span class="s2">&quot;rmse&quot;</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">gbt_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">gbt_predictions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Root Mean Squared Error (RMSE) on test data = </span><span class="si">%g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rmse</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+------------------+-------+----------------+
+        prediction|     it|        features|
++------------------+-------+----------------+
+ 1388898.308543053| 631930|[2093.0,50661.0]|
+ 1388898.308543053| 657860|[2347.0,43443.0]|
+1649083.6277172007| 889463|[2542.0,27673.0]|
+1649083.6277172007|1227364|[2712.0,26131.0]|
+1649083.6277172007|1499110|[2902.0,31847.0]|
++------------------+-------+----------------+
+only showing top 5 rows
+
+Root Mean Squared Error (RMSE) on test data = 778728
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
