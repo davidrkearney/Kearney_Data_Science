@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://davidrkearney.github.io/blog/2020/06/07/kwargs-decorators.html</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/06/07/kwargs-decorators.html</loc>
 <lastmod>2020-06-07T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/blog/2020/08/15/Pyspark-Fiscal-Data-Regression.html</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/08/15/Pyspark-Fiscal-Data-Regression.html</loc>
 <lastmod>2020-08-15T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/blog/about/</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/about/</loc>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/blog/</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/</loc>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/blog/search/</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/search/</loc>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/blog/categories/</loc>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/categories/</loc>
 </url>
 </urlset>
