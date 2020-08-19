@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>RDDs and Schemas and Data Types with Pyspark | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="RDDs and Schemas and Data Types with Pyspark" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-21T00:00:00-05:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html","headline":"RDDs and Schemas and Data Types with Pyspark","dateModified":"2020-08-21T00:00:00-05:00","datePublished":"2020-08-21T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>RDDs and Schemas and Data Types with Pyspark | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="RDDs and Schemas and Data Types with Pyspark" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-21T00:00:00-05:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html","headline":"RDDs and Schemas and Data Types with Pyspark","dateModified":"2020-08-21T00:00:00-05:00","datePublished":"2020-08-21T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">RDDs and Schemas and Data Types with Pyspark</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-21T00:00:00-05:00" itemprop="datePublished">
+        Aug 21, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      11 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-08-21-RDDs and Schemas and Data Types with Pyspark.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-08-21-RDDs+and+Schemas+and+Data+Types+with+Pyspark.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-08-21-RDDs and Schemas and Data Types with Pyspark.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-08-21-RDDs and Schemas and Data Types with Pyspark.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+
+<span class="c1"># Load data from a CSV</span>
+<span class="n">file_location</span> <span class="o">=</span> <span class="s2">&quot;/FileStore/tables/df_panel_fix.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;CSV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_location</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .table-result-container {
+    max-height: 300px;
+    overflow: auto;
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style><div class="table-result-container"><table class="table-result"><thead style="background-color: white"><tr><th>_c0</th><th>province</th><th>specific</th><th>general</th><th>year</th><th>gdp</th><th>fdi</th><th>rnr</th><th>rr</th><th>i</th><th>fr</th><th>reg</th><th>it</th></tr></thead><tbody><tr><td>0</td><td>Anhui</td><td>147002.0</td><td>null</td><td>1996</td><td>2093.3</td><td>50661</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1128873</td><td>East China</td><td>631930</td></tr><tr><td>1</td><td>Anhui</td><td>151981.0</td><td>null</td><td>1997</td><td>2347.32</td><td>43443</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1356287</td><td>East China</td><td>657860</td></tr><tr><td>2</td><td>Anhui</td><td>174930.0</td><td>null</td><td>1998</td><td>2542.96</td><td>27673</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1518236</td><td>East China</td><td>889463</td></tr><tr><td>3</td><td>Anhui</td><td>285324.0</td><td>null</td><td>1999</td><td>2712.34</td><td>26131</td><td>null</td><td>null</td><td>null</td><td>1646891</td><td>East China</td><td>1227364</td></tr><tr><td>4</td><td>Anhui</td><td>195580.0</td><td>32100.0</td><td>2000</td><td>2902.09</td><td>31847</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1601508</td><td>East China</td><td>1499110</td></tr></tbody></table></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+---+--------+---------+--------+----+-------+------+----+-----------+-----------+-------+-----------+-------+
+_c0|province| specific| general|year|    gdp|   fdi| rnr|         rr|          i|     fr|        reg|     it|
++---+--------+---------+--------+----+-------+------+----+-----------+-----------+-------+-----------+-------+
+  0|   Anhui| 147002.0|    null|1996| 2093.3| 50661| 0.0|        0.0|        0.0|1128873| East China| 631930|
+  1|   Anhui| 151981.0|    null|1997|2347.32| 43443| 0.0|        0.0|        0.0|1356287| East China| 657860|
+  2|   Anhui| 174930.0|    null|1998|2542.96| 27673| 0.0|        0.0|        0.0|1518236| East China| 889463|
+  3|   Anhui| 285324.0|    null|1999|2712.34| 26131|null|       null|       null|1646891| East China|1227364|
+  4|   Anhui| 195580.0| 32100.0|2000|2902.09| 31847| 0.0|        0.0|        0.0|1601508| East China|1499110|
+  5|   Anhui| 250898.0|    null|2001|3246.71| 33672| 0.0|        0.0|        0.0|1672445| East China|2165189|
+  6|   Anhui| 434149.0| 66529.0|2002|3519.72| 38375| 0.0|        0.0|        0.0|1677840| East China|2404936|
+  7|   Anhui| 619201.0| 52108.0|2003|3923.11| 36720| 0.0|        0.0|        0.0|1896479| East China|2815820|
+  8|   Anhui| 898441.0|349699.0|2004| 4759.3| 54669| 0.0|        0.0|        0.0|   null| East China|3422176|
+  9|   Anhui| 898441.0|    null|2005|5350.17| 69000| 0.0|        0.0|0.324324324|   null| East China|3874846|
+ 10|   Anhui|1457872.0|279052.0|2006| 6112.5|139354| 0.0|        0.0|0.324324324|3434548| East China|5167300|
+ 11|   Anhui|2213991.0|178705.0|2007|7360.92|299892| 0.0|        0.0|0.324324324|4468640| East China|7040099|
+ 12| Beijing| 165957.0|    null|1996| 1789.2|155290|null|       null|       null| 634562|North China| 508135|
+ 13| Beijing| 165957.0|    null|1997|2077.09|159286| 0.0|        0.0|        0.6| 634562|North China| 569283|
+ 14| Beijing| 245198.0|    null|1998|2377.18|216800| 0.0|        0.0|       0.53| 938788|North China| 695528|
+ 15| Beijing| 388083.0|    null|1999|2678.82|197525| 0.0|        0.0|       0.53|   null|North China| 944047|
+ 16| Beijing| 281769.0|188633.0|2000|3161.66|168368| 0.0|        0.0|       0.53|1667114|North China| 757990|
+ 17| Beijing| 441923.0|    null|2001|3707.96|176818| 0.0|        0.0|       0.53|2093925|North China|1194728|
+ 18| Beijing| 558569.0|280277.0|2002| 4315.0|172464| 0.0|        0.0|       0.53|2511249|North China|1078754|
+ 19| Beijing| 642581.0|269596.0|2003|5007.21|219126| 0.0|0.794871795|        0.0|2823366|North China|1426600|
++---+--------+---------+--------+----+-------+------+----+-----------+-----------+-------+-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">root
+-- _c0: integer (nullable = true)
+-- province: string (nullable = true)
+-- specific: double (nullable = true)
+-- general: double (nullable = true)
+-- year: integer (nullable = true)
+-- gdp: double (nullable = true)
+-- fdi: integer (nullable = true)
+-- rnr: double (nullable = true)
+-- rr: double (nullable = true)
+-- i: double (nullable = true)
+-- fr: string (nullable = true)
+-- reg: string (nullable = true)
+-- it: integer (nullable = true)
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[64]: [&#39;_c0&#39;,
+ &#39;province&#39;,
+ &#39;specific&#39;,
+ &#39;general&#39;,
+ &#39;year&#39;,
+ &#39;gdp&#39;,
+ &#39;fdi&#39;,
+ &#39;rnr&#39;,
+ &#39;rr&#39;,
+ &#39;i&#39;,
+ &#39;fr&#39;,
+ &#39;reg&#39;,
+ &#39;it&#39;]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[65]: DataFrame[summary: string, _c0: string, province: string, specific: string, general: string, year: string, gdp: string, fdi: string, rnr: string, rr: string, i: string, fr: string, reg: string, it: string]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">StructField</span><span class="p">,</span><span class="n">StringType</span><span class="p">,</span><span class="n">IntegerType</span><span class="p">,</span><span class="n">StructType</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_schema</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;_c0&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;province&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;specific&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;general&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;gdp&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;fdi&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;rnr&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;rr&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;fr&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;reg&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">,</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;it&quot;</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_struc</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">data_schema</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;CSV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">schema</span><span class="p">(</span><span class="n">final_struc</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_location</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">root
+-- _c0: integer (nullable = true)
+-- province: string (nullable = true)
+-- specific: integer (nullable = true)
+-- general: integer (nullable = true)
+-- year: integer (nullable = true)
+-- gdp: integer (nullable = true)
+-- fdi: integer (nullable = true)
+-- rnr: integer (nullable = true)
+-- rr: integer (nullable = true)
+-- i: integer (nullable = true)
+-- fr: integer (nullable = true)
+-- reg: string (nullable = true)
+-- it: integer (nullable = true)
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[72]: Column&lt;b&#39;fr&#39;&gt;</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[73]: pyspark.sql.column.Column</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;fr&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[74]: DataFrame[fr: int]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;fr&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[75]: pyspark.sql.dataframe.DataFrame</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;fr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+-------+
+     fr|
++-------+
+   null|
+1128873|
+1356287|
+1518236|
+1646891|
+1601508|
+1672445|
+1677840|
+1896479|
+   null|
+   null|
+3434548|
+4468640|
+ 634562|
+ 634562|
+ 938788|
+   null|
+1667114|
+2093925|
+2511249|
++-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[77]: [Row(_c0=None, province=&#39;province&#39;, specific=None, general=None, year=None, gdp=None, fdi=None, rnr=None, rr=None, i=None, fr=None, reg=&#39;reg&#39;, it=None),
+ Row(_c0=0, province=&#39;Anhui&#39;, specific=None, general=None, year=1996, gdp=None, fdi=50661, rnr=None, rr=None, i=None, fr=1128873, reg=&#39;East China&#39;, it=631930)]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span><span class="s1">&#39;fr&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[78]: DataFrame[reg: string, fr: int]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span><span class="s1">&#39;fr&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+-----------+-------+
+        reg|     fr|
++-----------+-------+
+        reg|   null|
+ East China|1128873|
+ East China|1356287|
+ East China|1518236|
+ East China|1646891|
+ East China|1601508|
+ East China|1672445|
+ East China|1677840|
+ East China|1896479|
+ East China|   null|
+ East China|   null|
+ East China|3434548|
+ East China|4468640|
+North China| 634562|
+North China| 634562|
+North China| 938788|
+North China|   null|
+North China|1667114|
+North China|2093925|
+North China|2511249|
++-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;fiscal_revenue&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+--------------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|fiscal_revenue|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+--------------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|          null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|       1128873|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|       1356287|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|       1518236|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|       1646891|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|       1601508|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|       1672445|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|       1677840|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|       1896479|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|          null|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|          null|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|       3434548|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|       4468640|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|        634562|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|        634562|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|        938788|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|          null|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|       1667114|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|       2093925|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|       2511249|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+--------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumnRenamed</span><span class="p">(</span><span class="s1">&#39;fr&#39;</span><span class="p">,</span><span class="s1">&#39;new_fiscal_revenue&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+------------------+-----------+-------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|new_fiscal_revenue|        reg|     it|
++----+--------+--------+-------+----+----+------+----+----+----+------------------+-----------+-------+
+null|province|    null|   null|null|null|  null|null|null|null|              null|        reg|   null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|           1128873| East China| 631930|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|           1356287| East China| 657860|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|           1518236| East China| 889463|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|           1646891| East China|1227364|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|           1601508| East China|1499110|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|           1672445| East China|2165189|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|           1677840| East China|2404936|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|           1896479| East China|2815820|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|              null| East China|3422176|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|              null| East China|3874846|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|           3434548| East China|5167300|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|           4468640| East China|7040099|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null|            634562|North China| 508135|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null|            634562|North China| 569283|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null|            938788|North China| 695528|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|              null|North China| 944047|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|           1667114|North China| 757990|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|           2093925|North China|1194728|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|           2511249|North China|1078754|
++----+--------+--------+-------+----+----+------+----+----+----+------------------+-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;double_fiscal_revenue&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+---------------------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|double_fiscal_revenue|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+---------------------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|                 null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|              2257746|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|              2712574|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|              3036472|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|              3293782|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|              3203016|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|              3344890|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|              3355680|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|              3792958|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|                 null|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|                 null|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|              6869096|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|              8937280|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|              1269124|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|              1269124|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|              1877576|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|                 null|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|              3334228|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|              4187850|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|              5022498|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+---------------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;add_fiscal_revenue&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+------------------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|add_fiscal_revenue|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+------------------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|              null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|           1128874|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|           1356288|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|           1518237|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|           1646892|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|           1601509|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|           1672446|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|           1677841|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|           1896480|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|              null|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|              null|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|           3434549|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|           4468641|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|            634563|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|            634563|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|            938789|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|              null|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|           1667115|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|           2093926|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|           2511250|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+------------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;half_fiscal_revenue&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+-------------------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|half_fiscal_revenue|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+-------------------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|               null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|           564436.5|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|           678143.5|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|           759118.0|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|           823445.5|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|           800754.0|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|           836222.5|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|           838920.0|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|           948239.5|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|               null|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|               null|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|          1717274.0|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|          2234320.0|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|           317281.0|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|           317281.0|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|           469394.0|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|               null|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|           833557.0|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|          1046962.5|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|          1255624.5|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+-------------------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s1">&#39;half_fr&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[86]: DataFrame[_c0: int, province: string, specific: int, general: int, year: int, gdp: int, fdi: int, rnr: int, rr: int, i: int, fr: int, reg: string, it: int, half_fr: double]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;economic_data&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql_results</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM economic_data&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql_results</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">Out[89]: DataFrame[_c0: int, province: string, specific: int, general: int, year: int, gdp: int, fdi: int, rnr: int, rr: int, i: int, fr: int, reg: string, it: int]</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql_results</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+ _c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|     fr|        reg|     it|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+null|province|    null|   null|null|null|  null|null|null|null|   null|        reg|   null|
+   0|   Anhui|    null|   null|1996|null| 50661|null|null|null|1128873| East China| 631930|
+   1|   Anhui|    null|   null|1997|null| 43443|null|null|null|1356287| East China| 657860|
+   2|   Anhui|    null|   null|1998|null| 27673|null|null|null|1518236| East China| 889463|
+   3|   Anhui|    null|   null|1999|null| 26131|null|null|null|1646891| East China|1227364|
+   4|   Anhui|    null|   null|2000|null| 31847|null|null|null|1601508| East China|1499110|
+   5|   Anhui|    null|   null|2001|null| 33672|null|null|null|1672445| East China|2165189|
+   6|   Anhui|    null|   null|2002|null| 38375|null|null|null|1677840| East China|2404936|
+   7|   Anhui|    null|   null|2003|null| 36720|null|null|null|1896479| East China|2815820|
+   8|   Anhui|    null|   null|2004|null| 54669|null|null|null|   null| East China|3422176|
+   9|   Anhui|    null|   null|2005|null| 69000|null|null|null|   null| East China|3874846|
+  10|   Anhui|    null|   null|2006|null|139354|null|null|null|3434548| East China|5167300|
+  11|   Anhui|    null|   null|2007|null|299892|null|null|null|4468640| East China|7040099|
+  12| Beijing|    null|   null|1996|null|155290|null|null|null| 634562|North China| 508135|
+  13| Beijing|    null|   null|1997|null|159286|null|null|null| 634562|North China| 569283|
+  14| Beijing|    null|   null|1998|null|216800|null|null|null| 938788|North China| 695528|
+  15| Beijing|    null|   null|1999|null|197525|null|null|null|   null|North China| 944047|
+  16| Beijing|    null|   null|2000|null|168368|null|null|null|1667114|North China| 757990|
+  17| Beijing|    null|   null|2001|null|176818|null|null|null|2093925|North China|1194728|
+  18| Beijing|    null|   null|2002|null|172464|null|null|null|2511249|North China|1078754|
++----+--------+--------+-------+----+----+------+----+----+----+-------+-----------+-------+
+only showing top 20 rows
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM economic_data WHERE fr=634562&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style scoped="">
+  .ansiout {
+    display: block;
+    unicode-bidi: embed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: "Source Code Pro", "Menlo", monospace;;
+    font-size: 13px;
+    color: #555;
+    margin-left: 4px;
+    line-height: 19px;
+  }
+</style>
+<div class="ansiout">+---+--------+--------+-------+----+----+------+----+----+----+------+-----------+------+
+_c0|province|specific|general|year| gdp|   fdi| rnr|  rr|   i|    fr|        reg|    it|
++---+--------+--------+-------+----+----+------+----+----+----+------+-----------+------+
+ 12| Beijing|    null|   null|1996|null|155290|null|null|null|634562|North China|508135|
+ 13| Beijing|    null|   null|1997|null|159286|null|null|null|634562|North China|569283|
++---+--------+--------+-------+----+----+------+----+----+----+------+-----------+------+
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/08/21/RDDs-and-Schemas-and-Data-Types-with-Pyspark.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/_davidkearney" title="_davidkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
