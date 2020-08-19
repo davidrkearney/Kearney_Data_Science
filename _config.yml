@@ -39,7 +39,7 @@ baseurl: "/Kearney_Data_Science" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: _davidkearney
+    twitter: 
     github: davidrkearney
 
 # Set this to true to get LaTeX math equation support
