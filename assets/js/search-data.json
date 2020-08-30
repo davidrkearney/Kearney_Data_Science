@@ -90,7 +90,7 @@
   
     
         ,"post8": {
-            "title": "Data Science, Big Data and Healthcare Research",
+            "title": "Pyspark for Data Science",
             "content": "Data Science, Big Data and Healthcare Research . This post will consider the use of hive, spark, and for machine learning pipelines and workflows. . # Prints &#39;2&#39; print(1+1) .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/markdown/2020/06/28/2st-markdown-post.html",
             "relUrl": "/markdown/2020/06/28/2st-markdown-post.html",
