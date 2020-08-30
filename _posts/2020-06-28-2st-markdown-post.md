@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: 1st Markdown Post
 categories: [markdown]
-title: Data Science, Big Data and Healthcare Research
+title: Pyspark for Data Science
 ---
 # Data Science, Big Data and Healthcare Research
 
