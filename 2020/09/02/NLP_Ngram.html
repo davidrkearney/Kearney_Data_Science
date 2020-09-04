@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>NLP ngrams With Python | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="NLP ngrams With Python" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html","headline":"NLP ngrams With Python","dateModified":"2020-09-02T00:00:00-05:00","datePublished":"2020-09-02T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>NLP ngrams With Python | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="NLP ngrams With Python" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/02/NLP_Ngram.html","headline":"NLP ngrams With Python","dateModified":"2020-09-02T00:00:00-05:00","datePublished":"2020-09-02T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NLP ngrams With Python</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-02T00:00:00-05:00" itemprop="datePublished">
+        Sep 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-09-02-NLP_Ngram.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-09-02-NLP_Ngram.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-09-02-NLP_Ngram.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-09-02-NLP_Ngram.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="'In-the-fields-of-computational-linguistics-and-probability,-an-n-gram-is-a-contiguous-sequence-of-n-items-from-a-given-sample-of-text-or-speech.-The-items-can-be-phonemes,-syllables,-letters,-words-or-base-pairs-according-to-the-application.-The-n-grams-typically-are-collected-from-a-text-or-speech-corpus.',-from-wikipedia">'In the fields of computational linguistics and probability, an n-gram is a contiguous sequence of n items from a given sample of text or speech. The items can be phonemes, syllables, letters, words or base pairs according to the application. The n-grams typically are collected from a text or speech corpus.', from <a href="https://en.wikipedia.org/wiki/N-gram">wikipedia</a><a class="anchor-link" href="#'In-the-fields-of-computational-linguistics-and-probability,-an-n-gram-is-a-contiguous-sequence-of-n-items-from-a-given-sample-of-text-or-speech.-The-items-can-be-phonemes,-syllables,-letters,-words-or-base-pairs-according-to-the-application.-The-n-grams-typically-are-collected-from-a-text-or-speech-corpus.',-from-wikipedia"> </a></h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../processed_data/nf_complete.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Pre-processing-text">Pre-processing text<a class="anchor-link" href="#Pre-processing-text"> </a></h1>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">preprocessor</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&lt;[^&gt;]*&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">emoticons</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;(?::|;|=)(?:-)?(?:\)|\(|D|P)&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[\W]+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="o">+</span>\
+        <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">emoticons</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">review</span> <span class="k">for</span> <span class="n">review</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">abstract</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> words in the combination of all abstracts.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>There are 272025 words in the combination of all abstracts.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="k">def</span> <span class="nf">wordListSum</span><span class="p">(</span><span class="n">wordList</span><span class="p">):</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">wordList</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="nb">sum</span>
+
+<span class="k">def</span> <span class="nf">retrieveRandomWord</span><span class="p">(</span><span class="n">wordList</span><span class="p">):</span>
+    <span class="n">randIndex</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wordListSum</span><span class="p">(</span><span class="n">wordList</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">wordList</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">randIndex</span> <span class="o">-=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">randIndex</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">word</span>
+
+<span class="k">def</span> <span class="nf">buildWordDict</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="c1"># Remove newlines and quotes</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">);</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+    <span class="c1"># Make sure punctuation marks are treated as their own &quot;words,&quot;</span>
+    <span class="c1"># so that they will be included in the Markov chain</span>
+    <span class="n">punctuation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;;&#39;</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">punctuation</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">symbol</span><span class="p">));</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="c1"># Filter out empty words</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+    <span class="n">wordDict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">:</span>
+                <span class="c1"># Create a new dictionary for this word</span>
+            <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]]:</span>
+            <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">wordDict</span>
+
+<span class="n">wordDict</span> <span class="o">=</span> <span class="n">buildWordDict</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1">#Generate a Markov chain of length 100</span>
+<span class="n">length</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">chain</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vietnam&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="n">newWord</span> <span class="o">=</span> <span class="n">retrieveRandomWord</span><span class="p">(</span><span class="n">wordDict</span><span class="p">[</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newWord</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chain</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Vietnam (DRV) hampered the end it? This paper at all) and have on a viable combat jet aircraft into a corps composed overwhelmingly of radical visions of the argument in Iraqi Kurdistan , few reasons : the war experience . The group identified and how elite cues , the emphasis on the ongoing betrayal of 1971-79 under which I argue that expand our knowledge of biological weapons which it . This pushes against Axis material support for any single institutional prerogatives . My work fills an opposition organization at the generalizability of the Cold War strategy to escalate . ” and
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">getFirstSentenceContaining</span><span class="p">(</span><span class="n">ngram</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="c1">#print(ngram)</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;. &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sentence</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CIVIL-MILITARY RELATIONS ARE FREQUENTLY STUDIED AS IF THEY OPERATE ON TWO DISTINCT LEVELS OF ANALYSIS
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#text</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span> <span class="nf">cleanSentence</span><span class="p">(</span><span class="n">sentence</span><span class="p">):</span>
+    <span class="n">sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">sentence</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="o">+</span><span class="n">string</span><span class="o">.</span><span class="n">whitespace</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">]</span>
+    <span class="n">sentence</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sentence</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span> <span class="ow">or</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;i&#39;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">sentence</span>
+
+<span class="k">def</span> <span class="nf">cleanInput</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;. &#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">cleanSentence</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">getNgramsFromSentence</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+<span class="k">def</span> <span class="nf">getNgrams</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">cleanInput</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">ngrams</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="n">ngrams_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+        <span class="n">newNgrams</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ngram</span><span class="p">)</span> <span class="k">for</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">getNgramsFromSentence</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">n</span><span class="p">)]</span>
+        <span class="n">ngrams_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">newNgrams</span><span class="p">)</span>
+        <span class="n">ngrams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newNgrams</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ngrams</span><span class="p">)</span>
+
+
+<span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">ngrams</span> <span class="o">=</span> <span class="n">getNgrams</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1">#print(ngrams)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span> <span class="nf">isCommon</span><span class="p">(</span><span class="n">ngram</span><span class="p">):</span>
+    <span class="n">commonWords</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;THE&#39;</span><span class="p">,</span> <span class="s1">&#39;BE&#39;</span><span class="p">,</span> <span class="s1">&#39;AND&#39;</span><span class="p">,</span> <span class="s1">&#39;OF&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="s1">&#39;TO&#39;</span><span class="p">,</span> <span class="s1">&#39;HAVE&#39;</span><span class="p">,</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;THAT&#39;</span><span class="p">,</span> <span class="s1">&#39;FOR&#39;</span><span class="p">,</span> <span class="s1">&#39;YOU&#39;</span><span class="p">,</span> <span class="s1">&#39;HE&#39;</span><span class="p">,</span> <span class="s1">&#39;WITH&#39;</span><span class="p">,</span> <span class="s1">&#39;ON&#39;</span><span class="p">,</span> <span class="s1">&#39;DO&#39;</span><span class="p">,</span> <span class="s1">&#39;SAY&#39;</span><span class="p">,</span> <span class="s1">&#39;THIS&#39;</span><span class="p">,</span> <span class="s1">&#39;THEY&#39;</span><span class="p">,</span> <span class="s1">&#39;IS&#39;</span><span class="p">,</span> <span class="s1">&#39;AN&#39;</span><span class="p">,</span> <span class="s1">&#39;AT&#39;</span><span class="p">,</span> <span class="s1">&#39;BUT&#39;</span><span class="p">,</span> <span class="s1">&#39;WE&#39;</span><span class="p">,</span> <span class="s1">&#39;HIS&#39;</span><span class="p">,</span> <span class="s1">&#39;FROM&#39;</span><span class="p">,</span> <span class="s1">&#39;THAT&#39;</span><span class="p">,</span> <span class="s1">&#39;NOT&#39;</span><span class="p">,</span> <span class="s1">&#39;BY&#39;</span><span class="p">,</span> <span class="s1">&#39;SHE&#39;</span><span class="p">,</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="s1">&#39;WHAT&#39;</span><span class="p">,</span> <span class="s1">&#39;GO&#39;</span><span class="p">,</span> <span class="s1">&#39;THEIR&#39;</span><span class="p">,</span> <span class="s1">&#39;CAN&#39;</span><span class="p">,</span> <span class="s1">&#39;WHO&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;IF&#39;</span><span class="p">,</span> <span class="s1">&#39;WOULD&#39;</span><span class="p">,</span> <span class="s1">&#39;HER&#39;</span><span class="p">,</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;MY&#39;</span><span class="p">,</span> <span class="s1">&#39;MAKE&#39;</span><span class="p">,</span> <span class="s1">&#39;ABOUT&#39;</span><span class="p">,</span> <span class="s1">&#39;KNOW&#39;</span><span class="p">,</span> <span class="s1">&#39;WILL&#39;</span><span class="p">,</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="s1">&#39;UP&#39;</span><span class="p">,</span> <span class="s1">&#39;ONE&#39;</span><span class="p">,</span> <span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="s1">&#39;HAS&#39;</span><span class="p">,</span> <span class="s1">&#39;BEEN&#39;</span><span class="p">,</span> <span class="s1">&#39;THERE&#39;</span><span class="p">,</span> <span class="s1">&#39;YEAR&#39;</span><span class="p">,</span> <span class="s1">&#39;SO&#39;</span><span class="p">,</span> <span class="s1">&#39;THINK&#39;</span><span class="p">,</span> <span class="s1">&#39;WHEN&#39;</span><span class="p">,</span> <span class="s1">&#39;WHICH&#39;</span><span class="p">,</span> <span class="s1">&#39;THEM&#39;</span><span class="p">,</span> <span class="s1">&#39;SOME&#39;</span><span class="p">,</span> <span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="s1">&#39;PEOPLE&#39;</span><span class="p">,</span> <span class="s1">&#39;TAKE&#39;</span><span class="p">,</span> <span class="s1">&#39;OUT&#39;</span><span class="p">,</span> <span class="s1">&#39;INTO&#39;</span><span class="p">,</span> <span class="s1">&#39;JUST&#39;</span><span class="p">,</span> <span class="s1">&#39;SEE&#39;</span><span class="p">,</span> <span class="s1">&#39;HIM&#39;</span><span class="p">,</span> <span class="s1">&#39;YOUR&#39;</span><span class="p">,</span> <span class="s1">&#39;COME&#39;</span><span class="p">,</span> <span class="s1">&#39;COULD&#39;</span><span class="p">,</span> <span class="s1">&#39;NOW&#39;</span><span class="p">,</span> <span class="s1">&#39;THAN&#39;</span><span class="p">,</span> <span class="s1">&#39;LIKE&#39;</span><span class="p">,</span> <span class="s1">&#39;OTHER&#39;</span><span class="p">,</span> <span class="s1">&#39;HOW&#39;</span><span class="p">,</span> <span class="s1">&#39;THEN&#39;</span><span class="p">,</span> <span class="s1">&#39;ITS&#39;</span><span class="p">,</span> <span class="s1">&#39;OUR&#39;</span><span class="p">,</span> <span class="s1">&#39;TWO&#39;</span><span class="p">,</span> <span class="s1">&#39;MORE&#39;</span><span class="p">,</span> <span class="s1">&#39;THESE&#39;</span><span class="p">,</span> <span class="s1">&#39;WANT&#39;</span><span class="p">,</span> <span class="s1">&#39;WAY&#39;</span><span class="p">,</span> <span class="s1">&#39;LOOK&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST&#39;</span><span class="p">,</span> <span class="s1">&#39;ALSO&#39;</span><span class="p">,</span> <span class="s1">&#39;NEW&#39;</span><span class="p">,</span> <span class="s1">&#39;BECAUSE&#39;</span><span class="p">,</span> <span class="s1">&#39;DAY&#39;</span><span class="p">,</span> <span class="s1">&#39;MORE&#39;</span><span class="p">,</span> <span class="s1">&#39;USE&#39;</span><span class="p">,</span> <span class="s1">&#39;NO&#39;</span><span class="p">,</span> <span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;FIND&#39;</span><span class="p">,</span> <span class="s1">&#39;HERE&#39;</span><span class="p">,</span> <span class="s1">&#39;THING&#39;</span><span class="p">,</span> <span class="s1">&#39;GIVE&#39;</span><span class="p">,</span> <span class="s1">&#39;MANY&#39;</span><span class="p">,</span> <span class="s1">&#39;WELL&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">ngram</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">commonWords</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">getNgramsFromSentence</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isCommon</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]):</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+<span class="n">ngrams</span> <span class="o">=</span> <span class="n">getNgrams</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1">#print(ngrams)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">getFirstSentenceContaining</span><span class="p">(</span><span class="n">ngram</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="c1">#print(ngram)</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;. &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sentence</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;SINO-JAPANESE WAR 1894-1895&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;2ND VIETNAM WAR&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;COLD WAR ARMY&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;WORLD WAR II&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getFirstSentenceContaining</span><span class="p">(</span><span class="s1">&#39;ARMS CONTROL AGREEMENTS&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+ IN THE INTERNATIONAL SITUATION, THE GERMANS PROVIDED SUBSTANTIAL ADVANCES TO TECHNOLOGICAL DEVELOPMENT IN THE IMMEDIATE POST-WAR PERIOD.
+   THE HISTORIOGRAPHY ON THE 2ND VIETNAM WAR HAS FOCUSED MOSTLY ON THE AMERICAN SIDE, WHILE THE ‘OTHER SIDE,’ ESPECIALLY FOR THE EARLY VIETNAM WAR, 1964-1966, HAS NOT ATTRACTED MUCH ATTENTION
+
+COLD WAR ARMY DURING THE PERIOD 1949 AND 1953 BY EXAMINING HOW SENIOR ARMY LEADERS WERE ABLE TO FUNDAMENTALLY BROADEN THE INSTITUTION’S INTELLECTUAL AND HISTORICAL FRAMEWORK OF “PREPAREDNESS” TO DESIGN A BLUEPRINT FOR A NEW TYPE OF GROUND FORCE THAT WOULD BE MORE ADEPT TO MEET THE CHALLENGES OF THE NEW NATURE OF WAR IMPOSED BY THE COLD WAR
+
+ I ARGUE THAT A NORM PROTECTING STATES’ TERRITORIAL SOVEREIGNTY IS ONLY ENTRENCHED AFTER WORLD WAR II, ALTHOUGH IT CAN BE TRACED AT LEAST AS FAR BACK AS THE FOUNDING OF THE LEAGUE OF NATIONS
+
+ IN EACH CASE I USE RIGOROUS ANALYSIS ON ORIGINAL DATA TO EXPLAIN THE WHY, WHEN, AND HOW OF THEIR DECISIONS ON THE BOMB, AS WELL AS OF THEIR DECISIONS ON RELATED ISSUES SUCH AS WHETHER TO BUILD UP NUCLEAR TECHNOLOGY, TO SEEK NUCLEAR SECURITY GUARANTEES, AND TO SIGN INTERNATIONAL NUCLEAR ARMS CONTROL AGREEMENTS.
+         THE OVERALL APPROACH INTRODUCED HERE HAS WIDE POTENTIAL APPLICABILITY
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="k">def</span> <span class="nf">wordListSum</span><span class="p">(</span><span class="n">wordList</span><span class="p">):</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">wordList</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="nb">sum</span>
+
+<span class="k">def</span> <span class="nf">retrieveRandomWord</span><span class="p">(</span><span class="n">wordList</span><span class="p">):</span>
+    <span class="n">randIndex</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wordListSum</span><span class="p">(</span><span class="n">wordList</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">wordList</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">randIndex</span> <span class="o">-=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">randIndex</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">word</span>
+
+<span class="k">def</span> <span class="nf">buildWordDict</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="c1"># Remove newlines and quotes</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">);</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+    <span class="c1"># Make sure punctuation marks are treated as their own &quot;words,&quot;</span>
+    <span class="c1"># so that they will be included in the Markov chain</span>
+    <span class="n">punctuation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;;&#39;</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">punctuation</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">symbol</span><span class="p">));</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="c1"># Filter out empty words</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+    <span class="n">wordDict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">:</span>
+                <span class="c1"># Create a new dictionary for this word</span>
+            <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]]:</span>
+            <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">wordDict</span><span class="p">[</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">wordDict</span>
+
+<span class="n">wordDict</span> <span class="o">=</span> <span class="n">buildWordDict</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1">#Generate a Markov chain of length 100</span>
+<span class="n">length</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">chain</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="n">newWord</span> <span class="o">=</span> <span class="n">retrieveRandomWord</span><span class="p">(</span><span class="n">wordDict</span><span class="p">[</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newWord</span><span class="p">)</span>
+
+<span class="c1">#print(&#39; &#39;.join(chain))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">def</span> <span class="nf">getNgrams</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">|[[\d+\]]&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">content</span> <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="k">def</span> <span class="nf">getNgrams</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">cleanInput</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">ngrams</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="n">ngrams_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+        <span class="n">newNgrams</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ngram</span><span class="p">)</span> <span class="k">for</span> <span class="n">ngram</span> <span class="ow">in</span> <span class="n">getNgramsFromSentence</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">n</span><span class="p">)]</span>
+        <span class="n">ngrams_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">newNgrams</span><span class="p">)</span>
+        <span class="n">ngrams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newNgrams</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ngrams</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#print(getNgrams(content, 2))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">isCommon</span><span class="p">(</span><span class="n">ngram</span><span class="p">):</span>
+    <span class="n">commonWords</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;THE&#39;</span><span class="p">,</span> <span class="s1">&#39;BE&#39;</span><span class="p">,</span> <span class="s1">&#39;AND&#39;</span><span class="p">,</span> <span class="s1">&#39;OF&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="s1">&#39;TO&#39;</span><span class="p">,</span> <span class="s1">&#39;HAVE&#39;</span><span class="p">,</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;THAT&#39;</span><span class="p">,</span> <span class="s1">&#39;FOR&#39;</span><span class="p">,</span> <span class="s1">&#39;YOU&#39;</span><span class="p">,</span> <span class="s1">&#39;HE&#39;</span><span class="p">,</span> <span class="s1">&#39;WITH&#39;</span><span class="p">,</span> <span class="s1">&#39;ON&#39;</span><span class="p">,</span> <span class="s1">&#39;DO&#39;</span><span class="p">,</span> <span class="s1">&#39;SAY&#39;</span><span class="p">,</span> <span class="s1">&#39;THIS&#39;</span><span class="p">,</span> <span class="s1">&#39;THEY&#39;</span><span class="p">,</span> <span class="s1">&#39;IS&#39;</span><span class="p">,</span> <span class="s1">&#39;AN&#39;</span><span class="p">,</span> <span class="s1">&#39;AT&#39;</span><span class="p">,</span> <span class="s1">&#39;BUT&#39;</span><span class="p">,</span> <span class="s1">&#39;WE&#39;</span><span class="p">,</span> <span class="s1">&#39;HIS&#39;</span><span class="p">,</span> <span class="s1">&#39;FROM&#39;</span><span class="p">,</span> <span class="s1">&#39;THAT&#39;</span><span class="p">,</span> <span class="s1">&#39;NOT&#39;</span><span class="p">,</span> <span class="s1">&#39;BY&#39;</span><span class="p">,</span> <span class="s1">&#39;SHE&#39;</span><span class="p">,</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="s1">&#39;WHAT&#39;</span><span class="p">,</span> <span class="s1">&#39;GO&#39;</span><span class="p">,</span> <span class="s1">&#39;THEIR&#39;</span><span class="p">,</span> <span class="s1">&#39;CAN&#39;</span><span class="p">,</span> <span class="s1">&#39;WHO&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;IF&#39;</span><span class="p">,</span> <span class="s1">&#39;WOULD&#39;</span><span class="p">,</span> <span class="s1">&#39;HER&#39;</span><span class="p">,</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;MY&#39;</span><span class="p">,</span> <span class="s1">&#39;MAKE&#39;</span><span class="p">,</span> <span class="s1">&#39;ABOUT&#39;</span><span class="p">,</span> <span class="s1">&#39;KNOW&#39;</span><span class="p">,</span> <span class="s1">&#39;WILL&#39;</span><span class="p">,</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="s1">&#39;UP&#39;</span><span class="p">,</span> <span class="s1">&#39;ONE&#39;</span><span class="p">,</span> <span class="s1">&#39;TIME&#39;</span><span class="p">,</span> <span class="s1">&#39;HAS&#39;</span><span class="p">,</span> <span class="s1">&#39;BEEN&#39;</span><span class="p">,</span> <span class="s1">&#39;THERE&#39;</span><span class="p">,</span> <span class="s1">&#39;YEAR&#39;</span><span class="p">,</span> <span class="s1">&#39;SO&#39;</span><span class="p">,</span> <span class="s1">&#39;THINK&#39;</span><span class="p">,</span> <span class="s1">&#39;WHEN&#39;</span><span class="p">,</span> <span class="s1">&#39;WHICH&#39;</span><span class="p">,</span> <span class="s1">&#39;THEM&#39;</span><span class="p">,</span> <span class="s1">&#39;SOME&#39;</span><span class="p">,</span> <span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="s1">&#39;PEOPLE&#39;</span><span class="p">,</span> <span class="s1">&#39;TAKE&#39;</span><span class="p">,</span> <span class="s1">&#39;OUT&#39;</span><span class="p">,</span> <span class="s1">&#39;INTO&#39;</span><span class="p">,</span> <span class="s1">&#39;JUST&#39;</span><span class="p">,</span> <span class="s1">&#39;SEE&#39;</span><span class="p">,</span> <span class="s1">&#39;HIM&#39;</span><span class="p">,</span> <span class="s1">&#39;YOUR&#39;</span><span class="p">,</span> <span class="s1">&#39;COME&#39;</span><span class="p">,</span> <span class="s1">&#39;COULD&#39;</span><span class="p">,</span> <span class="s1">&#39;NOW&#39;</span><span class="p">,</span> <span class="s1">&#39;THAN&#39;</span><span class="p">,</span> <span class="s1">&#39;LIKE&#39;</span><span class="p">,</span> <span class="s1">&#39;OTHER&#39;</span><span class="p">,</span> <span class="s1">&#39;HOW&#39;</span><span class="p">,</span> <span class="s1">&#39;THEN&#39;</span><span class="p">,</span> <span class="s1">&#39;ITS&#39;</span><span class="p">,</span> <span class="s1">&#39;OUR&#39;</span><span class="p">,</span> <span class="s1">&#39;TWO&#39;</span><span class="p">,</span> <span class="s1">&#39;MORE&#39;</span><span class="p">,</span> <span class="s1">&#39;THESE&#39;</span><span class="p">,</span> <span class="s1">&#39;WANT&#39;</span><span class="p">,</span> <span class="s1">&#39;WAY&#39;</span><span class="p">,</span> <span class="s1">&#39;LOOK&#39;</span><span class="p">,</span> <span class="s1">&#39;FIRST&#39;</span><span class="p">,</span> <span class="s1">&#39;ALSO&#39;</span><span class="p">,</span> <span class="s1">&#39;NEW&#39;</span><span class="p">,</span> <span class="s1">&#39;BECAUSE&#39;</span><span class="p">,</span> <span class="s1">&#39;DAY&#39;</span><span class="p">,</span> <span class="s1">&#39;MORE&#39;</span><span class="p">,</span> <span class="s1">&#39;USE&#39;</span><span class="p">,</span> <span class="s1">&#39;NO&#39;</span><span class="p">,</span> <span class="s1">&#39;MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;FIND&#39;</span><span class="p">,</span> <span class="s1">&#39;HERE&#39;</span><span class="p">,</span> <span class="s1">&#39;THING&#39;</span><span class="p">,</span> <span class="s1">&#39;GIVE&#39;</span><span class="p">,</span> <span class="s1">&#39;MANY&#39;</span><span class="p">,</span> <span class="s1">&#39;WELL&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">ngram</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">commonWords</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">getNgramsFromSentence</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isCommon</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]):</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+<span class="n">ngrams</span> <span class="o">=</span> <span class="n">getNgrams</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1">#print(ngrams)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/09/02/NLP_Ngram.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
