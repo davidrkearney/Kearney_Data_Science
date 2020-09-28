@@ -2,10 +2,10 @@
   
     
         "post0": {
-            "title": "Links",
-            "content": ". toc: true layout: post description: links categories: [links] title: Monday Links — . 澳大利亞也可以看到絢麗的極光 - from the BBC. . | Does Machine Translation Affect International Trade? Evidence from a Large Digital Platform - From NBER . | 3.How to digitize your lab notebooks - From Nature .",
-            "url": "https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/links.html",
-            "relUrl": "/2020/09/28/links.html",
+            "title": "Monday Links",
+            "content": "澳大利亞也可以看到絢麗的極光 - from the BBC. . | Does Machine Translation Affect International Trade? Evidence from a Large Digital Platform - From NBER. . | 3.How to digitize your lab notebooks - From Nature. .",
+            "url": "https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links.html",
+            "relUrl": "/links/2020/09/28/links.html",
             "date": " • Sep 28, 2020"
         }
         
