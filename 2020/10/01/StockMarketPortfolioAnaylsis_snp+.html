@@ -3,34 +3,34 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl | Data Science Notebooks</title>
+<title>Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl | Data Science Notebooks</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl" />
+<meta property="og:title" content="Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Notebooks and notes on data science work." />
 <meta property="og:description" content="Notebooks and notes on data science work." />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html" />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" />
 <meta property="og:site_name" content="Data Science Notebooks" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-09-30T00:00:00-05:00" />
+<meta property="article:published_time" content="2020-10-01T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Notebooks and notes on data science work.","headline":"Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl","@type":"BlogPosting","dateModified":"2020-09-30T00:00:00-05:00","datePublished":"2020-09-30T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html","@context":"https://schema.org"}</script>
+{"description":"Notebooks and notes on data science work.","headline":"Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl","@type":"BlogPosting","dateModified":"2020-10-01T00:00:00-05:00","datePublished":"2020-10-01T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl | Data Science Notebooks</title>
+<title>Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl | Data Science Notebooks</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl" />
+<meta property="og:title" content="Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Notebooks and notes on data science work." />
 <meta property="og:description" content="Notebooks and notes on data science work." />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html" />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" />
 <meta property="og:site_name" content="Data Science Notebooks" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-09-30T00:00:00-05:00" />
+<meta property="article:published_time" content="2020-10-01T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Notebooks and notes on data science work.","headline":"Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl","@type":"BlogPosting","dateModified":"2020-09-30T00:00:00-05:00","datePublished":"2020-09-30T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html","@context":"https://schema.org"}</script>
+{"description":"Notebooks and notes on data science work.","headline":"Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl","@type":"BlogPosting","dateModified":"2020-10-01T00:00:00-05:00","datePublished":"2020-10-01T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -85,13 +85,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-30T00:00:00-05:00" itemprop="datePublished">
-        Sep 30, 2020
+    <h1 class="post-title p-name" itemprop="name headline">Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-01T00:00:00-05:00" itemprop="datePublished">
+        Oct 1, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -102,19 +102,19 @@ window.onload = wrap_img;
         <div class="pb-5 d-flex flex-wrap flex-justify-end">
           <div class="px-2">
 
-    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-09-30-StockMarketPortfolioAnaylsis.ipynb" role="button" target="_blank">
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-10-01-StockMarketPortfolioAnaylsis_snp+.ipynb" role="button" target="_blank">
 <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-09-30-StockMarketPortfolioAnaylsis.ipynb" target="_blank">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-10-01-StockMarketPortfolioAnaylsis_snp%2B.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-09-30-StockMarketPortfolioAnaylsis.ipynb" target="_blank">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-10-01-StockMarketPortfolioAnaylsis_snp+.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
     </a>
 </div>
@@ -126,7 +126,7 @@ window.onload = wrap_img;
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2020-09-30-StockMarketPortfolioAnaylsis.ipynb
+# file to edit: _notebooks/2020-10-01-StockMarketPortfolioAnaylsis_snp+.ipynb
 -->
 
 <div class="container" id="notebook-container">
@@ -192,6 +192,1113 @@ window.onload = wrap_img;
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_DIV_YIELD_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-31</th>
+      <td>1.98</td>
+    </tr>
+    <tr>
+      <th>2010-02-28</th>
+      <td>2.03</td>
+    </tr>
+    <tr>
+      <th>2010-03-31</th>
+      <td>1.90</td>
+    </tr>
+    <tr>
+      <th>2010-04-30</th>
+      <td>1.83</td>
+    </tr>
+    <tr>
+      <th>2010-05-31</th>
+      <td>1.95</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-07-01</th>
+      <td>1.91</td>
+    </tr>
+    <tr>
+      <th>2020-07-31</th>
+      <td>1.86</td>
+    </tr>
+    <tr>
+      <th>2020-08-31</th>
+      <td>1.76</td>
+    </tr>
+    <tr>
+      <th>2020-09-01</th>
+      <td>1.69</td>
+    </tr>
+    <tr>
+      <th>2020-09-30</th>
+      <td>1.69</td>
+    </tr>
+  </tbody>
+</table>
+<p>136 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_PE_RATIO_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-01</th>
+      <td>20.70</td>
+    </tr>
+    <tr>
+      <th>2010-02-01</th>
+      <td>18.91</td>
+    </tr>
+    <tr>
+      <th>2010-03-01</th>
+      <td>18.91</td>
+    </tr>
+    <tr>
+      <th>2010-04-01</th>
+      <td>19.01</td>
+    </tr>
+    <tr>
+      <th>2010-05-01</th>
+      <td>17.30</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-07-01</th>
+      <td>27.57</td>
+    </tr>
+    <tr>
+      <th>2020-07-31</th>
+      <td>28.12</td>
+    </tr>
+    <tr>
+      <th>2020-08-01</th>
+      <td>29.16</td>
+    </tr>
+    <tr>
+      <th>2020-08-31</th>
+      <td>30.09</td>
+    </tr>
+    <tr>
+      <th>2020-09-01</th>
+      <td>30.32</td>
+    </tr>
+  </tbody>
+</table>
+<p>138 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_PE_RATIO_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-01</th>
+      <td>20.70</td>
+    </tr>
+    <tr>
+      <th>2010-02-01</th>
+      <td>18.91</td>
+    </tr>
+    <tr>
+      <th>2010-03-01</th>
+      <td>18.91</td>
+    </tr>
+    <tr>
+      <th>2010-04-01</th>
+      <td>19.01</td>
+    </tr>
+    <tr>
+      <th>2010-05-01</th>
+      <td>17.30</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-07-01</th>
+      <td>27.57</td>
+    </tr>
+    <tr>
+      <th>2020-07-31</th>
+      <td>28.12</td>
+    </tr>
+    <tr>
+      <th>2020-08-01</th>
+      <td>29.16</td>
+    </tr>
+    <tr>
+      <th>2020-08-31</th>
+      <td>30.09</td>
+    </tr>
+    <tr>
+      <th>2020-09-01</th>
+      <td>30.32</td>
+    </tr>
+  </tbody>
+</table>
+<p>138 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_EARNINGS_YIELD_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-01</th>
+      <td>4.83</td>
+    </tr>
+    <tr>
+      <th>2010-02-01</th>
+      <td>5.29</td>
+    </tr>
+    <tr>
+      <th>2010-03-01</th>
+      <td>5.29</td>
+    </tr>
+    <tr>
+      <th>2010-04-01</th>
+      <td>5.26</td>
+    </tr>
+    <tr>
+      <th>2010-05-01</th>
+      <td>5.78</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-07-01</th>
+      <td>3.63</td>
+    </tr>
+    <tr>
+      <th>2020-07-31</th>
+      <td>3.56</td>
+    </tr>
+    <tr>
+      <th>2020-08-01</th>
+      <td>3.43</td>
+    </tr>
+    <tr>
+      <th>2020-08-31</th>
+      <td>3.32</td>
+    </tr>
+    <tr>
+      <th>2020-09-01</th>
+      <td>3.30</td>
+    </tr>
+  </tbody>
+</table>
+<p>138 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_INFLADJ_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-01</th>
+      <td>1343.51</td>
+    </tr>
+    <tr>
+      <th>2010-02-01</th>
+      <td>1302.03</td>
+    </tr>
+    <tr>
+      <th>2010-03-01</th>
+      <td>1371.58</td>
+    </tr>
+    <tr>
+      <th>2010-04-01</th>
+      <td>1423.00</td>
+    </tr>
+    <tr>
+      <th>2010-05-01</th>
+      <td>1336.08</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-07-01</th>
+      <td>3207.62</td>
+    </tr>
+    <tr>
+      <th>2020-07-31</th>
+      <td>3271.12</td>
+    </tr>
+    <tr>
+      <th>2020-08-01</th>
+      <td>3391.71</td>
+    </tr>
+    <tr>
+      <th>2020-08-31</th>
+      <td>3500.31</td>
+    </tr>
+    <tr>
+      <th>2020-09-01</th>
+      <td>3526.65</td>
+    </tr>
+  </tbody>
+</table>
+<p>138 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_DIV_MONTH&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-01-31</th>
+      <td>26.59</td>
+    </tr>
+    <tr>
+      <th>2010-02-28</th>
+      <td>26.38</td>
+    </tr>
+    <tr>
+      <th>2010-03-31</th>
+      <td>26.08</td>
+    </tr>
+    <tr>
+      <th>2010-04-30</th>
+      <td>26.09</td>
+    </tr>
+    <tr>
+      <th>2010-05-31</th>
+      <td>26.12</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-02-29</th>
+      <td>59.23</td>
+    </tr>
+    <tr>
+      <th>2020-03-31</th>
+      <td>59.81</td>
+    </tr>
+    <tr>
+      <th>2020-04-30</th>
+      <td>60.25</td>
+    </tr>
+    <tr>
+      <th>2020-05-31</th>
+      <td>60.28</td>
+    </tr>
+    <tr>
+      <th>2020-06-30</th>
+      <td>59.99</td>
+    </tr>
+  </tbody>
+</table>
+<p>126 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_DIV_YEAR&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-12-31</th>
+      <td>26.87</td>
+    </tr>
+    <tr>
+      <th>2011-12-31</th>
+      <td>30.34</td>
+    </tr>
+    <tr>
+      <th>2012-12-31</th>
+      <td>35.26</td>
+    </tr>
+    <tr>
+      <th>2013-12-31</th>
+      <td>38.90</td>
+    </tr>
+    <tr>
+      <th>2014-12-31</th>
+      <td>43.52</td>
+    </tr>
+    <tr>
+      <th>2015-12-31</th>
+      <td>47.53</td>
+    </tr>
+    <tr>
+      <th>2016-12-31</th>
+      <td>49.05</td>
+    </tr>
+    <tr>
+      <th>2017-12-31</th>
+      <td>51.43</td>
+    </tr>
+    <tr>
+      <th>2018-12-31</th>
+      <td>55.43</td>
+    </tr>
+    <tr>
+      <th>2019-03-31</th>
+      <td>55.35</td>
+    </tr>
+    <tr>
+      <th>2019-06-30</th>
+      <td>56.17</td>
+    </tr>
+    <tr>
+      <th>2019-09-30</th>
+      <td>57.32</td>
+    </tr>
+    <tr>
+      <th>2019-12-31</th>
+      <td>58.72</td>
+    </tr>
+    <tr>
+      <th>2020-03-31</th>
+      <td>59.18</td>
+    </tr>
+    <tr>
+      <th>2020-06-30</th>
+      <td>59.99</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_DIV_GROWTH_YEAR&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-12-31</th>
+      <td>1.45</td>
+    </tr>
+    <tr>
+      <th>2011-12-31</th>
+      <td>16.26</td>
+    </tr>
+    <tr>
+      <th>2012-12-31</th>
+      <td>18.25</td>
+    </tr>
+    <tr>
+      <th>2013-12-31</th>
+      <td>11.99</td>
+    </tr>
+    <tr>
+      <th>2014-12-31</th>
+      <td>12.72</td>
+    </tr>
+    <tr>
+      <th>2015-12-31</th>
+      <td>10.00</td>
+    </tr>
+    <tr>
+      <th>2016-12-31</th>
+      <td>5.33</td>
+    </tr>
+    <tr>
+      <th>2017-12-31</th>
+      <td>7.07</td>
+    </tr>
+    <tr>
+      <th>2018-12-31</th>
+      <td>9.84</td>
+    </tr>
+    <tr>
+      <th>2019-03-31</th>
+      <td>9.87</td>
+    </tr>
+    <tr>
+      <th>2019-06-30</th>
+      <td>9.98</td>
+    </tr>
+    <tr>
+      <th>2019-09-30</th>
+      <td>9.32</td>
+    </tr>
+    <tr>
+      <th>2019-12-31</th>
+      <td>8.36</td>
+    </tr>
+    <tr>
+      <th>2020-03-31</th>
+      <td>8.45</td>
+    </tr>
+    <tr>
+      <th>2020-06-30</th>
+      <td>6.43</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">SP500</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MULTPL/SP500_DIV_GROWTH_QUARTER&quot;</span><span class="p">,</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">SP500</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-03-31</th>
+      <td>-19.63</td>
+    </tr>
+    <tr>
+      <th>2010-06-30</th>
+      <td>-13.90</td>
+    </tr>
+    <tr>
+      <th>2010-09-30</th>
+      <td>-6.48</td>
+    </tr>
+    <tr>
+      <th>2010-12-31</th>
+      <td>1.45</td>
+    </tr>
+    <tr>
+      <th>2011-03-31</th>
+      <td>6.97</td>
+    </tr>
+    <tr>
+      <th>2011-06-30</th>
+      <td>10.46</td>
+    </tr>
+    <tr>
+      <th>2011-09-30</th>
+      <td>12.65</td>
+    </tr>
+    <tr>
+      <th>2011-12-31</th>
+      <td>16.26</td>
+    </tr>
+    <tr>
+      <th>2012-03-31</th>
+      <td>16.74</td>
+    </tr>
+    <tr>
+      <th>2012-06-30</th>
+      <td>16.35</td>
+    </tr>
+    <tr>
+      <th>2012-09-30</th>
+      <td>17.51</td>
+    </tr>
+    <tr>
+      <th>2012-12-31</th>
+      <td>18.25</td>
+    </tr>
+    <tr>
+      <th>2013-03-31</th>
+      <td>17.40</td>
+    </tr>
+    <tr>
+      <th>2013-06-30</th>
+      <td>17.47</td>
+    </tr>
+    <tr>
+      <th>2013-09-30</th>
+      <td>16.27</td>
+    </tr>
+    <tr>
+      <th>2013-12-31</th>
+      <td>11.99</td>
+    </tr>
+    <tr>
+      <th>2014-03-31</th>
+      <td>12.82</td>
+    </tr>
+    <tr>
+      <th>2014-06-30</th>
+      <td>12.37</td>
+    </tr>
+    <tr>
+      <th>2014-09-30</th>
+      <td>11.89</td>
+    </tr>
+    <tr>
+      <th>2014-12-31</th>
+      <td>12.72</td>
+    </tr>
+    <tr>
+      <th>2015-03-31</th>
+      <td>12.64</td>
+    </tr>
+    <tr>
+      <th>2015-06-30</th>
+      <td>11.67</td>
+    </tr>
+    <tr>
+      <th>2015-09-30</th>
+      <td>10.43</td>
+    </tr>
+    <tr>
+      <th>2015-12-31</th>
+      <td>10.00</td>
+    </tr>
+    <tr>
+      <th>2016-03-31</th>
+      <td>7.52</td>
+    </tr>
+    <tr>
+      <th>2016-06-30</th>
+      <td>6.51</td>
+    </tr>
+    <tr>
+      <th>2016-09-30</th>
+      <td>5.92</td>
+    </tr>
+    <tr>
+      <th>2016-12-31</th>
+      <td>5.33</td>
+    </tr>
+    <tr>
+      <th>2017-03-31</th>
+      <td>5.71</td>
+    </tr>
+    <tr>
+      <th>2017-06-30</th>
+      <td>6.21</td>
+    </tr>
+    <tr>
+      <th>2017-09-30</th>
+      <td>6.99</td>
+    </tr>
+    <tr>
+      <th>2017-12-31</th>
+      <td>7.07</td>
+    </tr>
+    <tr>
+      <th>2018-03-31</th>
+      <td>7.81</td>
+    </tr>
+    <tr>
+      <th>2018-06-30</th>
+      <td>7.99</td>
+    </tr>
+    <tr>
+      <th>2018-09-30</th>
+      <td>8.65</td>
+    </tr>
+    <tr>
+      <th>2018-12-31</th>
+      <td>9.84</td>
+    </tr>
+    <tr>
+      <th>2019-03-31</th>
+      <td>9.87</td>
+    </tr>
+    <tr>
+      <th>2019-06-30</th>
+      <td>9.98</td>
+    </tr>
+    <tr>
+      <th>2019-09-30</th>
+      <td>9.32</td>
+    </tr>
+    <tr>
+      <th>2019-12-31</th>
+      <td>8.36</td>
+    </tr>
+    <tr>
+      <th>2020-03-31</th>
+      <td>8.45</td>
+    </tr>
+    <tr>
+      <th>2020-06-30</th>
+      <td>6.43</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -425,7 +1532,7 @@ window.onload = wrap_img;
 
 
 
-  </div><a class="u-url" href="/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis.html" hidden></a>
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
