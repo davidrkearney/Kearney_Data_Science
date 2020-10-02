@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-10-01T08:55:13-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Thursday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links.html" rel="alternate" type="text/html" title="Thursday Links" /><published>2020-10-01T00:00:00-05:00</published><updated>2020-10-01T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links.html">&lt;ul&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-10-02T08:47:12-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Friday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/02/links2.html" rel="alternate" type="text/html" title="Friday Links" /><published>2020-10-02T00:00:00-05:00</published><updated>2020-10-02T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/02/links2</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/02/links2.html">&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://til.simonwillison.net/til/til/bash_escaping-a-string.md&quot;&gt;Escaping strings in Bash using !:q &lt;/a&gt;/&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;bash # This string ‘has single’ “and double” quotes and a $
+bash !:q&lt;/p&gt;</content><author><name></name></author><summary type="html">Escaping strings in Bash using !:q /</summary></entry><entry><title type="html">Friday Books</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/10/02/links.html" rel="alternate" type="text/html" title="Friday Books" /><published>2020-10-02T00:00:00-05:00</published><updated>2020-10-02T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/books/2020/10/02/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/10/02/links.html">&lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://towardsdatascience.com/software-engineering-for-data-scientist-test-driven-development-example-3c737de7be88&quot;&gt;Test-Driven Data Science Development&lt;/a&gt; - From TWD. Using pytest.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.amazon.com/Lessons-21st-Century-Yuval-Harari/dp/0525512179&quot;&gt;21 Lessons for the 21st Century&lt;/a&gt;/&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://hdsr.mitpress.mit.edu/pub/diub13so/release/1&quot;&gt;Top 10 Essential Data Science Topics to Real-World Application from the Industry Perspectives&lt;/a&gt; - from the BBC. Review of Data Science and Causal inference.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.amazon.com/Outliers-Story-Success-Malcolm-Gladwell/dp/0316017930&quot;&gt;Outliers: The Story of Success&lt;/a&gt;/&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/AlvaroDeMenard/KindleClippingsParser&quot;&gt;Parser for Kindle My Clippings.txt file&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.amazon.com/David-Goliath-Underdogs-Misfits-Battling/dp/0316204374&quot;&gt;David and Goliath: Underdogs, Misfits, and the Art of Battling Giants &lt;/a&gt;/&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://forum.effectivealtruism.org/s/HXtZvHqsKwtAYP6Y7&quot;&gt;Forecasting Newsletter&lt;/a&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://psyarxiv.com/n2a9x&quot;&gt;High Replicability of Newly-Discovered Social-behavioral Findings is Achievable&lt;/a&gt; - ‘Failures to replicate evidence of new discoveries have forced scientists to ask whether this unreliability is due to suboptimal implementation of optimal methods or whether presumptively optimal methods are not, in fact, optimal’&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Test-Driven Data Science Development - From TWD. Using pytest.</summary></entry><entry><title type="html">Stock Market and Portfolio Anaylsis of the S&amp;amp;P 500 various metrics with pandas and quandl</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" rel="alternate" type="text/html" title="Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl" /><published>2020-10-01T00:00:00-05:00</published><updated>2020-10-01T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html">&lt;!--
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">21 Lessons for the 21st Century/</summary></entry><entry><title type="html">Stock Market and Portfolio Anaylsis of the S&amp;amp;P 500 various metrics with pandas and quandl</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html" rel="alternate" type="text/html" title="Stock Market and Portfolio Anaylsis of the S&amp;P 500 various metrics with pandas and quandl" /><published>2020-10-01T00:00:00-05:00</published><updated>2020-10-01T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/01/StockMarketPortfolioAnaylsis_snp+.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -1420,7 +1419,36 @@
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Stock Market and Portfolio Anaylsis of the S&amp;amp;P 500 with pandas and quandl</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp.html" rel="alternate" type="text/html" title="Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl" /><published>2020-09-30T00:00:00-05:00</published><updated>2020-09-30T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp.html">&lt;!--
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Thursday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links.html" rel="alternate" type="text/html" title="Thursday Links" /><published>2020-10-01T00:00:00-05:00</published><updated>2020-10-01T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/01/links.html">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://towardsdatascience.com/software-engineering-for-data-scientist-test-driven-development-example-3c737de7be88&quot;&gt;Test-Driven Data Science Development&lt;/a&gt; - From TWD. Using pytest.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hdsr.mitpress.mit.edu/pub/diub13so/release/1&quot;&gt;Top 10 Essential Data Science Topics to Real-World Application from the Industry Perspectives&lt;/a&gt; - from the BBC. Review of Data Science and Causal inference.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/AlvaroDeMenard/KindleClippingsParser&quot;&gt;Parser for Kindle My Clippings.txt file&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://forum.effectivealtruism.org/s/HXtZvHqsKwtAYP6Y7&quot;&gt;Forecasting Newsletter&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://psyarxiv.com/n2a9x&quot;&gt;High Replicability of Newly-Discovered Social-behavioral Findings is Achievable&lt;/a&gt; - ‘Failures to replicate evidence of new discoveries have forced scientists to ask whether this unreliability is due to suboptimal implementation of optimal methods or whether presumptively optimal methods are not, in fact, optimal’&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Test-Driven Data Science Development - From TWD. Using pytest.</summary></entry><entry><title type="html">Wednesday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links.html" rel="alternate" type="text/html" title="Wednesday Links" /><published>2020-09-30T00:00:00-05:00</published><updated>2020-09-30T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links.html">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.20190623&quot;&gt;Artificial Intelligence, Algorithmic Pricing, and Collusion&lt;/a&gt; - From American Economic Review. Abstract - ‘Increasingly, algorithms are supplanting human decision-makers in pricing goods and services. To analyze the possible consequences, we study experimentally the behavior of algorithms powered by Artificial Intelligence (Q-learning) in a workhorse oligopoly model of repeated price competition. We find that the algorithms consistently learn to charge supracompetitive prices, without communicating with one another. The high prices are sustained by collusive strategies with a finite phase of punishment followed by a gradual return to cooperation. This finding is robust to asymmetries in cost or demand, changes in the number of players, and various forms of uncertainty.’&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/zhongwen/trad/science-54149741&quot;&gt;北極之最：格陵蘭史帕特冰川大片冰舌脫落 後果多嚴重&lt;/a&gt; - from the BBC.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/vietnamese/vietnam-54355592&quot;&gt;Vì sao Ròm trở thành hiện tượng phòng vé nhưng lại gây chia rẽ khán giả?&lt;/a&gt; - From BBC.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.imdb.com/title/tt11095810/&quot;&gt;Ròm&lt;/a&gt; - From IMDB.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Artificial Intelligence, Algorithmic Pricing, and Collusion - From American Economic Review. Abstract - ‘Increasingly, algorithms are supplanting human decision-makers in pricing goods and services. To analyze the possible consequences, we study experimentally the behavior of algorithms powered by Artificial Intelligence (Q-learning) in a workhorse oligopoly model of repeated price competition. We find that the algorithms consistently learn to charge supracompetitive prices, without communicating with one another. The high prices are sustained by collusive strategies with a finite phase of punishment followed by a gradual return to cooperation. This finding is robust to asymmetries in cost or demand, changes in the number of players, and various forms of uncertainty.’</summary></entry><entry><title type="html">Stock Market and Portfolio Anaylsis of the S&amp;amp;P 500 with pandas and quandl</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp.html" rel="alternate" type="text/html" title="Stock Market and Portfolio Anaylsis of the S&amp;P 500 with pandas and quandl" /><published>2020-09-30T00:00:00-05:00</published><updated>2020-09-30T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/30/StockMarketPortfolioAnaylsis_snp.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -1719,20 +1747,7 @@
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Wednesday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links.html" rel="alternate" type="text/html" title="Wednesday Links" /><published>2020-09-30T00:00:00-05:00</published><updated>2020-09-30T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/30/links.html">&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.20190623&quot;&gt;Artificial Intelligence, Algorithmic Pricing, and Collusion&lt;/a&gt; - From American Economic Review. Abstract - ‘Increasingly, algorithms are supplanting human decision-makers in pricing goods and services. To analyze the possible consequences, we study experimentally the behavior of algorithms powered by Artificial Intelligence (Q-learning) in a workhorse oligopoly model of repeated price competition. We find that the algorithms consistently learn to charge supracompetitive prices, without communicating with one another. The high prices are sustained by collusive strategies with a finite phase of punishment followed by a gradual return to cooperation. This finding is robust to asymmetries in cost or demand, changes in the number of players, and various forms of uncertainty.’&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/zhongwen/trad/science-54149741&quot;&gt;北極之最：格陵蘭史帕特冰川大片冰舌脫落 後果多嚴重&lt;/a&gt; - from the BBC.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/vietnamese/vietnam-54355592&quot;&gt;Vì sao Ròm trở thành hiện tượng phòng vé nhưng lại gây chia rẽ khán giả?&lt;/a&gt; - From BBC.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.imdb.com/title/tt11095810/&quot;&gt;Ròm&lt;/a&gt; - From IMDB.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Artificial Intelligence, Algorithmic Pricing, and Collusion - From American Economic Review. Abstract - ‘Increasingly, algorithms are supplanting human decision-makers in pricing goods and services. To analyze the possible consequences, we study experimentally the behavior of algorithms powered by Artificial Intelligence (Q-learning) in a workhorse oligopoly model of repeated price competition. We find that the algorithms consistently learn to charge supracompetitive prices, without communicating with one another. The high prices are sustained by collusive strategies with a finite phase of punishment followed by a gradual return to cooperation. This finding is robust to asymmetries in cost or demand, changes in the number of players, and various forms of uncertainty.’</summary></entry><entry><title type="html">Tuesday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links.html" rel="alternate" type="text/html" title="Tuesday Links" /><published>2020-09-29T00:00:00-05:00</published><updated>2020-09-29T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links.html">&lt;ul&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Tuesday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links.html" rel="alternate" type="text/html" title="Tuesday Links" /><published>2020-09-29T00:00:00-05:00</published><updated>2020-09-29T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/29/links.html">&lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;&lt;a href=&quot;https://www.nber.org/papers/w27848&quot;&gt;A Satellite Account for Health in the United States&lt;/a&gt; - From NBER. The paper ‘measures the change in medical spending and health outcomes for a comprehensive set of 80 conditions’&lt;/p&gt;
   &lt;/li&gt;
@@ -1742,16 +1757,7 @@
   &lt;li&gt;
     &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/vietnamese/vert-fut-53826585&quot;&gt;Dùng sầu riêng và mít để sạc điện thoại&lt;/a&gt; - From BBC.&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">A Satellite Account for Health in the United States - From NBER. The paper ‘measures the change in medical spending and health outcomes for a comprehensive set of 80 conditions’</summary></entry><entry><title type="html">Monday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links.html" rel="alternate" type="text/html" title="Monday Links" /><published>2020-09-28T00:00:00-05:00</published><updated>2020-09-28T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links.html">&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/zhongwen/trad/science-53633255&quot;&gt;澳大利亞也可以看到絢麗的極光&lt;/a&gt; - from the BBC.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.nber.org/papers/w24917&quot;&gt;Does Machine Translation Affect International Trade? Evidence from a Large Digital Platform&lt;/a&gt; - From NBER.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;3.&lt;a href=&quot;https://www.nature.com/articles/d41586-020-02728-0&quot;&gt;How to digitize your lab notebooks&lt;/a&gt; - From Nature.&lt;/p&gt;</content><author><name></name></author><summary type="html">澳大利亞也可以看到絢麗的極光 - from the BBC.</summary></entry><entry><title type="html">Creating and accessing SQL databases with python using sqlalchemy and sqlite3</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27.html" rel="alternate" type="text/html" title="Creating and accessing SQL databases with python using sqlalchemy and sqlite3" /><published>2020-09-28T00:00:00-05:00</published><updated>2020-09-28T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27.html">&lt;!--
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">A Satellite Account for Health in the United States - From NBER. The paper ‘measures the change in medical spending and health outcomes for a comprehensive set of 80 conditions’</summary></entry><entry><title type="html">Creating and accessing SQL databases with python using sqlalchemy and sqlite3</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27.html" rel="alternate" type="text/html" title="Creating and accessing SQL databases with python using sqlalchemy and sqlite3" /><published>2020-09-28T00:00:00-05:00</published><updated>2020-09-28T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/09/28/databases_sqllite_sqlalchemy_27.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -2238,32 +2244,18 @@
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">What I’ve been reading.</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading.html" rel="alternate" type="text/html" title="What I've been reading." /><published>2020-09-27T00:00:00-05:00</published><updated>2020-09-27T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading.html">&lt;ol&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Monday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links.html" rel="alternate" type="text/html" title="Monday Links" /><published>2020-09-28T00:00:00-05:00</published><updated>2020-09-28T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/28/links.html">&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/zhongwen/trad/science-53633255&quot;&gt;澳大利亞也可以看到絢麗的極光&lt;/a&gt; - from the BBC.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.nber.org/papers/w24917&quot;&gt;Does Machine Translation Affect International Trade? Evidence from a Large Digital Platform&lt;/a&gt; - From NBER.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;3.&lt;a href=&quot;https://www.nature.com/articles/d41586-020-02728-0&quot;&gt;How to digitize your lab notebooks&lt;/a&gt; - From Nature.&lt;/p&gt;</content><author><name></name></author><summary type="html">澳大利亞也可以看到絢麗的極光 - from the BBC.</summary></entry><entry><title type="html">What I’ve been reading.</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading.html" rel="alternate" type="text/html" title="What I've been reading." /><published>2020-09-27T00:00:00-05:00</published><updated>2020-09-27T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/books/2020/09/27/reading.html">&lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach&quot;&gt;Gödel, Escher, Bach&lt;/a&gt; -&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Lessons-21st-Century-Yuval-Harari/dp/0525512179&quot;&gt;21 Lessons for the 21st Century&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Grit-Passion-Perseverance-Angela-Duckworth/dp/1501111108&quot;&gt;Grit: The Power of Passion and Perseverance Hardcover&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.amazon.co.uk/Notebooks-Possessed-Fyodor-Dostoevsky/dp/0226159639&quot;&gt;The notebooks for The possessed&lt;/a&gt;- Published 1968 by University of Chicago Press. Found at local used book store.&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><summary type="html">Gödel, Escher, Bach - 21 Lessons for the 21st Century Grit: The Power of Passion and Perseverance Hardcover The notebooks for The possessed- Published 1968 by University of Chicago Press. Found at local used book store.</summary></entry><entry><title type="html">Sat Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/26/links.html" rel="alternate" type="text/html" title="Sat Links" /><published>2020-09-26T00:00:00-05:00</published><updated>2020-09-26T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/26/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/26/links.html">&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://hdsr.mitpress.mit.edu/pub/9ptj5iu7/release/2&quot;&gt;What Is Your List of 10 Challenges in Data Science? &lt;/a&gt; - from the HDSR.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://fantasticanachronism.com/2020/09/11/whats-wrong-with-social-science-and-how-to-fix-it/&quot;&gt;What’s Wrong with Social Science and How to Fix It&lt;/a&gt; - ‘surely notice that all you have is a n=23, p=0.049 three-way interaction effect (one of dozens you tested, and with no multiple testing adjustments of course’&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><summary type="html">What Is Your List of 10 Challenges in Data Science? - from the HDSR.</summary></entry><entry><title type="html">Friday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/25/links.html" rel="alternate" type="text/html" title="Friday Links" /><published>2020-09-25T00:00:00-05:00</published><updated>2020-09-25T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/25/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/09/25/links.html">&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.economist.com/leaders/2020/09/26/what-quantum-computers-reveal-about-innovation&quot;&gt;What quantum computers reveal about innovation&lt;/a&gt; - from the Economist.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://catalyst.nejm.org/doi/full/10.1056/CAT.20.0072&quot;&gt;The Past, Present, and (Near) Future of Gene Therapy and Gene Editing&lt;/a&gt; - from NEJM&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.bbc.com/zhongwen/simp/chinese-news-54282979&quot;&gt;中国首富换人做 农夫山泉钟睒睒登顶富豪榜&lt;/a&gt; - &lt;strong&gt;半小时&lt;/strong&gt;的首富 - 来自BBC。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://vnexpress.net/messi-bi-keo-vao-vu-chi-trich-tuyen-argentina-4167254.html&quot;&gt;Messi bị kéo vào vụ chỉ trích tuyển Argentina&lt;/a&gt; - Vnexpress.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=Gs069dndIYk&quot;&gt;Earth, Wind &amp;amp; Fire - September&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><summary type="html">What quantum computers reveal about innovation - from the Economist.</summary></entry></feed>
+&lt;/ol&gt;</content><author><name></name></author><summary type="html">Gödel, Escher, Bach - 21 Lessons for the 21st Century Grit: The Power of Passion and Perseverance Hardcover The notebooks for The possessed- Published 1968 by University of Chicago Press. Found at local used book store.</summary></entry></feed>
