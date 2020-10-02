@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Creating and accessing SQL databases with python using sqlalchemy and sqlite | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Creating and accessing SQL databases with python using sqlalchemy and sqlite" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Creating and accessing SQL databases with python using sqlalchemy and sqlite","@type":"BlogPosting","dateModified":"2020-10-02T00:00:00-05:00","datePublished":"2020-10-02T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Creating and accessing SQL databases with python using sqlalchemy and sqlite | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Creating and accessing SQL databases with python using sqlalchemy and sqlite" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Creating and accessing SQL databases with python using sqlalchemy and sqlite","@type":"BlogPosting","dateModified":"2020-10-02T00:00:00-05:00","datePublished":"2020-10-02T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Creating and accessing SQL databases with python using sqlalchemy and sqlite</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-02T00:00:00-05:00" itemprop="datePublished">
+        Oct 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-10-02-databases_sqllite_sqlalchemy_27-Copy1.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-10-02-databases_sqllite_sqlalchemy_27-Copy1.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-10-02-databases_sqllite_sqlalchemy_27-Copy1.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-02-databases_sqllite_sqlalchemy_27-Copy1.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This post includes code adapted from <a href="https://gist.github.com/ronreiter/98916876e14534fa8ab2">SQLAlchemy Example</a>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">,</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">relationship</span><span class="p">,</span> <span class="n">backref</span><span class="p">,</span> <span class="n">sessionmaker</span><span class="p">,</span> <span class="n">joinedload</span>
+
+<span class="c1"># For this example we will use an in-memory sqlite DB.</span>
+<span class="c1"># Let&#39;s also configure it to echo everything it does to the screen.</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;sqlite:///:memory:&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># The base class which our objects will be defined on.</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+<span class="c1"># Our User object, mapped to the &#39;users&#39; table</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;users&#39;</span>
+
+    <span class="c1"># Every SQLAlchemy table should have a primary key named &#39;id&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
+    <span class="n">fullname</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
+
+    <span class="c1"># Lets us print out a user object conveniently.</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+       <span class="k">return</span> <span class="s2">&quot;&lt;User(name=&#39;</span><span class="si">%s</span><span class="s2">&#39;, fullname=&#39;</span><span class="si">%s</span><span class="s2">&#39;, password&#39;</span><span class="si">%s</span><span class="s2">&#39;)&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># The Address object stores the addresses </span>
+<span class="c1"># of a user in the &#39;adressess&#39; table.</span>
+<span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;addresses&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email_address</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Since we have a 1:n relationship, we need to store a foreign key </span>
+    <span class="c1"># to the users table.</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;users.id&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Defines the 1:n relationship between users and addresses.</span>
+    <span class="c1"># Also creates a backreference which is accessible from a User object.</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="n">backref</span><span class="p">(</span><span class="s1">&#39;addresses&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Lets us print out an address object conveniently.</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;Address(email_address=&#39;</span><span class="si">%s</span><span class="s2">&#39;)&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">email_address</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create all tables by issuing CREATE TABLE commands to the DB.</span>
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> 
+
+<span class="c1"># Creates a new session to the database by using the engine we described.</span>
+<span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+
+<span class="c1"># Let&#39;s create a user and add two e-mail addresses to that user.</span>
+<span class="n">example_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;example&#39;</span><span class="p">,</span> <span class="n">fullname</span><span class="o">=</span><span class="s1">&#39;example last_name_example&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;examplepassword&#39;</span><span class="p">)</span>
+<span class="n">example_user</span><span class="o">.</span><span class="n">addresses</span> <span class="o">=</span> <span class="p">[</span><span class="n">Address</span><span class="p">(</span><span class="n">email_address</span><span class="o">=</span><span class="s1">&#39;example@gmail.com&#39;</span><span class="p">),</span> <span class="n">Address</span><span class="p">(</span><span class="n">email_address</span><span class="o">=</span><span class="s1">&#39;example@yahoo.com&#39;</span><span class="p">)]</span>
+
+<span class="c1"># Let&#39;s add the user and its addresses we&#39;ve created to the DB and commit.</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">example_user</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># Now let&#39;s query the user that has the e-mail address ed@google.com</span>
+<span class="c1"># SQLAlchemy will construct a JOIN query automatically.</span>
+<span class="n">user_by_email</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Address</span><span class="o">.</span><span class="n">email_address</span><span class="o">==</span><span class="s1">&#39;example@gmail.com&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2020-10-02 08:55:48,507 INFO sqlalchemy.engine.base.Engine PRAGMA main.table_info(&#34;users&#34;)
+2020-10-02 08:55:48,508 INFO sqlalchemy.engine.base.Engine ()
+2020-10-02 08:55:48,510 INFO sqlalchemy.engine.base.Engine PRAGMA main.table_info(&#34;addresses&#34;)
+2020-10-02 08:55:48,510 INFO sqlalchemy.engine.base.Engine ()
+2020-10-02 08:55:48,513 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-10-02 08:55:48,514 INFO sqlalchemy.engine.base.Engine INSERT INTO users (name, fullname, password) VALUES (?, ?, ?)
+2020-10-02 08:55:48,515 INFO sqlalchemy.engine.base.Engine (&#39;example&#39;, &#39;example last_name_example&#39;, &#39;examplepassword&#39;)
+2020-10-02 08:55:48,517 INFO sqlalchemy.engine.base.Engine INSERT INTO addresses (email_address, user_id) VALUES (?, ?)
+2020-10-02 08:55:48,517 INFO sqlalchemy.engine.base.Engine (&#39;example@gmail.com&#39;, 1)
+2020-10-02 08:55:48,519 INFO sqlalchemy.engine.base.Engine INSERT INTO addresses (email_address, user_id) VALUES (?, ?)
+2020-10-02 08:55:48,519 INFO sqlalchemy.engine.base.Engine (&#39;example@yahoo.com&#39;, 1)
+2020-10-02 08:55:48,520 INFO sqlalchemy.engine.base.Engine COMMIT
+2020-10-02 08:55:48,522 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-10-02 08:55:48,523 INFO sqlalchemy.engine.base.Engine SELECT users.id AS users_id, users.name AS users_name, users.fullname AS users_fullname, users.password AS users_password 
+FROM users, addresses 
+WHERE addresses.email_address = ?
+ LIMIT ? OFFSET ?
+2020-10-02 08:55:48,524 INFO sqlalchemy.engine.base.Engine (&#39;example@gmail.com&#39;, 1, 0)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">user_by_email</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;User(name=&#39;example&#39;, fullname=&#39;example last_name_example&#39;, password&#39;examplepassword&#39;)&gt;
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># This will cause an additional query by lazy loading from the DB.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user_by_email</span><span class="o">.</span><span class="n">addresses</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2020-10-02 08:55:53,081 INFO sqlalchemy.engine.base.Engine SELECT addresses.id AS addresses_id, addresses.email_address AS addresses_email_address, addresses.user_id AS addresses_user_id 
+FROM addresses 
+WHERE ? = addresses.user_id
+2020-10-02 08:55:53,083 INFO sqlalchemy.engine.base.Engine (1,)
+[&lt;Address(email_address=&#39;example@gmail.com&#39;)&gt;, &lt;Address(email_address=&#39;example@yahoo.com&#39;)&gt;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># To avoid querying again when getting all addresses of a user,</span>
+<span class="c1"># we use the joinedload option. SQLAlchemy will load all results and hide</span>
+<span class="c1"># the duplicate entries from us, so we can then get for</span>
+<span class="c1"># the user&#39;s addressess without an additional query to the DB.</span>
+<span class="n">user_by_email</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Address</span><span class="o">.</span><span class="n">email_address</span><span class="o">==</span><span class="s1">&#39;example@gmail.com&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">joinedload</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">addresses</span><span class="p">))</span>\
+    <span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2020-10-02 08:56:04,305 INFO sqlalchemy.engine.base.Engine SELECT anon_1.users_id AS anon_1_users_id, anon_1.users_name AS anon_1_users_name, anon_1.users_fullname AS anon_1_users_fullname, anon_1.users_password AS anon_1_users_password, addresses_1.id AS addresses_1_id, addresses_1.email_address AS addresses_1_email_address, addresses_1.user_id AS addresses_1_user_id 
+FROM (SELECT users.id AS users_id, users.name AS users_name, users.fullname AS users_fullname, users.password AS users_password 
+FROM users, addresses 
+WHERE addresses.email_address = ?
+ LIMIT ? OFFSET ?) AS anon_1 LEFT OUTER JOIN addresses AS addresses_1 ON anon_1.users_id = addresses_1.user_id
+2020-10-02 08:56:04,306 INFO sqlalchemy.engine.base.Engine (&#39;example@gmail.com&#39;, 1, 0)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">user_by_email</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;User(name=&#39;example&#39;, fullname=&#39;example last_name_example&#39;, password&#39;examplepassword&#39;)&gt;
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">user_by_email</span><span class="o">.</span><span class="n">addresses</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&lt;Address(email_address=&#39;example@gmail.com&#39;)&gt;, &lt;Address(email_address=&#39;example@yahoo.com&#39;)&gt;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/10/02/databases_sqllite_sqlalchemy_27-Copy1.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
