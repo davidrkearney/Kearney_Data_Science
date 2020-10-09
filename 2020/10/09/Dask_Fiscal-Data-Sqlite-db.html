@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Title | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Title" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Title","@type":"BlogPosting","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Title | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Title" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-09T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Title","@type":"BlogPosting","dateModified":"2020-10-09T00:00:00-05:00","datePublished":"2020-10-09T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Title</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-09T00:00:00-05:00" itemprop="datePublished">
+        Oct 9, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-10-09-Dask_Fiscal-Data-Sqlite-db.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-10-09-Dask_Fiscal-Data-Sqlite-db.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-10-09-Dask_Fiscal-Data-Sqlite-db.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-09-Dask_Fiscal-Data-Sqlite-db.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_panel_fix.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;Unnamed: 0&#39;, &#39;province&#39;, &#39;specific&#39;, &#39;general&#39;, &#39;year&#39;, &#39;gdp&#39;, &#39;fdi&#39;,
+       &#39;rnr&#39;, &#39;rr&#39;, &#39;i&#39;, &#39;fr&#39;, &#39;reg&#39;, &#39;it&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_subset</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;reg&quot;</span><span class="p">,</span> <span class="s2">&quot;province&quot;</span><span class="p">,</span> <span class="s2">&quot;gdp&quot;</span><span class="p">,</span> <span class="s2">&quot;fdi&quot;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span><span class="s2">&quot;specific&quot;</span><span class="p">]]</span>
+<span class="n">df_subset</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>reg</th>
+      <th>province</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>it</th>
+      <th>specific</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1996</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>631930</td>
+      <td>147002.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1997</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>657860</td>
+      <td>151981.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1998</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>889463</td>
+      <td>174930.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1999</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>1227364</td>
+      <td>285324.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2000</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>1499110</td>
+      <td>195580.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>2003</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>9705.02</td>
+      <td>498055</td>
+      <td>2261631</td>
+      <td>391292.0</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>2004</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>11648.70</td>
+      <td>668128</td>
+      <td>3162299</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>2005</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>13417.68</td>
+      <td>772000</td>
+      <td>2370200</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>2006</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>15718.47</td>
+      <td>888935</td>
+      <td>2553268</td>
+      <td>1017303.0</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>2007</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>18753.73</td>
+      <td>1036576</td>
+      <td>2939778</td>
+      <td>844647.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>360 rows × 7 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_subset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;province&quot;</span><span class="p">,</span> <span class="s2">&quot;gdp&quot;</span><span class="p">,</span> <span class="s2">&quot;fdi&quot;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span><span class="s2">&quot;specific&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_subset</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>region</th>
+      <th>province</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>it</th>
+      <th>specific</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1996</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>631930</td>
+      <td>147002.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1997</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>657860</td>
+      <td>151981.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1998</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>889463</td>
+      <td>174930.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1999</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>1227364</td>
+      <td>285324.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2000</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>1499110</td>
+      <td>195580.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>2003</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>9705.02</td>
+      <td>498055</td>
+      <td>2261631</td>
+      <td>391292.0</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>2004</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>11648.70</td>
+      <td>668128</td>
+      <td>3162299</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>2005</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>13417.68</td>
+      <td>772000</td>
+      <td>2370200</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>2006</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>15718.47</td>
+      <td>888935</td>
+      <td>2553268</td>
+      <td>1017303.0</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>2007</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>18753.73</td>
+      <td>1036576</td>
+      <td>2939778</td>
+      <td>844647.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>360 rows × 7 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;sqlite:///fiscal_data.db&#39;</span><span class="p">)</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">MetaData</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fiscal_data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;fiscal_data&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> 
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;province&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;gdp&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;fdi&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;it&#39;</span><span class="p">,</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;specific&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="c1">#Creates the table</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fiscal_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Table(&#39;fiscal_data&#39;, MetaData(bind=None), Column(&#39;year&#39;, Integer(), table=&lt;fiscal_data&gt;), Column(&#39;region&#39;, String(), table=&lt;fiscal_data&gt;), Column(&#39;province&#39;, String(), table=&lt;fiscal_data&gt;), Column(&#39;gdp&#39;, String(), table=&lt;fiscal_data&gt;), Column(&#39;fdi&#39;, Integer(), table=&lt;fiscal_data&gt;), Column(&#39;it&#39;, Integer(), table=&lt;fiscal_data&gt;), Column(&#39;specific&#39;, Integer(), table=&lt;fiscal_data&gt;), schema=None)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_subset</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;fiscal_data&#39;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;append&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT year, region, province, gdp FROM fiscal_data LIMIT 10&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(1996, &#39;East China&#39;, &#39;Anhui&#39;, &#39;2093.3&#39;),
+ (1997, &#39;East China&#39;, &#39;Anhui&#39;, &#39;2347.32&#39;),
+ (1998, &#39;East China&#39;, &#39;Anhui&#39;, &#39;2542.96&#39;),
+ (1999, &#39;East China&#39;, &#39;Anhui&#39;, &#39;2712.34&#39;),
+ (2000, &#39;East China&#39;, &#39;Anhui&#39;, &#39;2902.09&#39;),
+ (2001, &#39;East China&#39;, &#39;Anhui&#39;, &#39;3246.71&#39;),
+ (2002, &#39;East China&#39;, &#39;Anhui&#39;, &#39;3519.72&#39;),
+ (2003, &#39;East China&#39;, &#39;Anhui&#39;, &#39;3923.11&#39;),
+ (2004, &#39;East China&#39;, &#39;Anhui&#39;, &#39;4759.3&#39;),
+ (2005, &#39;East China&#39;, &#39;Anhui&#39;, &#39;5350.17&#39;)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">SELECT year</span>
+<span class="s2">, region</span>
+<span class="s2">, province</span>
+<span class="s2">, gdp </span>
+<span class="s2">FROM fiscal_data</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">cnxn</span> <span class="o">=</span> <span class="n">connection</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">cnxn</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>region</th>
+      <th>province</th>
+      <th>gdp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>330</th>
+      <td>2002</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>1612.65</td>
+    </tr>
+    <tr>
+      <th>331</th>
+      <td>2003</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>1886.35</td>
+    </tr>
+    <tr>
+      <th>332</th>
+      <td>2004</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>2209.09</td>
+    </tr>
+    <tr>
+      <th>333</th>
+      <td>2005</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>2604.19</td>
+    </tr>
+    <tr>
+      <th>334</th>
+      <td>2006</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>3045.26</td>
+    </tr>
+    <tr>
+      <th>335</th>
+      <td>2007</td>
+      <td>Northwest China</td>
+      <td>Xinjiang</td>
+      <td>3523.16</td>
+    </tr>
+    <tr>
+      <th>336</th>
+      <td>1996</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>1517.69</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td>1997</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>1676.17</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>1998</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>1831.33</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>1999</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>1899.82</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>2000</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>2011.19</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>2001</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>2138.31</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>2002</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>2312.82</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>2003</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>2556.02</td>
+    </tr>
+    <tr>
+      <th>344</th>
+      <td>2004</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>3081.91</td>
+    </tr>
+    <tr>
+      <th>345</th>
+      <td>2005</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>3462.73</td>
+    </tr>
+    <tr>
+      <th>346</th>
+      <td>2006</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>3988.14</td>
+    </tr>
+    <tr>
+      <th>347</th>
+      <td>2007</td>
+      <td>Southwest China</td>
+      <td>Yunnan</td>
+      <td>4772.52</td>
+    </tr>
+    <tr>
+      <th>348</th>
+      <td>1996</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>4188.53</td>
+    </tr>
+    <tr>
+      <th>349</th>
+      <td>1997</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>4686.11</td>
+    </tr>
+    <tr>
+      <th>350</th>
+      <td>1998</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>5052.62</td>
+    </tr>
+    <tr>
+      <th>351</th>
+      <td>1999</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>5443.92</td>
+    </tr>
+    <tr>
+      <th>352</th>
+      <td>2000</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>6141.03</td>
+    </tr>
+    <tr>
+      <th>353</th>
+      <td>2001</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>6898.34</td>
+    </tr>
+    <tr>
+      <th>354</th>
+      <td>2002</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>8003.67</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>2003</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>9705.02</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>2004</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>11648.7</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>2005</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>13417.68</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>2006</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>15718.47</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>2007</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>18753.73</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#http://manpages.ubuntu.com/manpages/precise/man1/sqlite3.1.html</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># sqlite3 fiscal_data.db</span>
+
+<span class="c1"># create table memos(text, priority INTEGER);</span>
+<span class="c1"># insert into memos values(&#39;example 1&#39;, 10);</span>
+<span class="c1"># insert into memos values(&#39;example 2&#39;, 100);</span>
+<span class="c1"># select * from memos;</span>
+
+<span class="c1"># sqlite3 -line fiscal_data.db &#39;select * from memos where priority &gt; 20;&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/10/09/Dask_Fiscal-Data-Sqlite-db.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
