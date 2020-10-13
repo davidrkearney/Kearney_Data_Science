@@ -173,8 +173,16 @@
 <lastmod>2020-10-11T00:00:00-05:00</lastmod>
 </url>
 <url>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/12/dask-xgboost-fiscal-data.html</loc>
+<lastmod>2020-10-12T00:00:00-05:00</lastmod>
+</url>
+<url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/12/links.html</loc>
 <lastmod>2020-10-12T00:00:00-05:00</lastmod>
+</url>
+<url>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html</loc>
+<lastmod>2020-10-13T00:00:00-05:00</lastmod>
 </url>
 <url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/about/</loc>
@@ -193,5 +201,8 @@
 </url>
 <url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/page3/</loc>
+</url>
+<url>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/page4/</loc>
 </url>
 </urlset>

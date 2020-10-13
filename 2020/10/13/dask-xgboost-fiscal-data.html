@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models","@type":"BlogPosting","dateModified":"2020-10-13T00:00:00-05:00","datePublished":"2020-10-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models","@type":"BlogPosting","dateModified":"2020-10-13T00:00:00-05:00","datePublished":"2020-10-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Moving Dask XGboost with Fiscal Data, saving and loading Dask XGboost models</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-13T00:00:00-05:00" itemprop="datePublished">
+        Oct 13, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-10-13-dask-xgboost-fiscal-data.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-10-13-dask-xgboost-fiscal-data.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-10-13-dask-xgboost-fiscal-data.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-13-dask-xgboost-fiscal-data.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;sqlite:///fiscal.db&#39;</span><span class="p">)</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">MetaData</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM fiscal_table LIMIT 10&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(1996, &#39;East China&#39;, &#39;Anhui&#39;, 631930, 147002, 2093.3, 50661),
+ (1997, &#39;East China&#39;, &#39;Anhui&#39;, 657860, 151981, 2347.32, 43443),
+ (1998, &#39;East China&#39;, &#39;Anhui&#39;, 889463, 174930, 2542.96, 27673),
+ (1999, &#39;East China&#39;, &#39;Anhui&#39;, 1227364, 285324, 2712.34, 26131),
+ (2000, &#39;East China&#39;, &#39;Anhui&#39;, 1499110, 195580, 2902.09, 31847),
+ (2001, &#39;East China&#39;, &#39;Anhui&#39;, 2165189, 250898, 3246.71, 33672),
+ (2002, &#39;East China&#39;, &#39;Anhui&#39;, 2404936, 434149, 3519.72, 38375),
+ (2003, &#39;East China&#39;, &#39;Anhui&#39;, 2815820, 619201, 3923.11, 36720),
+ (2004, &#39;East China&#39;, &#39;Anhui&#39;, 3422176, 898441, 4759.3, 54669),
+ (2005, &#39;East China&#39;, &#39;Anhui&#39;, 3874846, 898441, 5350.17, 69000)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">SELECT year</span>
+<span class="s2">, region</span>
+<span class="s2">, province</span>
+<span class="s2">, gdp</span>
+<span class="s2">, fdi</span>
+<span class="s2">, it</span>
+<span class="s2">, specific</span>
+<span class="s2">FROM fiscal_table</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">cnxn</span> <span class="o">=</span> <span class="n">connection</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">cnxn</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>region</th>
+      <th>province</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>it</th>
+      <th>specific</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1996</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>631930</td>
+      <td>147002.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1997</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>657860</td>
+      <td>151981.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1998</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>889463</td>
+      <td>174930.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1999</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>1227364</td>
+      <td>285324.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2000</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>1499110</td>
+      <td>195580.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>2003</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>9705.02</td>
+      <td>498055</td>
+      <td>2261631</td>
+      <td>391292.0</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>2004</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>11648.70</td>
+      <td>668128</td>
+      <td>3162299</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>2005</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>13417.68</td>
+      <td>772000</td>
+      <td>2370200</td>
+      <td>656175.0</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>2006</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>15718.47</td>
+      <td>888935</td>
+      <td>2553268</td>
+      <td>1017303.0</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>2007</td>
+      <td>East China</td>
+      <td>Zhejiang</td>
+      <td>18753.73</td>
+      <td>1036576</td>
+      <td>2939778</td>
+      <td>844647.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>360 rows × 7 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;year&#39;, &#39;region&#39;, &#39;province&#39;, &#39;gdp&#39;, &#39;fdi&#39;, &#39;it&#39;, &#39;specific&#39;], dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">gdp</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f2677958128&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+" />
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">memory_limit</span><span class="o">=</span><span class="s1">&#39;4GB&#39;</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<table style="border: 2px solid white;">
+<tr>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Client</h3>
+<ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
+  <li><b>Scheduler: </b>inproc://192.168.1.71/13442/1</li>
+  <li><b>Dashboard: </b><a href="http://192.168.1.71:8787/status" target="_blank">http://192.168.1.71:8787/status</a></li>
+</ul>
+</td>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Cluster</h3>
+<ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
+  <li><b>Workers: </b>3</li>
+  <li><b>Cores: </b>6</li>
+  <li><b>Memory: </b>12.00 GB</li>
+</ul>
+</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<table style="border: 2px solid white;">
+<tr>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Client</h3>
+<ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
+  <li><b>Scheduler: </b>inproc://192.168.1.71/13442/1</li>
+  <li><b>Dashboard: </b><a href="http://192.168.1.71:8787/status" target="_blank">http://192.168.1.71:8787/status</a></li>
+</ul>
+</td>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Cluster</h3>
+<ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
+  <li><b>Workers: </b>3</li>
+  <li><b>Cores: </b>6</li>
+  <li><b>Memory: </b>12.00 GB</li>
+</ul>
+</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dask</span> <span class="kn">import</span> <span class="n">dataframe</span> <span class="k">as</span> <span class="n">dd</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ddf</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Dask DataFrame Structure:
+                year  region province      gdp    fdi     it specific
+npartitions=5                                                        
+0              int64  object   object  float64  int64  int64  float64
+72               ...     ...      ...      ...    ...    ...      ...
+...              ...     ...      ...      ...    ...    ...      ...
+288              ...     ...      ...      ...    ...    ...      ...
+359              ...     ...      ...      ...    ...    ...      ...
+Dask Name: from_pandas, 5 tasks
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ddf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>region</th>
+      <th>province</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>it</th>
+      <th>specific</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1996</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>631930</td>
+      <td>147002.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1997</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>657860</td>
+      <td>151981.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1998</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>889463</td>
+      <td>174930.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1999</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>1227364</td>
+      <td>285324.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2000</td>
+      <td>East China</td>
+      <td>Anhui</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>1499110</td>
+      <td>195580.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">id</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;Client-e79fe0fe-0d59-11eb-b482-f9dc9eaa58ee&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">feat_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;fdi&quot;</span><span class="p">]</span>
+<span class="n">cat_feat_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;province&quot;</span><span class="p">]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;gdp&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;fdi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;fdi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;gdp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;gdp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;it&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="s2">&quot;it&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="c1"># ddf[&quot;province&quot;] = ddf[&quot;province&quot;].astype(float)</span>
+<span class="c1"># ddf[&quot;region&quot;] = ddf[&quot;region&quot;].astype(float)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">ddf</span><span class="p">[</span><span class="n">feat_list</span><span class="p">]</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">y</span><span class="o">=</span><span class="n">ddf</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div><strong>Dask DataFrame Structure:</strong></div>
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>fdi</th>
+    </tr>
+    <tr>
+      <th>npartitions=5</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>int64</td>
+      <td>float64</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>288</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div>Dask Name: getitem, 5 tasks</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gdp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2093.30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2347.32</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2542.96</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2712.34</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2902.09</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>9705.02</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>11648.70</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>13417.68</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>15718.47</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>18753.73</td>
+    </tr>
+  </tbody>
+</table>
+<p>360 rows × 1 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(Delayed(&#39;int-97d0cf00-db85-425b-a0d2-08297142db86&#39;), 2) (Delayed(&#39;int-01cdae78-a995-48c1-9b93-277a008ad57a&#39;), 1)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>year    360
+fdi     360
+dtype: int64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dask_ml.xgboost</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">XGBR</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">XGBR_model</span> <span class="o">=</span> <span class="n">XGBR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 54.2 s, sys: 1.02 s, total: 55.2 s
+Wall time: 18.4 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">XGBR_model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>XGBRegressor()</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">XGBR_model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;fiscal_model&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">XGBR_model</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;fiscal_model&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[08:43:57] WARNING: /workspace/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/10/13/dask-xgboost-fiscal-data.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
