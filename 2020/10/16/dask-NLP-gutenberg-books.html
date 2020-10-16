@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-16T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg","@type":"BlogPosting","dateModified":"2020-10-16T00:00:00-05:00","datePublished":"2020-10-16T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-16T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg","@type":"BlogPosting","dateModified":"2020-10-16T00:00:00-05:00","datePublished":"2020-10-16T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-16T00:00:00-05:00" itemprop="datePublished">
+        Oct 16, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-10-16-dask-NLP-gutenberg-books.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-10-16-dask-NLP-gutenberg-books.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-10-16-dask-NLP-gutenberg-books.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-10-16-dask-NLP-gutenberg-books.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This post includes code from <a href="https://github.com/PacktPublishing/-Scalable-Data-Analysis-in-Python-with-Dask/tree/master/Section%202">Scalable-Data-Analysis-in-Python-with-Dask</a> and <a href="https://github.com/coiled/coiled-examples">coiled-examples</a>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">dask.bag</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">book_bag</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">from_url</span><span class="p">(</span><span class="s1">&#39;https://www.gutenberg.org/files/28054/28054-0.txt&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">book_bag</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(b&#39;\xef\xbb\xbfThe Project Gutenberg EBook of The Brothers Karamazov by Fyodor\r\n&#39;,
+ b&#39;Dostoyevsky\r\n&#39;,
+ b&#39;\r\n&#39;,
+ b&#39;\r\n&#39;,
+ b&#39;\r\n&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">remove_spaces</span> <span class="o">=</span> <span class="n">book_bag</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">remove_spaces</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(b&#39;\xef\xbb\xbfThe Project Gutenberg EBook of The Brothers Karamazov by Fyodor&#39;,
+ b&#39;Dostoyevsky&#39;,
+ b&#39;&#39;,
+ b&#39;&#39;,
+ b&#39;&#39;,
+ b&#39;This ebook is for the use of anyone anywhere in the United States and most&#39;,
+ b&#39;other parts of the world at no cost and with almost no restrictions&#39;,
+ b&#39;whatsoever. You may copy it, give it away or re\xe2\x80\x90use it under the terms of&#39;,
+ b&#39;the Project Gutenberg License included with this eBook or online at&#39;,
+ b&#39;http://www.gutenberg.org/license. If you are not located in the United&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">decode_to_ascii</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ascii_text</span> <span class="o">=</span> <span class="n">remove_spaces</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">decode_to_ascii</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ascii_text</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;The Project Gutenberg EBook of The Brothers Karamazov by Fyodor&#39;,
+ &#39;Dostoyevsky&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;This ebook is for the use of anyone anywhere in the United States and most&#39;,
+ &#39;other parts of the world at no cost and with almost no restrictions&#39;,
+ &#39;whatsoever. You may copy it, give it away or reuse it under the terms of&#39;,
+ &#39;the Project Gutenberg License included with this eBook or online at&#39;,
+ &#39;http://www.gutenberg.org/license. If you are not located in the United&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_punctuation</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">remove_punctuation</span> <span class="o">=</span> <span class="n">ascii_text</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">remove_punctuation</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">remove_punctuation</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;The Project Gutenberg EBook of The Brothers Karamazov by Fyodor&#39;,
+ &#39;Dostoyevsky&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;This ebook is for the use of anyone anywhere in the United States and most&#39;,
+ &#39;other parts of the world at no cost and with almost no restrictions&#39;,
+ &#39;whatsoever You may copy it give it away or reuse it under the terms of&#39;,
+ &#39;the Project Gutenberg License included with this eBook or online at&#39;,
+ &#39;httpwwwgutenbergorglicense If you are not located in the United&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lower_text</span> <span class="o">=</span> <span class="n">remove_punctuation</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lower_text</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;the project gutenberg ebook of the brothers karamazov by fyodor&#39;,
+ &#39;dostoyevsky&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;&#39;,
+ &#39;this ebook is for the use of anyone anywhere in the united states and most&#39;,
+ &#39;other parts of the world at no cost and with almost no restrictions&#39;,
+ &#39;whatsoever you may copy it give it away or reuse it under the terms of&#39;,
+ &#39;the project gutenberg license included with this ebook or online at&#39;,
+ &#39;httpwwwgutenbergorglicense if you are not located in the united&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">split_word_list</span> <span class="o">=</span> <span class="n">lower_text</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">split_word_list</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>([&#39;the&#39;,
+  &#39;project&#39;,
+  &#39;gutenberg&#39;,
+  &#39;ebook&#39;,
+  &#39;of&#39;,
+  &#39;the&#39;,
+  &#39;brothers&#39;,
+  &#39;karamazov&#39;,
+  &#39;by&#39;,
+  &#39;fyodor&#39;],
+ [&#39;dostoyevsky&#39;],
+ [&#39;&#39;],
+ [&#39;&#39;],
+ [&#39;&#39;],
+ [&#39;this&#39;,
+  &#39;ebook&#39;,
+  &#39;is&#39;,
+  &#39;for&#39;,
+  &#39;the&#39;,
+  &#39;use&#39;,
+  &#39;of&#39;,
+  &#39;anyone&#39;,
+  &#39;anywhere&#39;,
+  &#39;in&#39;,
+  &#39;the&#39;,
+  &#39;united&#39;,
+  &#39;states&#39;,
+  &#39;and&#39;,
+  &#39;most&#39;],
+ [&#39;other&#39;,
+  &#39;parts&#39;,
+  &#39;of&#39;,
+  &#39;the&#39;,
+  &#39;world&#39;,
+  &#39;at&#39;,
+  &#39;no&#39;,
+  &#39;cost&#39;,
+  &#39;and&#39;,
+  &#39;with&#39;,
+  &#39;almost&#39;,
+  &#39;no&#39;,
+  &#39;restrictions&#39;],
+ [&#39;whatsoever&#39;,
+  &#39;you&#39;,
+  &#39;may&#39;,
+  &#39;copy&#39;,
+  &#39;it&#39;,
+  &#39;give&#39;,
+  &#39;it&#39;,
+  &#39;away&#39;,
+  &#39;or&#39;,
+  &#39;reuse&#39;,
+  &#39;it&#39;,
+  &#39;under&#39;,
+  &#39;the&#39;,
+  &#39;terms&#39;,
+  &#39;of&#39;],
+ [&#39;the&#39;,
+  &#39;project&#39;,
+  &#39;gutenberg&#39;,
+  &#39;license&#39;,
+  &#39;included&#39;,
+  &#39;with&#39;,
+  &#39;this&#39;,
+  &#39;ebook&#39;,
+  &#39;or&#39;,
+  &#39;online&#39;,
+  &#39;at&#39;],
+ [&#39;httpwwwgutenbergorglicense&#39;,
+  &#39;if&#39;,
+  &#39;you&#39;,
+  &#39;are&#39;,
+  &#39;not&#39;,
+  &#39;located&#39;,
+  &#39;in&#39;,
+  &#39;the&#39;,
+  &#39;united&#39;])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_empty_words</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">word_list</span><span class="p">))</span>
+
+<span class="n">non_empty_words</span> <span class="o">=</span> <span class="n">split_word_list</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">remove_empty_words</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">non_empty_words</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>([&#39;the&#39;,
+  &#39;project&#39;,
+  &#39;gutenberg&#39;,
+  &#39;ebook&#39;,
+  &#39;of&#39;,
+  &#39;the&#39;,
+  &#39;brothers&#39;,
+  &#39;karamazov&#39;,
+  &#39;by&#39;,
+  &#39;fyodor&#39;],
+ [&#39;dostoyevsky&#39;],
+ [&#39;this&#39;,
+  &#39;ebook&#39;,
+  &#39;is&#39;,
+  &#39;for&#39;,
+  &#39;the&#39;,
+  &#39;use&#39;,
+  &#39;of&#39;,
+  &#39;anyone&#39;,
+  &#39;anywhere&#39;,
+  &#39;in&#39;,
+  &#39;the&#39;,
+  &#39;united&#39;,
+  &#39;states&#39;,
+  &#39;and&#39;,
+  &#39;most&#39;],
+ [&#39;other&#39;,
+  &#39;parts&#39;,
+  &#39;of&#39;,
+  &#39;the&#39;,
+  &#39;world&#39;,
+  &#39;at&#39;,
+  &#39;no&#39;,
+  &#39;cost&#39;,
+  &#39;and&#39;,
+  &#39;with&#39;,
+  &#39;almost&#39;,
+  &#39;no&#39;,
+  &#39;restrictions&#39;],
+ [&#39;whatsoever&#39;,
+  &#39;you&#39;,
+  &#39;may&#39;,
+  &#39;copy&#39;,
+  &#39;it&#39;,
+  &#39;give&#39;,
+  &#39;it&#39;,
+  &#39;away&#39;,
+  &#39;or&#39;,
+  &#39;reuse&#39;,
+  &#39;it&#39;,
+  &#39;under&#39;,
+  &#39;the&#39;,
+  &#39;terms&#39;,
+  &#39;of&#39;],
+ [&#39;the&#39;,
+  &#39;project&#39;,
+  &#39;gutenberg&#39;,
+  &#39;license&#39;,
+  &#39;included&#39;,
+  &#39;with&#39;,
+  &#39;this&#39;,
+  &#39;ebook&#39;,
+  &#39;or&#39;,
+  &#39;online&#39;,
+  &#39;at&#39;],
+ [&#39;httpwwwgutenbergorglicense&#39;,
+  &#39;if&#39;,
+  &#39;you&#39;,
+  &#39;are&#39;,
+  &#39;not&#39;,
+  &#39;located&#39;,
+  &#39;in&#39;,
+  &#39;the&#39;,
+  &#39;united&#39;],
+ [&#39;states&#39;,
+  &#39;youll&#39;,
+  &#39;have&#39;,
+  &#39;to&#39;,
+  &#39;check&#39;,
+  &#39;the&#39;,
+  &#39;laws&#39;,
+  &#39;of&#39;,
+  &#39;the&#39;,
+  &#39;country&#39;,
+  &#39;where&#39;,
+  &#39;you&#39;,
+  &#39;are&#39;,
+  &#39;located&#39;],
+ [&#39;before&#39;, &#39;using&#39;, &#39;this&#39;, &#39;ebook&#39;],
+ [&#39;title&#39;, &#39;the&#39;, &#39;brothers&#39;, &#39;karamazov&#39;])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_words</span> <span class="o">=</span> <span class="n">non_empty_words</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">all_words</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>dask.bag.core.Bag</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_words</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;the&#39;,
+ &#39;project&#39;,
+ &#39;gutenberg&#39;,
+ &#39;ebook&#39;,
+ &#39;of&#39;,
+ &#39;the&#39;,
+ &#39;brothers&#39;,
+ &#39;karamazov&#39;,
+ &#39;by&#39;,
+ &#39;fyodor&#39;,
+ &#39;dostoyevsky&#39;,
+ &#39;this&#39;,
+ &#39;ebook&#39;,
+ &#39;is&#39;,
+ &#39;for&#39;,
+ &#39;the&#39;,
+ &#39;use&#39;,
+ &#39;of&#39;,
+ &#39;anyone&#39;,
+ &#39;anywhere&#39;,
+ &#39;in&#39;,
+ &#39;the&#39;,
+ &#39;united&#39;,
+ &#39;states&#39;,
+ &#39;and&#39;,
+ &#39;most&#39;,
+ &#39;other&#39;,
+ &#39;parts&#39;,
+ &#39;of&#39;,
+ &#39;the&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">change_to_key_value</span> <span class="o">=</span> <span class="n">all_words</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">change_to_key_value</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;, 1), (&#39;project&#39;, 1), (&#39;gutenberg&#39;, 1), (&#39;ebook&#39;, 1))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped_words</span> <span class="o">=</span> <span class="n">all_words</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grouped_words</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;,
+  [&#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   &#39;the&#39;,
+   ...]),)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">word_count</span> <span class="o">=</span> <span class="n">grouped_words</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">word_count</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;, 15379),
+ (&#39;project&#39;, 89),
+ (&#39;gutenberg&#39;, 88),
+ (&#39;ebook&#39;, 14),
+ (&#39;of&#39;, 7410),
+ (&#39;brothers&#39;, 82),
+ (&#39;karamazov&#39;, 170),
+ (&#39;by&#39;, 1165),
+ (&#39;fyodor&#39;, 303),
+ (&#39;dostoyevsky&#39;, 3))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">change_to_key_value</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;, 1),
+ (&#39;project&#39;, 1),
+ (&#39;gutenberg&#39;, 1),
+ (&#39;ebook&#39;, 1),
+ (&#39;of&#39;, 1),
+ (&#39;the&#39;, 1),
+ (&#39;brothers&#39;, 1),
+ (&#39;karamazov&#39;, 1),
+ (&#39;by&#39;, 1),
+ (&#39;fyodor&#39;, 1))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Take a running count of a word</span>
+<span class="c1"># In this case, the default value of </span>
+<span class="c1"># count needs to be provided</span>
+<span class="k">def</span> <span class="nf">add_bin_op</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">count</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Take the output from multiple bin_op(s)</span>
+<span class="c1"># and add them to get the total count of</span>
+<span class="c1"># a word</span>
+<span class="k">def</span> <span class="nf">add_combine_op</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">word_count</span> <span class="o">=</span> <span class="n">change_to_key_value</span><span class="o">.</span><span class="n">foldby</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                       <span class="n">add_bin_op</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                                       <span class="n">add_combine_op</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">word_count</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;, 15379),
+ (&#39;project&#39;, 89),
+ (&#39;gutenberg&#39;, 88),
+ (&#39;ebook&#39;, 14),
+ (&#39;of&#39;, 7410),
+ (&#39;brothers&#39;, 82),
+ (&#39;karamazov&#39;, 170),
+ (&#39;by&#39;, 1165),
+ (&#39;fyodor&#39;, 303),
+ (&#39;dostoyevsky&#39;, 3))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">much_easier</span> <span class="o">=</span> <span class="n">all_words</span><span class="o">.</span><span class="n">frequencies</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">much_easier</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;the&#39;, 15379),
+ (&#39;project&#39;, 89),
+ (&#39;gutenberg&#39;, 88),
+ (&#39;ebook&#39;, 14),
+ (&#39;of&#39;, 7410),
+ (&#39;brothers&#39;, 82),
+ (&#39;karamazov&#39;, 170),
+ (&#39;by&#39;, 1165),
+ (&#39;fyodor&#39;, 303),
+ (&#39;dostoyevsky&#39;, 3))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Removing-stop-words-in-top-word-frequency-counts">Removing stop words in top word frequency counts<a class="anchor-link" href="#Removing-stop-words-in-top-word-frequency-counts"> </a></h1>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">spacy.lang.en</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">without_stopwords</span> <span class="o">=</span> <span class="n">all_words</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_freq</span> <span class="o">=</span> <span class="n">without_stopwords</span><span class="o">.</span><span class="n">frequencies</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_freq</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>((&#39;project&#39;, 89),
+ (&#39;gutenberg&#39;, 88),
+ (&#39;ebook&#39;, 14),
+ (&#39;brothers&#39;, 82),
+ (&#39;karamazov&#39;, 170),
+ (&#39;fyodor&#39;, 303),
+ (&#39;dostoyevsky&#39;, 3),
+ (&#39;use&#39;, 77),
+ (&#39;united&#39;, 24),
+ (&#39;states&#39;, 21),
+ (&#39;parts&#39;, 19),
+ (&#39;world&#39;, 182),
+ (&#39;cost&#39;, 12),
+ (&#39;restrictions&#39;, 2),
+ (&#39;whatsoever&#39;, 5),
+ (&#39;copy&#39;, 16),
+ (&#39;away&#39;, 445),
+ (&#39;reuse&#39;, 2),
+ (&#39;terms&#39;, 33),
+ (&#39;license&#39;, 14))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_freq</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>dask.bag&lt;topk-aggregate, npartitions=1&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_freq</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;alyosha&#39;, 1176),
+ (&#39;said&#39;, 993),
+ (&#39;know&#39;, 843),
+ (&#39;man&#39;, 842),
+ (&#39;mitya&#39;, 814),
+ (&#39;dont&#39;, 784),
+ (&#39;come&#39;, 772),
+ (&#39;father&#39;, 721),
+ (&#39;ivan&#39;, 677),
+ (&#39;time&#39;, 669)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
