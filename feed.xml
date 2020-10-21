@@ -1,4 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-10-21T08:13:06-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Using the Quandl API and Pandas Datareader API to call Microsoft, Apple, Zoom, Snowflake stocks and other finance data</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl.html" rel="alternate" type="text/html" title="Using the Quandl API and Pandas Datareader API to call Microsoft, Apple, Zoom, Snowflake stocks and other finance data" /><published>2020-10-21T00:00:00-05:00</published><updated>2020-10-21T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl.html">&lt;!--
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-10-21T18:42:37-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Data Science Content</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20content/2020/10/22/ds-content.html" rel="alternate" type="text/html" title="Data Science Content" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20content/2020/10/22/ds-content</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20content/2020/10/22/ds-content.html">&lt;h2 id=&quot;style-guides&quot;&gt;Style Guides&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/palantir/pyspark-style-guide&quot;&gt;Pyspark Style Guide&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/google/styleguide/blob/gh-pages/pyguide.md&quot;&gt;Python Style Guide&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reinforcement-learning&quot;&gt;Reinforcement Learning&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/reinforcement-learning-made-simple-part-1-intro-to-basic-concepts-and-terminology-1d2a87aa060&quot;&gt;Reinforcement Learning Project&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;data-engineering-resources&quot;&gt;Data Engineering Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://awesomedataengineering.com/&quot;&gt;Data Engineering Resources&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;nlp&quot;&gt;NLP&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;BERT
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/distilling-bert-using-unlabeled-qa-dataset-4670085cc18&quot;&gt;Using BERT for Unlabeled Data&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;docker&quot;&gt;Docker&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/docker-for-data-science-a-step-by-step-guide-1e5f7f3baf8e&quot;&gt;Using Docker for Data Science&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;github-roadmaps&quot;&gt;Github Roadmaps&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/microsoft/vscode/wiki/Roadmap&quot;&gt;VS Code Roadmap&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;apis&quot;&gt;APIs&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://tidalwaves.io/&quot;&gt;News API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Style Guides</summary></entry><entry><title type="html">Using the Quandl API and Pandas Datareader API to call Microsoft, Apple, Zoom, Snowflake stocks and other finance data</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl.html" rel="alternate" type="text/html" title="Using the Quandl API and Pandas Datareader API to call Microsoft, Apple, Zoom, Snowflake stocks and other finance data" /><published>2020-10-21T00:00:00-05:00</published><updated>2020-10-21T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/21/quant_data_datareader_quandl.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -6774,20 +6823,7 @@ The comparison between East China and North China is not statistically significa
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Friday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links.html" rel="alternate" type="text/html" title="Friday Links" /><published>2020-10-16T00:00:00-05:00</published><updated>2020-10-16T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links.html">&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://explosion.ai/blog/spacy-v3-nightly&quot;&gt;Spacy V3&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.brookings.edu/techstream/why-congress-should-invest-in-open-source-software/&quot;&gt;why-congress-should-invest-in-open-source-software&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://hai.stanford.edu/blog/national-research-cloud-ensuring-continuation-american-innovation&quot;&gt;National Research Cloud AI/ML&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://formito.com/tools/favicon&quot;&gt;Favicons&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Spacy V3</summary></entry><entry><title type="html">Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" rel="alternate" type="text/html" title="Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg" /><published>2020-10-16T00:00:00-05:00</published><updated>2020-10-16T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html">&lt;!--
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html" rel="alternate" type="text/html" title="Using Dask with dask.bag and regex to parse The Brothers Karamazov from project gutenberg" /><published>2020-10-16T00:00:00-05:00</published><updated>2020-10-16T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/16/dask-NLP-gutenberg-books.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -9052,7 +9088,23 @@ The comparison between East China and North China is not statistically significa
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Linear Regression using Dask Data Frames</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1.html" rel="alternate" type="text/html" title="Linear Regression using Dask Data Frames" /><published>2020-10-15T00:00:00-05:00</published><updated>2020-10-15T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1.html">&lt;!--
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Friday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links.html" rel="alternate" type="text/html" title="Friday Links" /><published>2020-10-16T00:00:00-05:00</published><updated>2020-10-16T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links.html">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://explosion.ai/blog/spacy-v3-nightly&quot;&gt;Spacy V3&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.brookings.edu/techstream/why-congress-should-invest-in-open-source-software/&quot;&gt;why-congress-should-invest-in-open-source-software&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hai.stanford.edu/blog/national-research-cloud-ensuring-continuation-american-innovation&quot;&gt;National Research Cloud AI/ML&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://formito.com/tools/favicon&quot;&gt;Favicons&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hub.jhu.edu/2020/10/02/babies-prefer-what-they-choose-even-when-random/&quot;&gt;Babies’ random choices become their preferences&lt;/a&gt;: “We assume we choose things that we like, but research suggests that’s sometimes backward: We like things because we choose them, and we dislike things that we don’t choose.”&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Spacy V3</summary></entry><entry><title type="html">Linear Regression using Dask Data Frames</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1.html" rel="alternate" type="text/html" title="Linear Regression using Dask Data Frames" /><published>2020-10-15T00:00:00-05:00</published><updated>2020-10-15T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/2020/10/15/dask-xgboost-Linear-Regresion-Copy1.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
@@ -14023,20 +14075,4 @@ Wall time: 18.4 s
 &lt;/div&gt;
     
 
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry><entry><title type="html">Monday Links</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/12/links.html" rel="alternate" type="text/html" title="Monday Links" /><published>2020-10-12T00:00:00-05:00</published><updated>2020-10-12T00:00:00-05:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/12/links</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/12/links.html">&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.nobelprize.org/uploads/2020/09/advanced-economicsciencesprize2020.pdf&quot;&gt;Nobel Prize in Economics 2020, Auction Theory&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.320.1811&amp;amp;rep=rep1&amp;amp;type=pdf&quot;&gt;The Promise of Prediction Markets&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://apps.dtic.mil/sti/pdfs/ADA111668.pdf&quot;&gt;ENTRY DETERRENCE by Milgrom and John Roberts (1981)&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;http://www.econ.ucla.edu/riley/271/Milgrom-Putting%20Auction%20Theory%20to%20Work.pdf&quot;&gt;Auction Theory by Milgrom&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://www.simonsfoundation.org/event/how-computer-science-informs-modern-auction-design/&quot;&gt;How Computer Science Informs Modern Auction Design&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Nobel Prize in Economics 2020, Auction Theory</summary></entry></feed>
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary></entry></feed>
