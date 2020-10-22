@@ -48,3 +48,7 @@ title: Data Science Content
  + [News API](https://tidalwaves.io/)
 
 
+## Startups
+
+ + [Startup Financial Modeling](https://www.mathventurepartners.com/blog/2016/9/15/startup-financial-modeling-part-1-what-is-a-financial-model)
+
