@@ -52,3 +52,23 @@ title: Data Science Content
 
  + [Startup Financial Modeling](https://www.mathventurepartners.com/blog/2016/9/15/startup-financial-modeling-part-1-what-is-a-financial-model)
 
+
+## Content
+
+ + [LIME explanations for classification results](https://towardsdatascience.com/build-a-lime-explainer-dashboard-with-the-fewest-lines-of-code-bfe12e4592d4)
+
+
+## Explainble Machine Learning
+
+
+## Mapping with Python
+
+ + [Hex Maps for Spatial Data](https://towardsdatascience.com/generate-hex-maps-from-your-existing-spatial-data-in-less-than-3-steps-a6f39d778d84)
+  
+ + [Choropleth using the Plot.ly](https://towardsdatascience.com/visualizing-covid-19-vulnerability-with-plot-ly-for-python-bce308dd58)
+
+
+
+
+
+
