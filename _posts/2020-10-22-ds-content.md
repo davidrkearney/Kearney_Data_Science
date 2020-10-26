@@ -7,17 +7,29 @@ title: Data Science Content
 ---
 
 
-## Style Guides
+
+# Machine Learning
+
+## Pyspark Content
 
 + [Pyspark Style Guide](https://github.com/palantir/pyspark-style-guide)
 
-+ [Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md)
++ [Spark Joins](https://towardsdatascience.com/demystifying-joins-in-apache-spark-38589701a88e)
 
+
+## Style Guides
+
++ [Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md)
 
 ## Reinforcement Learning
 
 + [Reinforcement Learning Project](https://towardsdatascience.com/reinforcement-learning-made-simple-part-1-intro-to-basic-concepts-and-terminology-1d2a87aa060)
 
+
+
+## Principal Component Analysis (PCA) 
+
+[Principal Component Analysis (PCA) with Scikit-learn](https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0)
 
 
 ## Data Engineering Resources
@@ -53,13 +65,17 @@ title: Data Science Content
  + [Startup Financial Modeling](https://www.mathventurepartners.com/blog/2016/9/15/startup-financial-modeling-part-1-what-is-a-financial-model)
 
 
+
+
+
+
 ## Content
 
+
+
+## Explainable Machine Learning
+
  + [LIME explanations for classification results](https://towardsdatascience.com/build-a-lime-explainer-dashboard-with-the-fewest-lines-of-code-bfe12e4592d4)
-
-
-## Explainble Machine Learning
-
 
 ## Mapping with Python
 
@@ -68,7 +84,17 @@ title: Data Science Content
  + [Choropleth using the Plot.ly](https://towardsdatascience.com/visualizing-covid-19-vulnerability-with-plot-ly-for-python-bce308dd58)
 
 
+## Organization
+
+[Organizing Folders with Python](https://towardsdatascience.com/how-to-create-a-list-of-files-folders-and-subfolders-and-then-export-as-excel-6ce9eaa3867a)
 
 
 
+## Economics and Data Science
 
+[An Economist’s Value in Data Science](https://towardsdatascience.com/an-economists-value-in-data-science-1f94723827c4)
+Covers Econometrics. Economists 'have a unique set of skills that allows them to apply statistics in a very similar fashion to data scientists, while also being able to evaluate bias, externalities, and comprehend the math behind algorithms. Additionally, their experience analyzing businesses provide an ability to question and discuss the value of models relative to business goals.'
+
+
+
+# Statistics
