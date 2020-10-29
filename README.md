@@ -2,6 +2,9 @@
 
 ![](https://github.com/davidrkearney/Kearney_Data_Science/workflows/CI/badge.svg) 
 ![](https://github.com/davidrkearney/Kearney_Data_Science/workflows/GH-Pages%20Status/badge.svg) 
+![](https://img.shields.io/github/last-commit/davidrkearney/Kearney_Data_Science) 
+
+
 
 
 # Data Science blog resources
