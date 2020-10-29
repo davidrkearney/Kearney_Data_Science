@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Webscraping Text and Images with BeautifulSoup example | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Webscraping Text and Images with BeautifulSoup example" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-04T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Webscraping Text and Images with BeautifulSoup example","@type":"BlogPosting","dateModified":"2020-11-04T00:00:00-06:00","datePublished":"2020-11-04T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Webscraping Text and Images with BeautifulSoup example | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Webscraping Text and Images with BeautifulSoup example" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-04T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Notebooks and notes on data science work.","headline":"Webscraping Text and Images with BeautifulSoup example","@type":"BlogPosting","dateModified":"2020-11-04T00:00:00-06:00","datePublished":"2020-11-04T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/04/Webscraping_Example.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Webscraping Text and Images with BeautifulSoup example</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-04T00:00:00-06:00" itemprop="datePublished">
+        Nov 4, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      21 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-11-04-Webscraping_Example.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-11-04-Webscraping_Example.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-11-04-Webscraping_Example.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-04-Webscraping_Example.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This notebook code is from the app found here: <a href="https://github.com/kenichinakanishi/houseplant_classifier/">https://github.com/kenichinakanishi/houseplant_classifier/</a></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="k">def</span> <span class="nf">getHTMLContent</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">soup</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s1">&#39;https://www.aspca.org/pet-care/animal-poison-control/cats-plant-list&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0&#39;</span><span class="p">})</span>
+<span class="n">webpage</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="c1"># Soupify the webpage</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">webpage</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>       
+<span class="c1"># Search through the parse tree to get all the content from the table         </span>
+<span class="n">content_list</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">)[</span><span class="mi">7</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>       
+<span class="c1"># Put it in a dataframe for further processing</span>
+<span class="n">df_cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">content_list</span><span class="p">)</span>           
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/gao/anaconda3/lib/python3.7/site-packages/pandas/core/internals/construction.py:305: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  values = np.array([convert(v) for v in values])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Clean up the strings</span>
+<span class="n">df_cats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_cats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">df_cats</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_cats</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">df_cats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_cats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+<span class="c1"># Get rid of useless columns and rename the columns</span>
+<span class="n">df_cats</span> <span class="o">=</span> <span class="n">df_cats</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Alternative Names&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s1">&#39;Family&#39;</span><span class="p">})</span>
+<span class="c1"># Separate toxic and non-toxic plants</span>
+<span class="n">df_cats</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">first_nontoxic_cats</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">df_cats</span><span class="p">[</span><span class="n">df_cats</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">index</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df_cats</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">first_nontoxic_cats</span><span class="p">:,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_cats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Alternative Names</th>
+      <th>Scientific Name</th>
+      <th>Family</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adam-and-Eve</td>
+      <td>Arum, Lord-and-Ladies, Wake Robin, Starch Root...</td>
+      <td>Arum maculatum</td>
+      <td>Araceae</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>African Wonder Tree</td>
+      <td></td>
+      <td>Ricinus communis</td>
+      <td></td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Alocasia</td>
+      <td>Elephant's Ear</td>
+      <td>Alocasia spp.</td>
+      <td>Araceae</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Aloe</td>
+      <td></td>
+      <td>Aloe vera</td>
+      <td>Liliaceae</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Amaryllis</td>
+      <td>Many, including: Belladonna lily, Saint Joseph...</td>
+      <td>Amaryllis spp.</td>
+      <td>Amaryllidaceae</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>980</th>
+      <td>Yellowrocket</td>
+      <td></td>
+      <td>Barbarea vulgaris</td>
+      <td>Brassicaceae</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>981</th>
+      <td>Yorba Linda</td>
+      <td></td>
+      <td>Peperomia rotundifolia</td>
+      <td>Piperaceae</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>982</th>
+      <td>Zebra Haworthia</td>
+      <td></td>
+      <td>Haworthia fasciata</td>
+      <td>Liliaceae</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>983</th>
+      <td>Zinnia</td>
+      <td></td>
+      <td>Zinnia species</td>
+      <td>Asteraceae</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>984</th>
+      <td>Zucchini Squash</td>
+      <td></td>
+      <td>Cucurbia pepo cv zucchini</td>
+      <td>Cucurbitaceae</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>985 rows × 5 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s1">&#39;https://www.aspca.org/pet-care/animal-poison-control/dogs-plant-list&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0&#39;</span><span class="p">})</span>
+<span class="n">webpage</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">webpage</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>                 <span class="c1"># soupify the webpage</span>
+<span class="n">content_list</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">)[</span><span class="mi">7</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>            <span class="c1"># Get all the content from the table</span>
+<span class="n">df_dogs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">content_list</span><span class="p">)</span>                  <span class="c1"># Put it in a dataframe for processing</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/gao/anaconda3/lib/python3.7/site-packages/pandas/core/internals/construction.py:305: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray
+  values = np.array([convert(v) for v in values])
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Clean up the strings</span>
+<span class="n">df_dogs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">df_dogs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">df_dogs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+<span class="c1"># Get rid of useless columns and rename the columns</span>
+<span class="n">df_dogs</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Alternative Names&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s1">&#39;Family&#39;</span><span class="p">})</span>
+<span class="c1"># Separate toxic and non-toxic plants</span>
+<span class="n">df_dogs</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">first_nontoxic_dogs</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">df_dogs</span><span class="p">[</span><span class="n">df_dogs</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">index</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df_dogs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">first_nontoxic_dogs</span><span class="p">:,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Merge dataframes into one, outer merge used to retain values that only exist on one side</span>
+<span class="n">df_catsdogs</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_cats</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="s1">&#39;Alternative Names&#39;</span><span class="p">,</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span><span class="s1">&#39;Family&#39;</span><span class="p">])</span>
+<span class="n">df_catsdogs</span> <span class="o">=</span> <span class="n">df_catsdogs</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">df_catsdogs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># Assume same toxicity for dogs and cats if unknown</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Merge dataframes into one, outer merge used to retain values that only exist on one side</span>
+<span class="n">df_catsdogs</span> <span class="o">=</span> <span class="n">df_dogs</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_cats</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="s1">&#39;Alternative Names&#39;</span><span class="p">,</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span><span class="s1">&#39;Family&#39;</span><span class="p">])</span>
+<span class="n">df_catsdogs</span> <span class="o">=</span> <span class="n">df_catsdogs</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">df_catsdogs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># Assume same toxicity for dogs and cats if unknown</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Alternative Names</th>
+      <th>Scientific Name</th>
+      <th>Family</th>
+      <th>Toxic to Dogs</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>810</th>
+      <td>Pink Splash</td>
+      <td>Flamingo Plant, Polka Dot Plant, Measles Plant...</td>
+      <td>Hypoestes phyllostachya</td>
+      <td>Acanthaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>English Ivy</td>
+      <td>Branching Ivy, Glacier Ivy, Needlepoint Ivy, S...</td>
+      <td>Hedera helix</td>
+      <td>Araliaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>564</th>
+      <td>Crape Myrtle</td>
+      <td>Crepe Myrtle</td>
+      <td>Lagerstroemia indica</td>
+      <td>Lythraceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>Japanese Yew</td>
+      <td>English Yew, Western Yew, Pacific Yew, Anglo-J...</td>
+      <td>Taxus sp.</td>
+      <td>Taxaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>635</th>
+      <td>Giant Touch-Me-Not</td>
+      <td>Buzzy Lizzie, Impatience Plant, Patient Lucy, ...</td>
+      <td>Impatiens spp.</td>
+      <td>Balsaminaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>Cowbane</td>
+      <td>Water Hemlock, Poison Parsnip</td>
+      <td>Cicuta species</td>
+      <td>Apiaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>277</th>
+      <td>Ornamental Pepper</td>
+      <td>Natal Cherry, Winter Cherry, Jerusalem Cherry</td>
+      <td>Solanum pseudocapsicum</td>
+      <td>Solanaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>513</th>
+      <td>Carrot Fern</td>
+      <td></td>
+      <td>Onychium japonica</td>
+      <td>Polypodiaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>712</th>
+      <td>Leather Peperomia</td>
+      <td></td>
+      <td>Peperomia crassifolia</td>
+      <td>Piperaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>California Pitcher Plant</td>
+      <td>Cobra Orchid, Cobra Plant, Cobra Lily, Chrysam...</td>
+      <td>Darlingtonia californica</td>
+      <td>Sarraceniaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">)</span> <span class="c1"># Get rid of duplicates</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>   <span class="c1"># Reset and sort index</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;NONE LISTED&#39;</span><span class="p">])]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>    <span class="c1"># Fix mistakes in database</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Ensure proper punctuation for each scientific name.</span>
+<span class="k">def</span> <span class="nf">normalize_capitalization</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">first_word</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+  <span class="n">first_word</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_word</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()]</span>
+  <span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">]</span>
+  <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">first_word</span><span class="o">+</span><span class="n">rest</span><span class="p">)</span>
+
+<span class="c1"># Clean up repeated species that have different names</span>
+<span class="k">def</span> <span class="nf">species_normalizer</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sp&#39;</span><span class="p">,</span><span class="s1">&#39;species&#39;</span><span class="p">,</span><span class="s1">&#39;spp&#39;</span><span class="p">,</span><span class="s1">&#39;sp.&#39;</span><span class="p">,</span><span class="s1">&#39;spp.&#39;</span><span class="p">]:</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+  <span class="k">return</span> <span class="n">word</span>
+
+<span class="c1"># Remove cv from names, as it is an outdated way of referring to cultivars</span>
+<span class="k">def</span> <span class="nf">cv_remover</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+  <span class="k">if</span> <span class="s1">&#39;cv&#39;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; cv &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">word</span>
+
+<span class="c1"># Remove var. from names</span>
+<span class="k">def</span> <span class="nf">var_remover</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+  <span class="k">if</span> <span class="s1">&#39;var&#39;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; var. &#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">word</span>
+
+<span class="c1"># Apply each of the functions</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_capitalization</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">species_normalizer</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cv_remover</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">var_remover</span><span class="p">)</span>
+
+<span class="c1"># Remove special characters</span>
+<span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">character</span> <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">if</span> <span class="n">character</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">character</span><span class="o">.</span><span class="n">isspace</span><span class="p">()]))</span>
+
+<span class="c1"># Reset dataframe for further processing</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">)</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Alternative Names</th>
+      <th>Scientific Name</th>
+      <th>Family</th>
+      <th>Toxic to Dogs</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>108</th>
+      <td>American Bittersweet</td>
+      <td>Bittersweet, Waxwork, Shrubby Bittersweet, Fal...</td>
+      <td>Celastrus scandens</td>
+      <td>Celastraceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>530</th>
+      <td>Pacific Yew</td>
+      <td>English Yew, Western Yew, Japanese Yew, Anglo-...</td>
+      <td>Taxus brevifolia</td>
+      <td>Taxaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>Pie Plant</td>
+      <td>Rhubarb</td>
+      <td>Rheum rhabarbarium</td>
+      <td>Polygonaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>164</th>
+      <td>Pheasant Plant</td>
+      <td>Zebra Plant</td>
+      <td>Cryptanthus zonatus</td>
+      <td>Bromeliaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>452</th>
+      <td>Primrose</td>
+      <td></td>
+      <td>Primula vulgaris</td>
+      <td>Primulaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>506</th>
+      <td>Jackson Brier</td>
+      <td></td>
+      <td>Smilax lanceolata</td>
+      <td>Liliaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>407</th>
+      <td>Ivy Peperomia</td>
+      <td>Plantinum Peperomia, Silver leaf Peperomia, Iv...</td>
+      <td>Peperomia griseoargentea</td>
+      <td>Piperaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>Poison Hemlock</td>
+      <td>Poison Parsley, Spotted Hemlock, Winter Fern, ...</td>
+      <td>Conium maculatum</td>
+      <td>Umbelliferae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>351</th>
+      <td>Cardinal Flower</td>
+      <td>Lobelia, Indian Pink</td>
+      <td>Lobelia cardinalis</td>
+      <td>Campanulaceae</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>Pink Brocade</td>
+      <td></td>
+      <td>Episcia cultivar</td>
+      <td>Gesneriaceae</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">use_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;scientificName&#39;</span><span class="p">,</span><span class="s1">&#39;taxonRank&#39;</span><span class="p">,</span><span class="s1">&#39;family&#39;</span><span class="p">,</span><span class="s1">&#39;genus&#39;</span><span class="p">,</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">,</span><span class="s1">&#39;taxonID&#39;</span><span class="p">,</span> <span class="s1">&#39;acceptedNameUsageID&#39;</span><span class="p">]</span>
+<span class="n">wfo_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../classification.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">lineterminator</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">use_cols</span><span class="p">)</span>
+<span class="n">wfo_df</span> <span class="o">=</span> <span class="n">wfo_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/gao/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3146: DtypeWarning: Columns (10) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wfo_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>taxonID</th>
+      <th>scientificName</th>
+      <th>taxonRank</th>
+      <th>family</th>
+      <th>genus</th>
+      <th>taxonomicStatus</th>
+      <th>acceptedNameUsageID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>796160</th>
+      <td>wfo-0000798814</td>
+      <td>Peridium oblongifolium</td>
+      <td>SPECIES</td>
+      <td>Peraceae</td>
+      <td>Peridium</td>
+      <td>Synonym</td>
+      <td>wfo-0000267144</td>
+    </tr>
+    <tr>
+      <th>180708</th>
+      <td>wfo-0000180970</td>
+      <td>Cracca smallii</td>
+      <td>SPECIES</td>
+      <td>Fabaceae</td>
+      <td>Cracca</td>
+      <td>Synonym</td>
+      <td>wfo-0000178756</td>
+    </tr>
+    <tr>
+      <th>911945</th>
+      <td>wfo-0000914633</td>
+      <td>Thinopyrum turcicum</td>
+      <td>SPECIES</td>
+      <td>Poaceae</td>
+      <td>Thinopyrum</td>
+      <td>Synonym</td>
+      <td>wfo-0000866236</td>
+    </tr>
+    <tr>
+      <th>167159</th>
+      <td>wfo-0000167369</td>
+      <td>Indigofera cinerea</td>
+      <td>SPECIES</td>
+      <td>Fabaceae</td>
+      <td>Indigofera</td>
+      <td>Synonym</td>
+      <td>wfo-0000173646</td>
+    </tr>
+    <tr>
+      <th>642316</th>
+      <td>wfo-0000644639</td>
+      <td>Diaphanoptera khorasanica</td>
+      <td>SPECIES</td>
+      <td>Caryophyllaceae</td>
+      <td>Diaphanoptera</td>
+      <td>Accepted</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>464965</th>
+      <td>wfo-0000466716</td>
+      <td>Phyllocyclus minutiflorus</td>
+      <td>SPECIES</td>
+      <td>Gentianaceae</td>
+      <td>Phyllocyclus</td>
+      <td>Doubtful</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>740337</th>
+      <td>wfo-0000742945</td>
+      <td>Daphne pseudomezereum var. koreana</td>
+      <td>VARIETY</td>
+      <td>Thymelaeaceae</td>
+      <td>Daphne</td>
+      <td>Synonym</td>
+      <td>wfo-0000637684</td>
+    </tr>
+    <tr>
+      <th>868404</th>
+      <td>wfo-0000871073</td>
+      <td>Festuca montis-aurei</td>
+      <td>SPECIES</td>
+      <td>Poaceae</td>
+      <td>Festuca</td>
+      <td>Synonym</td>
+      <td>wfo-0000869683</td>
+    </tr>
+    <tr>
+      <th>186218</th>
+      <td>wfo-0000186502</td>
+      <td>Lotononis curvicarpa</td>
+      <td>SPECIES</td>
+      <td>Fabaceae</td>
+      <td>Lotononis</td>
+      <td>Accepted</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>552490</th>
+      <td>wfo-0000554468</td>
+      <td>Specklinia casualis</td>
+      <td>SPECIES</td>
+      <td>Orchidaceae</td>
+      <td>Specklinia</td>
+      <td>Synonym</td>
+      <td>wfo-0000339564</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Don&#39;t need this column, we trust the WFO database more</span>
+<span class="n">aspca_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Family&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Merge dataframes together to get trusted info</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">wfo_df</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">left_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">],</span> <span class="n">right_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;scientificName&#39;</span><span class="p">])</span>
+<span class="c1"># Sort by taxonomicStatus and drop duplicates keeping the first - keeping accepted names as priority</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Fill NaN&#39;s with Unknown</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Clean up and deal with scientific names that are unknown, due to misspellings or otherwise.</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">unknown_idx</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unknown_idx</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>101
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_closest_name</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">,</span> <span class="n">name_df</span> <span class="o">=</span> <span class="n">wfo_df</span><span class="p">,</span> <span class="n">name_col</span> <span class="o">=</span> <span class="s1">&#39;scientificName&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; Matches an &#39;unknown_name&#39; against accepted names in a &#39;name_df&#39;. Will return names that are above a &#39;threshold&#39; of closeness. </span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  unknown_name: str</span>
+<span class="sd">    Name we want to match against accepted names. </span>
+<span class="sd">  name_df: DataFrame</span>
+<span class="sd">    DataFrame containing accepted names.</span>
+<span class="sd">  name_col: str, name of name_df column </span>
+<span class="sd">    DataFrame column containing accepted names.</span>
+<span class="sd">  threshold: int</span>
+<span class="sd">    How closely does the unknown_name need to match with the accepted name.</span>
+<span class="sd">    If above this threshold, the name is added to a dictionary of possible names.</span>
+<span class="sd">  verbose: bool</span>
+<span class="sd">    Should the function print the entire list of possible names. </span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">  ----------</span>
+<span class="sd">  str</span>
+<span class="sd">    Closest name to &#39;unknown_name&#39; that was above the given &#39;threshold&#39;.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="kn">import</span> <span class="nn">operator</span>
+  <span class="kn">from</span> <span class="nn">difflib</span> <span class="kn">import</span> <span class="n">SequenceMatcher</span>
+  <span class="k">def</span> <span class="nf">similar</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span>
+  <span class="n">poss_names</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="c1"># Only look through entries with the same first letter to save time</span>
+  <span class="k">for</span> <span class="n">true_sciname</span> <span class="ow">in</span> <span class="n">name_df</span><span class="p">[</span><span class="n">name_df</span><span class="p">[</span><span class="n">name_col</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">[</span><span class="mi">0</span><span class="p">])][</span><span class="n">name_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="n">similar_score</span> <span class="o">=</span> <span class="n">similar</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">,</span> <span class="n">true_sciname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">similar_score</span><span class="o">&gt;</span><span class="n">threshold</span><span class="p">:</span>
+      <span class="n">poss_names</span><span class="p">[</span><span class="n">true_sciname</span><span class="p">]</span><span class="o">=</span><span class="n">similar_score</span>
+  <span class="c1"># If the dict is empty</span>
+  <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">poss_names</span><span class="p">)</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">poss_names</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No names close enough to </span><span class="si">{</span><span class="n">unknown_name</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">unknown_name</span><span class="si">}</span><span class="s1"> is closest to </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">poss_names</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">, with a score of </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">poss_names</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">poss_names</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fix_name</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">,</span> <span class="n">true_name</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; Fixes the aspca_df entries according to the accepted wfo_df entry.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  unknown_name: str</span>
+<span class="sd">    Name we want to fix. </span>
+<span class="sd">  true_name: DataFrame</span>
+<span class="sd">    Accepted name to use.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="c1"># Get the series we&#39;re looking to change</span>
+  <span class="n">unknown_data</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">unknown_name</span><span class="p">]</span>
+  <span class="c1"># Grab accepted data from wfo database based on ID lookup</span>
+  <span class="n">true_data</span> <span class="o">=</span> <span class="n">wfo_df</span><span class="p">[</span><span class="n">wfo_df</span><span class="p">[</span><span class="s1">&#39;scientificName&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">true_name</span><span class="p">]</span>
+  <span class="n">true_sciname</span> <span class="o">=</span> <span class="n">true_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;scientificName&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">true_family</span> <span class="o">=</span> <span class="n">true_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;family&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">true_genus</span> <span class="o">=</span> <span class="n">true_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;genus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">true_taxonomicStatus</span> <span class="o">=</span> <span class="n">true_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="c1"># Change scientific name, family, genus and taxonomic status to accepted versions</span>
+  <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">unknown_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_sciname</span>
+  <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">unknown_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_family</span>
+  <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">unknown_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_genus</span>
+  <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">unknown_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_taxonomicStatus</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unknown_idx</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unknown_idx</span><span class="p">)</span><span class="si">}</span><span class="s1"> plants currently cannot be matched.&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">unknown_idx</span><span class="p">):</span>
+  <span class="n">unknown_name</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+  <span class="n">closest_name</span> <span class="o">=</span> <span class="n">get_closest_name</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">closest_name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+    <span class="k">continue</span>
+  <span class="n">fix_name</span><span class="p">(</span><span class="n">unknown_name</span><span class="p">,</span><span class="n">closest_name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>101 plants currently cannot be matched.
+Malus sylvestrus is closest to Malus sylvestris, with a score of 0.94
+No names close enough to Maranta insignis.
+No names close enough to Miltonia roezlii alba.
+No names close enough to Neoregalia.
+No names close enough to Nephrolepis exalta bostoniensis.
+Nephrolepsis exalta is closest to Nephrolepis exaltata, with a score of 0.92
+No names close enough to Nephrolepsis cordifolia duffii.
+No names close enough to Lilium orientalis.
+No names close enough to Nephrolepsis cordifolia plumosa.
+Nephrolepis exalta is closest to Nephrolepis exaltata, with a score of 0.95
+No names close enough to Lilium asiatica.
+Hosta plataginea is closest to Hosta plantaginea, with a score of 0.97
+No names close enough to Lampranthus piquet.
+Kalmia poliifolia is closest to Kalmia polifolia, with a score of 0.97
+Kalmia augustifolia is closest to Kalmia angustifolia, with a score of 0.95
+Jasminium is closest to Jasminum, with a score of 0.94
+Hoya publcalyx is closest to Hoya pubicalyx, with a score of 0.93
+No names close enough to Hoya carnosa krinkle kurl.
+No names close enough to Hemigraphis exotica.
+Gynura aurantica is closest to Gynura aurantiaca, with a score of 0.97
+No names close enough to Nolina tuberculata.
+Guzmania lingulata minor is closest to Guzmania lingulata var. minor, with a score of 0.91
+Lavendula angustifolia is closest to Lavandula angustifolia, with a score of 0.95
+Onychium japonica is closest to Onychium japonicum, with a score of 0.91
+No names close enough to Schefflera or brassia actinoplylla.
+Paeonis officinalis is closest to Paeonia officinalis, with a score of 0.95
+No names close enough to Giant dracaena.
+Taxus canadensus is closest to Taxus canadensis, with a score of 0.94
+Stapelia hirsata is closest to Stapelia hirsuta, with a score of 0.94
+Sorghum vulgare var sudanesis is closest to Sorghum vulgare var. sudanense, with a score of 0.92
+Smilax walteria is closest to Smilax walteri, with a score of 0.97
+Secum weinbergii is closest to Sedum weinbergii, with a score of 0.94
+No names close enough to Scindapsusphilodendron.
+Santpaulia confusa is closest to Saintpaulia confusa, with a score of 0.97
+Rhipsalis cassutha is closest to Rhipsalis cassytha, with a score of 0.94
+Rheum rhabarbarium is closest to Rheum rhabarbarum, with a score of 0.97
+Origanum vulgare hirtum is closest to Origanum vulgare var. hirtum, with a score of 0.90
+Tolmeia menziesii is closest to Tolmiea menziesii, with a score of 0.94
+Podocarpus macrophylla is closest to Podocarpus macrophyllus, with a score of 0.93
+Ploystichum munitum is closest to Polystichum munitum, with a score of 0.95
+Plectranthus oetendahlii is closest to Plectranthus oertendahlii, with a score of 0.98
+Plantanus occidentalis is closest to Platanus occidentalis, with a score of 0.98
+Pilea cadieri is closest to Pilea cadierei, with a score of 0.96
+No names close enough to Phoenix robellinii.
+No names close enough to Peperomia serpens variegata.
+Peperomia prostata is closest to Peperomia prostrata, with a score of 0.97
+Peperomia griseoargentea is closest to Peperomia griseoargentia, with a score of 0.96
+Pellonia pulchra is closest to Pellionia pulchra, with a score of 0.97
+Rhapis flabelliformus is closest to Rhapis flabelliformis, with a score of 0.95
+Fuschsia is closest to Fuchsia, with a score of 0.93
+No names close enough to Begonia rex peace.
+Eriogonium umbellatum is closest to Eriogonum umbellatum, with a score of 0.98
+Citrus aurantifolia is closest to Citrus aurantiifolia, with a score of 0.97
+Cissus dicolor is closest to Cissus discolor, with a score of 0.97
+Chlorophytum bichetti is closest to Chlorophytum bichetii, with a score of 0.95
+No names close enough to Ceratostigma larpentiae.
+Cattleya trianaei is closest to Cattleya trianae, with a score of 0.97
+Camellia japonica thea japonica is closest to Camellia japonica var. japonica, with a score of 0.90
+Caesalpinia gilliessi is closest to Caesalpinia gilliesii, with a score of 0.95
+Borage officinalis is closest to Borago officinalis, with a score of 0.94
+No names close enough to Bertolonia mosaica.
+No names close enough to Begonia semperflorens cultivar.
+Begonia scharfii is closest to Begonia scharffii, with a score of 0.97
+Begonia cleopatra is closest to Begonia cleopatrae, with a score of 0.97
+No names close enough to Asparagus densiflorus sprengeri.
+Arum palestinum is closest to Arum palaestinum, with a score of 0.97
+Anthurium scherzeranum is closest to Anthurium scherzerianum, with a score of 0.98
+Anthirrhinum multiflorum is closest to Antirrhinum multiflorum, with a score of 0.98
+Anoectuchilus setaceus is closest to Anoectochilus setaceus, with a score of 0.95
+Anethum graveolena is closest to Anethum graveolens, with a score of 0.94
+No names close enough to Albiflora.
+No names close enough to Acantha.
+Tradescantia flumeninsis is closest to Tradescantia fluminensis, with a score of 0.92
+Citrus aurantium is closest to Citrus ×aurantium, with a score of 0.97
+Euonymus atropurpurea is closest to Euonymus atropurpureus, with a score of 0.93
+Citrus limonia is closest to Citrus ×limonia, with a score of 0.97
+Cleome hasserlana is closest to Cleome hassleriana, with a score of 0.91
+Eriogonium inflatum is closest to Eriogonum inflatum, with a score of 0.97
+No names close enough to Episcia cultivar.
+Epidendrum atropurpeum is closest to Epidendrum atropurpureum, with a score of 0.96
+Eleagnus is closest to Elaeagnus, with a score of 0.94
+No names close enough to Echeveria puloliver.
+Echeveria pulinata is closest to Echeveria pulvinata, with a score of 0.97
+No names close enough to Echevaria.
+No names close enough to Dypsis lutescens chrysalidocarpus lutescens alternate scientific name.
+No names close enough to Draceana.
+No names close enough to Daucus carota sativa.
+Citrus paradisii is closest to Citrus paradisi, with a score of 0.97
+No names close enough to Cycasrevolutazamia.
+No names close enough to Cucurbita maxima turbaniformis.
+No names close enough to Cucurbita maxima hubbard.
+No names close enough to Cucurbita maxima butternut.
+No names close enough to Cucurbita maxima buttercup.
+No names close enough to Cucurbita maxima banana.
+No names close enough to Cucurbia pepo zucchini.
+No names close enough to Cryptanthus bivattus minor.
+Coleus ampoinicus is closest to Coleus amboinicus, with a score of 0.94
+Clivia minata is closest to Clivia miniata, with a score of 0.96
+Clintonia umbelluata is closest to Clintonia umbellulata, with a score of 0.98
+No names close enough to Cycasandzamia.
+Veitchia merillii is closest to Veitchia merrillii, with a score of 0.97
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Scientific names that don&#39;t match anything on record automatically</span>
+<span class="n">unknown_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span>
+<span class="c1"># Synonyms that don&#39;t have a database link to the accepted name</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">unknown_ids</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[(</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">acceptedNameUsageID</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Synonym&#39;</span><span class="p">)]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">unknown_ids</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>52</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Manually fix some scientific names that don&#39;t match anything on record automatically</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Nephrolepsis cordifolia plumosa&#39;</span><span class="p">,</span> <span class="s1">&#39;Nephrolepis cordifolia&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Nephrolepsis cordifolia duffii&#39;</span><span class="p">,</span> <span class="s1">&#39;Nephrolepis cordifolia&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Nephrolepis exalta bostoniensis&#39;</span><span class="p">,</span> <span class="s1">&#39;Nephrolepis exaltata&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Neoregalia&#39;</span><span class="p">,</span> <span class="s1">&#39;Neoregelia&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Miltonia roezlii alba&#39;</span><span class="p">,</span> <span class="s1">&#39;Miltonia roezlii&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Maranta insignis&#39;</span><span class="p">,</span> <span class="s1">&#39;Calathea insignis&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lilium orientalis&#39;</span><span class="p">,</span> <span class="s1">&#39;Lilium japonicum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lampranthus piquet&#39;</span><span class="p">,</span> <span class="s1">&#39;Lampranthus piquetbergensis&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Hoya carnosa krinkle kurl&#39;</span><span class="p">,</span> <span class="s1">&#39;Hoya carnosa&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Hemigraphis exotica&#39;</span><span class="p">,</span> <span class="s1">&#39;Hemigraphis alternata&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lilium asiatica&#39;</span><span class="p">,</span> <span class="s1">&#39;Lilium japonicum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Nolina tuberculata&#39;</span><span class="p">,</span> <span class="s1">&#39;Beaucarnea recurvata&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Giant dracaena&#39;</span><span class="p">,</span> <span class="s1">&#39;Cordyline australis&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Scindapsusphilodendron&#39;</span><span class="p">,</span> <span class="s1">&#39;Philodendron scandens&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Schefflera or brassia actinoplylla&#39;</span><span class="p">,</span> <span class="s1">&#39;Schefflera actinophylla&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Phoenix robellinii&#39;</span><span class="p">,</span> <span class="s1">&#39;Phoenix roebelenii&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Peperomia serpens variegata&#39;</span><span class="p">,</span> <span class="s1">&#39;Peperomia serpens&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Bertolonia mosaica&#39;</span><span class="p">,</span> <span class="s1">&#39;Fittonia albivenis&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Begonia semperflorens cultivar&#39;</span><span class="p">,</span> <span class="s1">&#39;Begonia semperflorens&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Begonia rex peace&#39;</span><span class="p">,</span> <span class="s1">&#39;Begonia rex&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Asparagus densiflorus sprengeri&#39;</span><span class="p">,</span> <span class="s1">&#39;Asparagus densiflorus&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Albiflora&#39;</span><span class="p">,</span> <span class="s1">&#39;Tradescantia zebrina&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Acantha&#39;</span><span class="p">,</span> <span class="s1">&#39;Acanthus&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Episcia cultivar&#39;</span><span class="p">,</span> <span class="s1">&#39;Episcia&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Echevaria&#39;</span><span class="p">,</span> <span class="s1">&#39;Echeveria&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Echeveria puloliver&#39;</span><span class="p">,</span> <span class="s1">&#39;Echeveria harmsii&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Dypsis lutescens chrysalidocarpus lutescens alternate scientific name&#39;</span><span class="p">,</span> <span class="s1">&#39;Dypsis lutescens&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Draceana&#39;</span><span class="p">,</span> <span class="s1">&#39;Dracaena&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Daucus carota sativa&#39;</span><span class="p">,</span> <span class="s1">&#39;Daucus carota&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Ceratostigma larpentiae&#39;</span><span class="p">,</span> <span class="s1">&#39;Ceratostigma plumbaginoides&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cycasrevolutazamia&#39;</span><span class="p">,</span> <span class="s1">&#39;Cycas revoluta&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbita maxima turbaniformis&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita maxima&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbita maxima hubbard&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita maxima&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbita maxima butternut&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita maxima&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbita maxima banana&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita maxima&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbita maxima buttercup&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita maxima&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cucurbia pepo zucchini&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucurbita pepo&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cryptanthus bivattus minor&#39;</span><span class="p">,</span> <span class="s1">&#39;Cryptanthus bivittatus&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cycasandzamia&#39;</span><span class="p">,</span> <span class="s1">&#39;Cycas&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Manually match up synonyms that don&#39;t have a database link to the accepted name</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Chlorophytum bichetii&#39;</span><span class="p">,</span> <span class="s1">&#39;Chlorophytum laxum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Rhapis flabelliformis&#39;</span><span class="p">,</span> <span class="s1">&#39;Rhapis excelsa&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cleome hassleriana&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleome spinosa&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Pellionia pulchra&#39;</span><span class="p">,</span> <span class="s1">&#39;Pellionia repens&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cissus discolor&#39;</span><span class="p">,</span> <span class="s1">&#39;Cissus javana&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Miltonia roezlii&#39;</span><span class="p">,</span> <span class="s1">&#39;Miltoniopsis roezlii&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Sorghum vulgare var. sudanense&#39;</span><span class="p">,</span> <span class="s1">&#39;Sorghum bicolor&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Camellia japonica var. japonica&#39;</span><span class="p">,</span> <span class="s1">&#39;Camellia japonica&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Onychium japonicum&#39;</span><span class="p">,</span> <span class="s1">&#39;Onychium japonicum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Epidendrum atropurpureum&#39;</span><span class="p">,</span> <span class="s1">&#39;Psychilis atropurpurea&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Philodendron scandens&#39;</span><span class="p">,</span> <span class="s1">&#39;Philodendron hederaceum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Origanum vulgare var. hirtum&#39;</span><span class="p">,</span> <span class="s1">&#39;Origanum vulgare subsp. hirtum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Guzmania lingulata var. minor&#39;</span><span class="p">,</span> <span class="s1">&#39;Guzmania lingulata var. concolor&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lavandula angustifolia&#39;</span><span class="p">,</span> <span class="s1">&#39;Lavandula angustifolia&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Begonia semperflorens&#39;</span><span class="p">,</span> <span class="s1">&#39;Begonia cucullata&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Calathea insignis&#39;</span><span class="p">,</span> <span class="s1">&#39;Calathea crotalifera&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Citrus ×limonia&#39;</span><span class="p">,</span> <span class="s1">&#39;Citrus limon&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Coleus amboinicus&#39;</span><span class="p">,</span> <span class="s1">&#39;Plectranthus amboinicus&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Rhipsalis cassytha&#39;</span><span class="p">,</span> <span class="s1">&#39;Rhipsalis dichotoma&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lycopersicon&#39;</span><span class="p">,</span> <span class="s1">&#39;Solanum lycopersicum&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Lachenalia lilacina&#39;</span><span class="p">,</span> <span class="s1">&#39;Iris domestica&#39;</span><span class="p">)</span>
+<span class="n">fix_name</span><span class="p">(</span><span class="s1">&#39;Cymopterus watsonii&#39;</span><span class="p">,</span> <span class="s1">&#39;Cymopterus terebinthinus&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Scientific names that don&#39;t match anything on record automatically</span>
+<span class="n">unknown_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span>
+<span class="c1"># Synonyms that don&#39;t have a database link to the accepted name</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">unknown_ids</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[(</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">acceptedNameUsageID</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">taxonomicStatus</span> <span class="o">==</span> <span class="s1">&#39;Synonym&#39;</span><span class="p">)]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">unknown_ids</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_df</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">synonym_idx</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="s1">&#39;Synonym&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">synonym_idx</span><span class="p">)</span><span class="si">}</span><span class="s1"> entries have a more acceptable synonym&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>71 entries have a more acceptable synonym
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Work to update the remaining scientific names that are synonyms for their accepted scientific names</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">synonym_idx</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="s1">&#39;Synonym&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">synonym_idx</span><span class="p">:</span>
+  <span class="c1"># Get the series we&#39;re looking to change</span>
+  <span class="n">synonym_data</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+  <span class="n">synonym_name</span> <span class="o">=</span> <span class="n">synonym_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span>
+  <span class="c1"># Grab accepted data from wfo database based on ID lookup</span>
+  <span class="n">true_data</span> <span class="o">=</span> <span class="n">wfo_df</span><span class="p">[</span><span class="n">wfo_df</span><span class="p">[</span><span class="s1">&#39;taxonID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">synonym_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;acceptedNameUsageID&#39;</span><span class="p">]]</span>
+  <span class="n">true_sciname</span> <span class="o">=</span> <span class="n">true_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">fix_name</span><span class="p">(</span><span class="n">synonym_name</span><span class="p">,</span><span class="n">true_sciname</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-36-d42f5603c8fc&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>   <span class="ansi-red-fg"># Grab accepted data from wfo database based on ID lookup</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>   true_data <span class="ansi-blue-fg">=</span> wfo_df<span class="ansi-blue-fg">[</span>wfo_df<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;taxonID&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">==</span> synonym_data<span class="ansi-blue-fg">.</span>loc<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;acceptedNameUsageID&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">   </span>true_sciname <span class="ansi-blue-fg">=</span> true_data<span class="ansi-blue-fg">.</span>iloc<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>values<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>   fix_name<span class="ansi-blue-fg">(</span>synonym_name<span class="ansi-blue-fg">,</span>true_sciname<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">IndexError</span>: index 0 is out of bounds for axis 0 with size 0</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">synonym_idx</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="s1">&#39;Synonym&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">synonym_idx</span><span class="p">)</span><span class="si">}</span><span class="s1"> entries have a more acceptable synonym&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>31 entries have a more acceptable synonym
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Sort and drop again</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Scientific Name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="c1"># Set genus of one-word names to be the name, rather than NaN</span>
+<span class="n">aspca_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)[</span><span class="s1">&#39;genus&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Unknown&#39;</span><span class="p">,</span> <span class="s1">&#39;genus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">aspca_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">)[</span><span class="s1">&#39;genus&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Unknown&#39;</span><span class="p">,</span> <span class="s1">&#39;Scientific Name&#39;</span><span class="p">]</span>
+<span class="c1"># Drop columns we no longer need</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;taxonID&#39;</span><span class="p">,</span> <span class="s1">&#39;scientificName&#39;</span><span class="p">,</span> <span class="s1">&#39;taxonomicStatus&#39;</span><span class="p">,</span> <span class="s1">&#39;acceptedNameUsageID&#39;</span><span class="p">,</span> <span class="s1">&#39;taxonRank&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Standardize column names</span>
+<span class="n">aspca_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;genus&#39;</span><span class="p">:</span><span class="s1">&#39;Genus&#39;</span><span class="p">,</span> <span class="s1">&#39;family&#39;</span><span class="p">:</span><span class="s1">&#39;Family&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Reorder columns</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Scientific Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Genus&#39;</span><span class="p">,</span> <span class="s1">&#39;Family&#39;</span><span class="p">,</span> <span class="s1">&#39;Alternative Names&#39;</span><span class="p">,</span> <span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span> <span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]</span>
+<span class="n">aspca_df</span> <span class="o">=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Plant Toxicity - v6.csv&#39;</span><span class="p">)</span>
+<span class="n">aspca_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Scientific Name</th>
+      <th>Genus</th>
+      <th>Family</th>
+      <th>Alternative Names</th>
+      <th>Toxic to Dogs</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>102</th>
+      <td>Celosia Globosa</td>
+      <td>Celosia globosa</td>
+      <td>Celosia</td>
+      <td>Amaranthaceae</td>
+      <td>Globe Amarantha, Perpetua</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Alocasia</td>
+      <td>Alocasia</td>
+      <td>Alocasia</td>
+      <td>Araceae</td>
+      <td>Elephant's Ear</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>386</th>
+      <td>Variegated Philodendron</td>
+      <td>Philodendron hederaceum</td>
+      <td>Philodendron</td>
+      <td>Araceae</td>
+      <td></td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>411</th>
+      <td>American Mandrake</td>
+      <td>Podophyllum peltatum</td>
+      <td>Podophyllum</td>
+      <td>Berberidaceae</td>
+      <td>Mayapple, Indian Apple Root, Umbrella Leaf, Wi...</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>Chestnut</td>
+      <td>Castanea dentata</td>
+      <td>Castanea</td>
+      <td>Fagaceae</td>
+      <td>American Chestnut</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>291</th>
+      <td>Butterfly Iris</td>
+      <td>Iris spuria</td>
+      <td>Iris</td>
+      <td>Iridaceae</td>
+      <td>Spuria Iris</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>Climbing Lily</td>
+      <td>Gloriosa superba</td>
+      <td>Gloriosa</td>
+      <td>Colchicaceae</td>
+      <td>Gloriosa Lily, Glory Lily, Superb Lily</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Measles Plant</td>
+      <td>Acanthus</td>
+      <td>Acanthus</td>
+      <td>Acanthaceae</td>
+      <td>Polka Dot Plant, Flamingo Plant, Baby’s Tears,...</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>246</th>
+      <td>Orange Star</td>
+      <td>Guzmania lingulata var. concolor</td>
+      <td>Guzmania</td>
+      <td>Bromeliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>420</th>
+      <td>Algaroba</td>
+      <td>Prosopis limensis</td>
+      <td>Prosopis</td>
+      <td>Fabaceae</td>
+      <td>Kiawe, Mesquite</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Scientific Name</th>
+      <th>Genus</th>
+      <th>Family</th>
+      <th>Alternative Names</th>
+      <th>Toxic to Dogs</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sand Verbena</td>
+      <td>Abronia fragrans</td>
+      <td>Abronia</td>
+      <td>Nyctaginaceae</td>
+      <td>Prairie Snowball, Wild Lantana</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Prayer Bean</td>
+      <td>Abrus precatorius</td>
+      <td>Abrus</td>
+      <td>Fabaceae</td>
+      <td>Rosary Pea, Buddhist Rosary Bead, Indian Bead,...</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Copperleaf</td>
+      <td>Acalypha godseffiana</td>
+      <td>Acalypha</td>
+      <td>Euphorbiaceae</td>
+      <td>Lance Copperleaf</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Chenille Plant</td>
+      <td>Acalypha hispida</td>
+      <td>Acalypha</td>
+      <td>Euphorbiaceae</td>
+      <td>Philippine Medusa, Foxtail, Red-hot Cat Tail</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Measles Plant</td>
+      <td>Acanthus</td>
+      <td>Acanthus</td>
+      <td>Acanthaceae</td>
+      <td>Polka Dot Plant, Flamingo Plant, Baby’s Tears,...</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="p">[</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Scientific Name</th>
+      <th>Genus</th>
+      <th>Family</th>
+      <th>Alternative Names</th>
+      <th>Toxic to Dogs</th>
+      <th>Toxic to Cats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>262</th>
+      <td>Day Lilies (many varieties)</td>
+      <td>Hemerocallis</td>
+      <td>Hemerocallis</td>
+      <td>Xanthorrhoeaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>263</th>
+      <td>Orange Day Lily</td>
+      <td>Hemerocallis graminea</td>
+      <td>Hemerocallis</td>
+      <td>Xanthorrhoeaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>296</th>
+      <td>Black Walnut</td>
+      <td>Juglans nigra</td>
+      <td>Juglans</td>
+      <td>Juglandaceae</td>
+      <td></td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>317</th>
+      <td>Lily</td>
+      <td>Lilium</td>
+      <td>Lilium</td>
+      <td>Liliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>319</th>
+      <td>Tiger Lily</td>
+      <td>Lilium lancifolium</td>
+      <td>Lilium</td>
+      <td>Liliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>320</th>
+      <td>Easter Lily</td>
+      <td>Lilium longiflorum</td>
+      <td>Lilium</td>
+      <td>Liliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>321</th>
+      <td>Red Lily</td>
+      <td>Lilium philadelphicum</td>
+      <td>Lilium</td>
+      <td>Liliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>322</th>
+      <td>Japanese Show Lily</td>
+      <td>Lilium speciosum</td>
+      <td>Lilium</td>
+      <td>Liliaceae</td>
+      <td></td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Family&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Family&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="mi">70</span><span class="p">:</span><span class="mi">80</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Toxic to Cats</th>
+      <th>Toxic to Dogs</th>
+    </tr>
+    <tr>
+      <th>Family</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Lauraceae</th>
+      <td>0.500000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>Proteaceae</th>
+      <td>0.500000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>Convolvulaceae</th>
+      <td>0.500000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>Commelinaceae</th>
+      <td>0.500000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>Euphorbiaceae</th>
+      <td>0.600000</td>
+      <td>0.600000</td>
+    </tr>
+    <tr>
+      <th>Fabaceae</th>
+      <td>0.600000</td>
+      <td>0.600000</td>
+    </tr>
+    <tr>
+      <th>Berberidaceae</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Polygonaceae</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Apiaceae</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Moraceae</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># How many Families have mixed toxicity</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Family&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Family&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Family&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Family&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>33</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># How many Families</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">aspca_df</span><span class="p">[</span><span class="s1">&#39;Family&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>111</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Genus&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Genus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="mi">208</span><span class="p">:</span><span class="mi">218</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Toxic to Cats</th>
+      <th>Toxic to Dogs</th>
+    </tr>
+    <tr>
+      <th>Genus</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Schefflera</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Cordyline</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Iris</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Aloe</th>
+      <td>0.666667</td>
+      <td>0.666667</td>
+    </tr>
+    <tr>
+      <th>Dracaena</th>
+      <td>0.800000</td>
+      <td>0.800000</td>
+    </tr>
+    <tr>
+      <th>Aralia</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>Ficus</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>Apocynum</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>Sansevieria</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>Rumex</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># How many Genuses have mixed toxicity</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Genus&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Genus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Genus&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Genus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">)[</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>9</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># How many Genuses</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">aspca_df</span><span class="p">[[</span><span class="s1">&#39;Genus&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">,</span><span class="s1">&#39;Toxic to Cats&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Genus&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Toxic to Dogs&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>346</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># If running in Colabs</span>
+<span class="o">!</span>pip install selenium -q
+<span class="o">!</span>apt-get update # to update ubuntu to correctly run apt install
+<span class="o">!</span>apt install chromium-chromedriver -q
+<span class="o">!</span>cp /usr/lib/chromium-browser/chromedriver /usr/bin
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-yellow-fg">WARNING: You are using pip version 20.2.3; however, version 20.2.4 is available.
+You should consider upgrading via the &#39;/home/gao/anaconda3/bin/python -m pip install --upgrade pip&#39; command.</span>
+Reading package lists... Done
+E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)
+E: Unable to lock directory /var/lib/apt/lists/
+W: Problem unlinking the file /var/cache/apt/pkgcache.bin - RemoveCaches (13: Permission denied)
+W: Problem unlinking the file /var/cache/apt/srcpkgcache.bin - RemoveCaches (13: Permission denied)
+E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+cp: cannot stat &#39;/usr/lib/chromium-browser/chromedriver&#39;: No such file or directory
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;/usr/lib/chromium-browser/chromedriver&#39;</span><span class="p">)</span>
+
+<span class="c1"># Import and setup the Selenium webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="n">chrome_options</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">ChromeOptions</span><span class="p">()</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--no-sandbox&#39;</span><span class="p">)</span>
+<span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--disable-dev-shm-usage&#39;</span><span class="p">)</span>
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s1">&#39;chromedriver&#39;</span><span class="p">,</span><span class="n">chrome_options</span><span class="o">=</span><span class="n">chrome_options</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/11/04/Webscraping_Example.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
