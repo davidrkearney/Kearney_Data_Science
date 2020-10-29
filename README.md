@@ -4,9 +4,9 @@
 ![](https://github.com/davidrkearney/Kearney_Data_Science/workflows/GH-Pages%20Status/badge.svg) 
 ![](https://img.shields.io/github/last-commit/davidrkearney/Kearney_Data_Science) 
 
-## Code and Content:
-![](https://img.shields.io/badge/rss-%23FFA500.svg?&style=for-the-badge&logo=rss&logoColor=white) 
+## Code and Creative:
 ![](https://img.shields.io/badge/github-%23100000.svg?&style=for-the-badge&logo=github&logoColor=white) 
+![](https://img.shields.io/badge/rss-%23FFA500.svg?&style=for-the-badge&logo=rss&logoColor=white) 
 
 ## Skills:
 ![](https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white) 
