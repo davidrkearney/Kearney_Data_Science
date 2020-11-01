@@ -2,8 +2,8 @@
 toc: true
 layout: post
 description: Statistics Blog Posts
-categories: [Statistics, RCT]
-title: T-Tests. The Purpose, Assumptions, How it Works, and Corrections.
+categories: [Statistics]
+title: T-Tests The Purpose, Assumptions, How it Works, and Corrections.
 ---
 
 
