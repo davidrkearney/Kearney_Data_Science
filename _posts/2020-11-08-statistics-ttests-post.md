@@ -1,12 +1,12 @@
 ---
 toc: true
 layout: post
-description: Data Science Posts
-categories: [Data Science Posts]
-title: Data Science Posts
+description: Statistics Blog Posts
+categories: [Statistics, RCT]
+title: T-Tests. The Purpose, Assumptions, How it Works, and Corrections.
 ---
 
-# T-Tests: Purpose, Assumptions, How it works, and Corrections.
+
 
 
 ![](https://upload.wikimedia.org/wikipedia/commons/7/74/Normal_Distribution_PDF.svg "Credit: Wikipedia")
