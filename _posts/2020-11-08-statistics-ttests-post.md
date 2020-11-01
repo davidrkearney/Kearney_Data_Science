@@ -9,6 +9,8 @@ title: Data Science Posts
 # T-Tests: Purpose, Assumptions, How it works, and Corrections.
 
 
+![](https://upload.wikimedia.org/wikipedia/commons/7/74/Normal_Distribution_PDF.svg "Credit: Wikipedia")
+
 ## Purpose:
 
 The purpose of the T-test is to compare if there are mean differences between two groups of interest. 
