@@ -3,34 +3,34 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Data Science Posts | Data Science Notebooks</title>
+<title>T-Tests. The Purpose, Assumptions, How it Works, and Corrections. | Data Science Notebooks</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Data Science Posts" />
+<meta property="og:title" content="T-Tests. The Purpose, Assumptions, How it Works, and Corrections." />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Data Science Posts" />
-<meta property="og:description" content="Data Science Posts" />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html" />
+<meta name="description" content="Statistics Blog Posts" />
+<meta property="og:description" content="Statistics Blog Posts" />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html" />
 <meta property="og:site_name" content="Data Science Notebooks" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-11-08T00:00:00-06:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-11-08T00:00:00-06:00","dateModified":"2020-11-08T00:00:00-06:00","description":"Data Science Posts","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html","headline":"Data Science Posts","@context":"https://schema.org"}</script>
+{"datePublished":"2020-11-08T00:00:00-06:00","dateModified":"2020-11-08T00:00:00-06:00","description":"Statistics Blog Posts","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html","headline":"T-Tests. The Purpose, Assumptions, How it Works, and Corrections.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Data Science Posts | Data Science Notebooks</title>
+<title>T-Tests. The Purpose, Assumptions, How it Works, and Corrections. | Data Science Notebooks</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Data Science Posts" />
+<meta property="og:title" content="T-Tests. The Purpose, Assumptions, How it Works, and Corrections." />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Data Science Posts" />
-<meta property="og:description" content="Data Science Posts" />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html" />
+<meta name="description" content="Statistics Blog Posts" />
+<meta property="og:description" content="Statistics Blog Posts" />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html" />
 <meta property="og:site_name" content="Data Science Notebooks" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-11-08T00:00:00-06:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-11-08T00:00:00-06:00","dateModified":"2020-11-08T00:00:00-06:00","description":"Data Science Posts","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html","headline":"Data Science Posts","@context":"https://schema.org"}</script>
+{"datePublished":"2020-11-08T00:00:00-06:00","dateModified":"2020-11-08T00:00:00-06:00","description":"Statistics Blog Posts","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html","headline":"T-Tests. The Purpose, Assumptions, How it Works, and Corrections.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -85,7 +85,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Data Science Posts</h1><p class="page-description">Data Science Posts</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-08T00:00:00-06:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">T-Tests. The Purpose, Assumptions, How it Works, and Corrections.</h1><p class="page-description">Statistics Blog Posts</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-08T00:00:00-06:00" itemprop="datePublished">
         Nov 8, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -98,7 +98,10 @@ window.onload = wrap_img;
     
       <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
       
-        <a class="category-tags-link" href="/Kearney_Data_Science/categories/#Data Science Posts">Data Science Posts</a>
+        <a class="category-tags-link" href="/Kearney_Data_Science/categories/#Statistics">Statistics</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/Kearney_Data_Science/categories/#RCT">RCT</a>
         
       
       </p>
@@ -108,8 +111,6 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h1"><a href="#t-tests-purpose-assumptions-how-it-works-and-corrections">T-Tests: Purpose, Assumptions, How it works, and Corrections.</a>
-<ul>
 <li class="toc-entry toc-h2"><a href="#purpose">Purpose:</a></li>
 <li class="toc-entry toc-h2"><a href="#assumptions">Assumptions:</a></li>
 <li class="toc-entry toc-h2"><a href="#how-it-works">How it works:</a></li>
@@ -118,12 +119,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#bonferroni-correction">Bonferroni Correction</a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul><h1 id="t-tests-purpose-assumptions-how-it-works-and-corrections">
-<a class="anchor" href="#t-tests-purpose-assumptions-how-it-works-and-corrections" aria-hidden="true"><span class="octicon octicon-link"></span></a>T-Tests: Purpose, Assumptions, How it works, and Corrections.</h1>
-
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Normal_Distribution_PDF.svg" alt="" title="Credit: Wikipedia"></p>
+</ul><p><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Normal_Distribution_PDF.svg" alt="" title="Credit: Wikipedia"></p>
 
 <h2 id="purpose">
 <a class="anchor" href="#purpose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Purpose:</h2>
@@ -153,7 +149,7 @@ window.onload = wrap_img;
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python ttest.py
 </code></pre></div></div>
 
-  </div><a class="u-url" href="/Kearney_Data_Science/data%20science%20posts/2020/11/08/statistics-ttests-post.html" hidden></a>
+  </div><a class="u-url" href="/Kearney_Data_Science/statistics/rct/2020/11/08/statistics-ttests-post.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
