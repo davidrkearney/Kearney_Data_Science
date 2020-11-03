@@ -41,3 +41,22 @@ This repository contains extra resources like code  and Jupyter notebooks that a
 
 The repository is structured as folders whose name is the same as the blog post file.
 That is, the blog post `http://davidkearney.xyz/Kearney_Data_Science/2020/10/26/blog-post.html` will have a corresponding `_notebooks/2020-10-26-blog-post.ipynb` file in the repo with the needed content.
+
+
+
+
+## Roadmap
+
+You can see the `tasks.todo.md` to see full plans for the future of the blog!
+
+Here is the current summary
+ - [X] Example 1 [X lines]
+ - [ ] Example 2 
+
+## License
+
+Distributed under the GNU GPLv2 License. See `LICENSE` for more information.
+
+## Contact
+
+You can contact me on Discord at `example`. 
