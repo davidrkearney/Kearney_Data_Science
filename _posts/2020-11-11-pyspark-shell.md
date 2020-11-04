@@ -1,5 +1,10 @@
-# Setting up pyspark locally, for development.
-
+---
+toc: true
+layout: post
+description: Big Data Blog Posts
+categories: [Big Data]
+title: Setting up pyspark locally, for development.
+---
 
 ```
 Welcome to
