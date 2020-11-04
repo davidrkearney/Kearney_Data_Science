@@ -2,10 +2,10 @@
   
     
         "post0": {
-            "title": "Pyspark Shell",
-            "content": "Setting up pyspark locally, for development. . Welcome to ____ __ / __/__ ___ _____/ /__ _ / _ / _ `/ __/ &#39;_/ /__ / .__/ _,_/_/ /_/ _ version 2.4.4 /_/ Using Python version 3.7.3 (default, Mar 27 2019 22:11:17) SparkSession available as &#39;spark&#39;. .",
-            "url": "https://davidrkearney.github.io/Kearney_Data_Science/2020/11/11/pyspark-shell.html",
-            "relUrl": "/2020/11/11/pyspark-shell.html",
+            "title": "Setting up pyspark locally, for development.",
+            "content": "Welcome to ____ __ / __/__ ___ _____/ /__ _ / _ / _ `/ __/ &#39;_/ /__ / .__/ _,_/_/ /_/ _ version 2.4.4 /_/ Using Python version 3.7.3 (default, Mar 27 2019 22:11:17) SparkSession available as &#39;spark&#39;. .",
+            "url": "https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell.html",
+            "relUrl": "/big%20data/2020/11/11/pyspark-shell.html",
             "date": " • Nov 11, 2020"
         }
         
