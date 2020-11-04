@@ -4,6 +4,12 @@
 ![](https://github.com/davidrkearney/Kearney_Data_Science/workflows/GH-Pages%20Status/badge.svg) 
 ![](https://img.shields.io/github/last-commit/davidrkearney/Kearney_Data_Science) 
 
+[![Build Status](https://img.shields.io/github/forks/davidrkearney/Kearney_Data_Science.svg?style=for-the-badge)](https://github.com/davidrkearney/Kearney_Data_Science)
+[![Build Status](https://img.shields.io/github/stars/davidrkearney/Kearney_Data_Science.svg?style=for-the-badge)](https://github.com/davidrkearney/Kearney_Data_Science)
+[![License](https://img.shields.io/github/license/davidrkearney/Kearney_Data_Science.svg?style=for-the-badge)](https://github.com/davidrkearney/Kearney_Data_Science)
+
+
+
 ## Machine Learning & AI Code and Creative:
 ![](https://img.shields.io/badge/github-%23100000.svg?&style=for-the-badge&logo=github&logoColor=white) 
 ![](https://img.shields.io/badge/rss-%23FFA500.svg?&style=for-the-badge&logo=rss&logoColor=white) 
@@ -35,3 +41,22 @@ This repository contains extra resources like code  and Jupyter notebooks that a
 
 The repository is structured as folders whose name is the same as the blog post file.
 That is, the blog post `http://davidkearney.xyz/Kearney_Data_Science/2020/10/26/blog-post.html` will have a corresponding `_notebooks/2020-10-26-blog-post.ipynb` file in the repo with the needed content.
+
+
+
+
+## Roadmap
+
+You can see the `tasks.todo.md` to see full plans for the future of the blog!
+
+Here is the current summary
+ - [X] Example 1 [X lines]
+ - [ ] Example 2 
+
+## License
+
+Distributed under the GNU GPLv2 License. See `LICENSE` for more information.
+
+## Contact
+
+You can contact me on Discord at `example`. 
