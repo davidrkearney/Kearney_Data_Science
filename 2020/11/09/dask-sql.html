@@ -150,6 +150,13 @@ window.onload = wrap_img;
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>dask-sql</code></p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1889,13 +1896,6 @@ Wall time: 176 ms
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's also try that average tip by passenger count query, this time from cache.</p>
-
-</div>
-</div>
-</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -2083,15 +2083,6 @@ Wall time: 162 ms
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Not surprisingly, since working from the cached data removes most of the I/O, parsing, and ser/de from the job, it runs a lot faster than before.</p>
-<h3 id="SQL-built-in-functions">SQL built-in functions<a class="anchor-link" href="#SQL-built-in-functions"> </a></h3><p><code>dask-sql</code> also exposes a number of helper functions in SQL -- just like traditional relational databases expose helper functions for math, date/time processing, string manipulation, and more.</p>
-<p>Here's the <code>floor</code> function running on a static literal value:</p>
-
-</div>
-</div>
-</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">

@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Dask API for analytics | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Dask API for analytics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-10T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-10T00:00:00-06:00","dateModified":"2020-11-10T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html","headline":"Dask API for analytics","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Dask API for analytics | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Dask API for analytics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-10T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-10T00:00:00-06:00","dateModified":"2020-11-10T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/10/Dask-api-eda.html","headline":"Dask API for analytics","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Dask API for analytics</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-10T00:00:00-06:00" itemprop="datePublished">
+        Nov 10, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-11-10-Dask-api-eda.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-11-10-Dask-api-eda.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-11-10-Dask-api-eda.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-10-Dask-api-eda.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Credit:-code-from-https://github.com/coiled/data-science-at-scale">Credit: code from <a href="https://github.com/coiled/data-science-at-scale">https://github.com/coiled/data-science-at-scale</a><a class="anchor-link" href="#Credit:-code-from-https://github.com/coiled/data-science-at-scale"> </a></h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">client</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/opt/venv/lib/python3.7/site-packages/distributed/node.py:155: UserWarning: Port 8787 is already in use.
+Perhaps you already have a cluster running?
+Hosting the HTTP server on port 45123 instead
+  http_address[&#34;port&#34;], self.http_server.port
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<table style="border: 2px solid white;">
+<tr>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Client</h3>
+<ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
+  <li><b>Scheduler: </b>tcp://127.0.0.1:43829</li>
+  <li><b>Dashboard: </b><a href="http://127.0.0.1:45123/status" target="_blank">http://127.0.0.1:45123/status</a></li>
+</ul>
+</td>
+<td style="vertical-align: top; border: 0px solid white">
+<h3 style="text-align: left;">Cluster</h3>
+<ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
+  <li><b>Workers: </b>4</li>
+  <li><b>Cores: </b>4</li>
+  <li><b>Memory: </b>5.00 GB</li>
+</ul>
+</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://raw.githubusercontent.com/davidrkearney/Kearney_Data_Science/master/_notebooks/df_panel_fix.csv&#39;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span>
+
+<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+
+<span class="n">ddf</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">url</span><span class="p">,</span>
+    <span class="n">blocksize</span><span class="o">=</span><span class="s2">&quot;10 MiB&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ddf</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div><strong>Dask DataFrame Structure:</strong></div>
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>province</th>
+      <th>specific</th>
+      <th>general</th>
+      <th>year</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>rnr</th>
+      <th>rr</th>
+      <th>i</th>
+      <th>fr</th>
+      <th>reg</th>
+      <th>it</th>
+    </tr>
+    <tr>
+      <th>npartitions=1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th></th>
+      <td>int64</td>
+      <td>object</td>
+      <td>float64</td>
+      <td>float64</td>
+      <td>int64</td>
+      <td>float64</td>
+      <td>int64</td>
+      <td>float64</td>
+      <td>float64</td>
+      <td>float64</td>
+      <td>object</td>
+      <td>object</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div>Dask Name: read-csv, 1 tasks</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># See that we actually have a collection of Pandas DataFrames</span>
+<span class="n">ddf</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0    &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># View head of Dask DataFrame</span>
+<span class="n">ddf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>province</th>
+      <th>specific</th>
+      <th>general</th>
+      <th>year</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>rnr</th>
+      <th>rr</th>
+      <th>i</th>
+      <th>fr</th>
+      <th>reg</th>
+      <th>it</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>Anhui</td>
+      <td>147002.0</td>
+      <td>NaN</td>
+      <td>1996</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1128873</td>
+      <td>East China</td>
+      <td>631930</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Anhui</td>
+      <td>151981.0</td>
+      <td>NaN</td>
+      <td>1997</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1356287</td>
+      <td>East China</td>
+      <td>657860</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Anhui</td>
+      <td>174930.0</td>
+      <td>NaN</td>
+      <td>1998</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1518236</td>
+      <td>East China</td>
+      <td>889463</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Anhui</td>
+      <td>285324.0</td>
+      <td>NaN</td>
+      <td>1999</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1646891</td>
+      <td>East China</td>
+      <td>1227364</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Anhui</td>
+      <td>195580.0</td>
+      <td>32100.0</td>
+      <td>2000</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1601508</td>
+      <td>East China</td>
+      <td>1499110</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gdp</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;province&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gdp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">gdp</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>province
+Anhui            3905.870000
+Beijing          4673.453333
+Chongqing        2477.712500
+Fujian           4864.023333
+Gansu            1397.832500
+Guangdong       15358.781667
+Guangxi          2924.104167
+Guizhou          1422.010833
+Hainan            686.714167
+Hebei            6936.825000
+Heilongjiang     4041.241667
+Henan            7208.966667
+Hubei            4772.503333
+Hunan            4765.891667
+Jiangsu         10761.846667
+Jiangxi          2460.782500
+Jilin            2274.854167
+Liaoning         5231.135000
+Ningxia           432.268333
+Qinghai           383.099167
+Shaanxi          2658.034167
+Shandong        12324.002500
+Shanghai         6432.454167
+Shanxi           2817.210833
+Sichuan          5377.790000
+Tianjin          2528.665000
+Tibet             170.426667
+Xinjiang         1828.896667
+Yunnan           2604.054167
+Zhejiang         9138.151667
+Name: gdp, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gdp</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>province
+Tibet             170.426667
+Qinghai           383.099167
+Ningxia           432.268333
+Hainan            686.714167
+Gansu            1397.832500
+Guizhou          1422.010833
+Xinjiang         1828.896667
+Jilin            2274.854167
+Jiangxi          2460.782500
+Chongqing        2477.712500
+Tianjin          2528.665000
+Yunnan           2604.054167
+Shaanxi          2658.034167
+Shanxi           2817.210833
+Guangxi          2924.104167
+Anhui            3905.870000
+Heilongjiang     4041.241667
+Beijing          4673.453333
+Hunan            4765.891667
+Hubei            4772.503333
+Fujian           4864.023333
+Liaoning         5231.135000
+Sichuan          5377.790000
+Shanghai         6432.454167
+Hebei            6936.825000
+Henan            7208.966667
+Zhejiang         9138.151667
+Jiangsu         10761.846667
+Shandong        12324.002500
+Guangdong       15358.781667
+Name: gdp, dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ddf</span><span class="p">[</span><span class="n">ddf</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;East China&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>province</th>
+      <th>specific</th>
+      <th>general</th>
+      <th>year</th>
+      <th>gdp</th>
+      <th>fdi</th>
+      <th>rnr</th>
+      <th>rr</th>
+      <th>i</th>
+      <th>fr</th>
+      <th>reg</th>
+      <th>it</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>Anhui</td>
+      <td>147002.0</td>
+      <td>NaN</td>
+      <td>1996</td>
+      <td>2093.30</td>
+      <td>50661</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1128873</td>
+      <td>East China</td>
+      <td>631930</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Anhui</td>
+      <td>151981.0</td>
+      <td>NaN</td>
+      <td>1997</td>
+      <td>2347.32</td>
+      <td>43443</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1356287</td>
+      <td>East China</td>
+      <td>657860</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Anhui</td>
+      <td>174930.0</td>
+      <td>NaN</td>
+      <td>1998</td>
+      <td>2542.96</td>
+      <td>27673</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1518236</td>
+      <td>East China</td>
+      <td>889463</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Anhui</td>
+      <td>285324.0</td>
+      <td>NaN</td>
+      <td>1999</td>
+      <td>2712.34</td>
+      <td>26131</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1646891</td>
+      <td>East China</td>
+      <td>1227364</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Anhui</td>
+      <td>195580.0</td>
+      <td>32100.0</td>
+      <td>2000</td>
+      <td>2902.09</td>
+      <td>31847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1601508</td>
+      <td>East China</td>
+      <td>1499110</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ec</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="n">ddf</span><span class="o">.</span><span class="n">reg</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;East China&#39;</span><span class="p">)]</span>
+
+<span class="n">mean_gdp_prov</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;province&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gdp</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+<span class="n">mean_gdp_prov</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>province</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Anhui</th>
+      <td>3905.870000</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Fujian</th>
+      <td>4864.023333</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Jiangsu</th>
+      <td>10761.846667</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Jiangxi</th>
+      <td>2460.782500</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Shandong</th>
+      <td>12324.002500</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Shanghai</th>
+      <td>6432.454167</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Zhejiang</th>
+      <td>9138.151667</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mean_gdp_prov</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>province</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Shandong</th>
+      <td>12324.002500</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Jiangsu</th>
+      <td>10761.846667</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Zhejiang</th>
+      <td>9138.151667</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Shanghai</th>
+      <td>6432.454167</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Fujian</th>
+      <td>4864.023333</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mean_gdp_prov</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;mean_gdp-*.csv&#39;</span><span class="p">)</span> <span class="c1">#the * is where the partition number will go</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;/home/jovyan/work/mean_gdp-0.csv&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/11/10/Dask-api-eda.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
