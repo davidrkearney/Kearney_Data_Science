@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-11-05T08:02:50-06:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Setting up pyspark locally, for development.</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell.html" rel="alternate" type="text/html" title="Setting up pyspark locally, for development." /><published>2020-11-11T00:00:00-06:00</published><updated>2020-11-11T00:00:00-06:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell.html">&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Welcome to
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" rel="self" type="application/atom+xml" /><link href="https://davidrkearney.github.io/Kearney_Data_Science/" rel="alternate" type="text/html" /><updated>2020-11-05T08:34:29-06:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/feed.xml</id><title type="html">Data Science Notebooks</title><subtitle>Notebooks and notes on data science work.</subtitle><entry><title type="html">Setting up pyspark locally, for development.</title><link href="https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell.html" rel="alternate" type="text/html" title="Setting up pyspark locally, for development." /><published>2020-11-11T00:00:00-06:00</published><updated>2020-11-11T00:00:00-06:00</updated><id>https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell</id><content type="html" xml:base="https://davidrkearney.github.io/Kearney_Data_Science/big%20data/2020/11/11/pyspark-shell.html">&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Welcome to
       ____              __
      / __/__  ___ _____/ /__
     _\ \/ _ \/ _ `/ __/  '_/
@@ -31,6 +31,23 @@ SparkSession available as 'spark'.
 &lt;div class=&quot;inner_cell&quot;&gt;
     &lt;div class=&quot;input_area&quot;&gt;
 &lt;div class=&quot; highlight hl-ipython3&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;## Prophet docs can be found here: https://facebook.github.io/prophet/docs/quick_start.html&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+    
+
+    
+    
+&lt;div class=&quot;cell border-box-sizing code_cell rendered&quot;&gt;
+&lt;div class=&quot;input&quot;&gt;
+
+&lt;div class=&quot;inner_cell&quot;&gt;
+    &lt;div class=&quot;input_area&quot;&gt;
+&lt;div class=&quot; highlight hl-ipython3&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;## This notebooks is published here: https://deepnote.com/publish/e870766e-a2ca-4167-99b6-3cb070a87c2e&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
     &lt;/div&gt;
