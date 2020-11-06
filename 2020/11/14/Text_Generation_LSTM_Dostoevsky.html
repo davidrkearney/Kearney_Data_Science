@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Text Generation - LSTM | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Text Generation - LSTM" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-14T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-14T00:00:00-06:00","dateModified":"2020-11-14T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html","headline":"Text Generation - LSTM","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Text Generation - LSTM | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Text Generation - LSTM" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-14T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-14T00:00:00-06:00","dateModified":"2020-11-14T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html","headline":"Text Generation - LSTM","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Text Generation - LSTM</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-14T00:00:00-06:00" itemprop="datePublished">
+        Nov 14, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      47 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-11-14-Text_Generation_LSTM_Dostoevsky.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-11-14-Text_Generation_LSTM_Dostoevsky.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-11-14-Text_Generation_LSTM_Dostoevsky.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-14-Text_Generation_LSTM_Dostoevsky.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="https://colab.research.google.com/github/davidrkearney/colab-notebooks/blob/main/Text_Generation_LSTM_Dostoevsky.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" /></a></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="o">%</span><span class="k">tensorflow_version</span> 2.x
+    <span class="n">COLAB</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Note: using Google CoLab&quot;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Note: not using Google CoLab&quot;</span><span class="p">)</span>
+    <span class="n">COLAB</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Note: using Google CoLab
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.callbacks</span> <span class="kn">import</span> <span class="n">LambdaCallback</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">LSTM</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">RMSprop</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.utils</span> <span class="kn">import</span> <span class="n">get_file</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://www.gutenberg.org/cache/epub/600/pg600.txt&quot;</span><span class="p">)</span>
+<span class="n">raw_text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw_text</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>﻿Project Gutenberg&#39;s Notes from the Underground, by Feodor Dostoevsky
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.net
+
+
+Title: Notes from the Underground
+
+Author: Feodor Dostoevsky
+
+Posting Date: September 13, 2008 [EBook #600]
+Release Date: July, 1996
+
+Language: English
+
+
+*** START OF THIS PROJECT GUTENBERG EBOOK NOTES FROM THE UNDERGROUND ***
+
+
+
+
+Produced by Judith Boss.  HTML version by Al Haines.
+
+
+
+
+
+
+
+
+Notes from the Underground
+
+FYODOR DOSTOYEVSKY
+
+
+
+
+
+PART I
+
+Underground*
+
+     *The author of the diary and the diary itself
+     are, of course, imaginary.  Nevertheless it is clear
+     that such persons as the writer of these notes
+     not only may, but positively must, exist in our
+     society, when we consider the circumstances i
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">processed_text</span> <span class="o">=</span> <span class="n">raw_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="n">processed_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\x00-\x7f]&#39;</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">processed_text</span><span class="p">)</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;corpus length:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_text</span><span class="p">))</span>
+
+<span class="n">chars</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">processed_text</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total chars:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">))</span>
+<span class="n">char_indices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chars</span><span class="p">))</span>
+<span class="n">indices_char</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chars</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>corpus length: 265582
+total chars: 58
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># cut the text in semi-redundant sequences of maxlen characters</span>
+<span class="n">maxlen</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">sentences</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">next_chars</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_text</span><span class="p">)</span> <span class="o">-</span> <span class="n">maxlen</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+    <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">processed_text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">maxlen</span><span class="p">])</span>
+    <span class="n">next_chars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">processed_text</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">maxlen</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;nb sequences:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>nb sequences: 88514
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sentences</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#34;project gutenberg&#39;s notes from the under&#34;,
+ &#34;ject gutenberg&#39;s notes from the undergro&#34;,
+ &#34;t gutenberg&#39;s notes from the underground&#34;,
+ &#34;utenberg&#39;s notes from the underground, b&#34;,
+ &#34;nberg&#39;s notes from the underground, by f&#34;,
+ &#34;rg&#39;s notes from the underground, by feod&#34;,
+ &#39;s notes from the underground, by feodor &#39;,
+ &#39;otes from the underground, by feodor dos&#39;,
+ &#39;s from the underground, by feodor dostoe&#39;,
+ &#39;rom the underground, by feodor dostoevsk&#39;,
+ &#39; the underground, by feodor dostoevsky\r\n&#39;,
+ &#39;e underground, by feodor dostoevsky\r\n\r\nt&#39;,
+ &#39;nderground, by feodor dostoevsky\r\n\r\nthis&#39;,
+ &#39;rground, by feodor dostoevsky\r\n\r\nthis eb&#39;,
+ &#39;ound, by feodor dostoevsky\r\n\r\nthis ebook&#39;,
+ &#39;d, by feodor dostoevsky\r\n\r\nthis ebook is&#39;,
+ &#39;by feodor dostoevsky\r\n\r\nthis ebook is fo&#39;,
+ &#39;feodor dostoevsky\r\n\r\nthis ebook is for t&#39;,
+ &#39;dor dostoevsky\r\n\r\nthis ebook is for the &#39;,
+ &#39; dostoevsky\r\n\r\nthis ebook is for the use&#39;,
+ &#39;stoevsky\r\n\r\nthis ebook is for the use of&#39;,
+ &#39;evsky\r\n\r\nthis ebook is for the use of an&#39;,
+ &#39;ky\r\n\r\nthis ebook is for the use of anyon&#39;,
+ &#39;\n\r\nthis ebook is for the use of anyone a&#39;,
+ &#39;this ebook is for the use of anyone anyw&#39;,
+ &#39;s ebook is for the use of anyone anywher&#39;,
+ &#39;book is for the use of anyone anywhere a&#39;,
+ &#39;k is for the use of anyone anywhere at n&#39;,
+ &#39;s for the use of anyone anywhere at no c&#39;,
+ &#39;or the use of anyone anywhere at no cost&#39;,
+ &#39;the use of anyone anywhere at no cost an&#39;,
+ &#39; use of anyone anywhere at no cost and w&#39;,
+ &#39;e of anyone anywhere at no cost and with&#39;,
+ &#39;f anyone anywhere at no cost and with\r\na&#39;,
+ &#39;nyone anywhere at no cost and with\r\nalmo&#39;,
+ &#39;ne anywhere at no cost and with\r\nalmost &#39;,
+ &#39;anywhere at no cost and with\r\nalmost no &#39;,
+ &#39;where at no cost and with\r\nalmost no res&#39;,
+ &#39;re at no cost and with\r\nalmost no restri&#39;,
+ &#39;at no cost and with\r\nalmost no restricti&#39;,
+ &#39;no cost and with\r\nalmost no restrictions&#39;,
+ &#39;cost and with\r\nalmost no restrictions wh&#39;,
+ &#39;t and with\r\nalmost no restrictions whats&#39;,
+ &#39;nd with\r\nalmost no restrictions whatsoev&#39;,
+ &#39;with\r\nalmost no restrictions whatsoever.&#39;,
+ &#39;h\r\nalmost no restrictions whatsoever.  y&#39;,
+ &#39;almost no restrictions whatsoever.  you &#39;,
+ &#39;ost no restrictions whatsoever.  you may&#39;,
+ &#39; no restrictions whatsoever.  you may co&#39;,
+ &#39; restrictions whatsoever.  you may copy &#39;,
+ &#39;strictions whatsoever.  you may copy it,&#39;,
+ &#39;ictions whatsoever.  you may copy it, gi&#39;,
+ &#39;ions whatsoever.  you may copy it, give &#39;,
+ &#39;s whatsoever.  you may copy it, give it &#39;,
+ &#39;hatsoever.  you may copy it, give it awa&#39;,
+ &#39;soever.  you may copy it, give it away o&#39;,
+ &#39;ver.  you may copy it, give it away or\r\n&#39;,
+ &#39;.  you may copy it, give it away or\r\nre-&#39;,
+ &#39;you may copy it, give it away or\r\nre-use&#39;,
+ &#39; may copy it, give it away or\r\nre-use it&#39;,
+ &#39;y copy it, give it away or\r\nre-use it un&#39;,
+ &#39;opy it, give it away or\r\nre-use it under&#39;,
+ &#39; it, give it away or\r\nre-use it under th&#39;,
+ &#39;, give it away or\r\nre-use it under the t&#39;,
+ &#39;ive it away or\r\nre-use it under the term&#39;,
+ &#39; it away or\r\nre-use it under the terms o&#39;,
+ &#39; away or\r\nre-use it under the terms of t&#39;,
+ &#39;ay or\r\nre-use it under the terms of the &#39;,
+ &#39;or\r\nre-use it under the terms of the pro&#39;,
+ &#39;\nre-use it under the terms of the projec&#39;,
+ &#39;-use it under the terms of the project g&#39;,
+ &#39;e it under the terms of the project gute&#39;,
+ &#39;t under the terms of the project gutenbe&#39;,
+ &#39;nder the terms of the project gutenberg &#39;,
+ &#39;r the terms of the project gutenberg lic&#39;,
+ &#39;he terms of the project gutenberg licens&#39;,
+ &#39;terms of the project gutenberg license i&#39;,
+ &#39;ms of the project gutenberg license incl&#39;,
+ &#39;of the project gutenberg license include&#39;,
+ &#39;the project gutenberg license included\r\n&#39;,
+ &#39; project gutenberg license included\r\nwit&#39;,
+ &#39;oject gutenberg license included\r\nwith t&#39;,
+ &#39;ct gutenberg license included\r\nwith this&#39;,
+ &#39;gutenberg license included\r\nwith this eb&#39;,
+ &#39;enberg license included\r\nwith this ebook&#39;,
+ &#39;erg license included\r\nwith this ebook or&#39;,
+ &#39; license included\r\nwith this ebook or on&#39;,
+ &#39;cense included\r\nwith this ebook or onlin&#39;,
+ &#39;se included\r\nwith this ebook or online a&#39;,
+ &#39;included\r\nwith this ebook or online at w&#39;,
+ &#39;luded\r\nwith this ebook or online at www.&#39;,
+ &#39;ed\r\nwith this ebook or online at www.gut&#39;,
+ &#39;\nwith this ebook or online at www.gutenb&#39;,
+ &#39;th this ebook or online at www.gutenberg&#39;,
+ &#39;this ebook or online at www.gutenberg.ne&#39;,
+ &#39;s ebook or online at www.gutenberg.net\r\n&#39;,
+ &#39;book or online at www.gutenberg.net\r\n\r\n\r&#39;,
+ &#39;k or online at www.gutenberg.net\r\n\r\n\r\nti&#39;,
+ &#39;r online at www.gutenberg.net\r\n\r\n\r\ntitle&#39;,
+ &#39;nline at www.gutenberg.net\r\n\r\n\r\ntitle: n&#39;,
+ &#39;ne at www.gutenberg.net\r\n\r\n\r\ntitle: note&#39;,
+ &#39;at www.gutenberg.net\r\n\r\n\r\ntitle: notes f&#39;,
+ &#39;www.gutenberg.net\r\n\r\n\r\ntitle: notes from&#39;,
+ &#39;.gutenberg.net\r\n\r\n\r\ntitle: notes from th&#39;,
+ &#39;tenberg.net\r\n\r\n\r\ntitle: notes from the u&#39;,
+ &#39;berg.net\r\n\r\n\r\ntitle: notes from the unde&#39;,
+ &#39;g.net\r\n\r\n\r\ntitle: notes from the undergr&#39;,
+ &#39;et\r\n\r\n\r\ntitle: notes from the undergroun&#39;,
+ &#39;\n\r\n\r\ntitle: notes from the underground\r\n&#39;,
+ &#39;\r\ntitle: notes from the underground\r\n\r\na&#39;,
+ &#39;itle: notes from the underground\r\n\r\nauth&#39;,
+ &#39;e: notes from the underground\r\n\r\nauthor:&#39;,
+ &#39;notes from the underground\r\n\r\nauthor: fe&#39;,
+ &#39;es from the underground\r\n\r\nauthor: feodo&#39;,
+ &#39;from the underground\r\n\r\nauthor: feodor d&#39;,
+ &#39;m the underground\r\n\r\nauthor: feodor dost&#39;,
+ &#39;he underground\r\n\r\nauthor: feodor dostoev&#39;,
+ &#39;underground\r\n\r\nauthor: feodor dostoevsky&#39;,
+ &#39;erground\r\n\r\nauthor: feodor dostoevsky\r\n\r&#39;,
+ &#39;round\r\n\r\nauthor: feodor dostoevsky\r\n\r\npo&#39;,
+ &#39;nd\r\n\r\nauthor: feodor dostoevsky\r\n\r\nposti&#39;,
+ &#39;\n\r\nauthor: feodor dostoevsky\r\n\r\nposting &#39;,
+ &#39;author: feodor dostoevsky\r\n\r\nposting dat&#39;,
+ &#39;hor: feodor dostoevsky\r\n\r\nposting date: &#39;,
+ &#39;: feodor dostoevsky\r\n\r\nposting date: sep&#39;,
+ &#39;eodor dostoevsky\r\n\r\nposting date: septem&#39;,
+ &#39;or dostoevsky\r\n\r\nposting date: september&#39;,
+ &#39;dostoevsky\r\n\r\nposting date: september 13&#39;,
+ &#39;toevsky\r\n\r\nposting date: september 13, 2&#39;,
+ &#39;vsky\r\n\r\nposting date: september 13, 2008&#39;,
+ &#39;y\r\n\r\nposting date: september 13, 2008 [e&#39;,
+ &#39;\r\nposting date: september 13, 2008 [eboo&#39;,
+ &#39;osting date: september 13, 2008 [ebook #&#39;,
+ &#39;ing date: september 13, 2008 [ebook #600&#39;,
+ &#39; date: september 13, 2008 [ebook #600]\r\n&#39;,
+ &#39;te: september 13, 2008 [ebook #600]\r\nrel&#39;,
+ &#39; september 13, 2008 [ebook #600]\r\nreleas&#39;,
+ &#39;ptember 13, 2008 [ebook #600]\r\nrelease d&#39;,
+ &#39;mber 13, 2008 [ebook #600]\r\nrelease date&#39;,
+ &#39;r 13, 2008 [ebook #600]\r\nrelease date: j&#39;,
+ &#39;3, 2008 [ebook #600]\r\nrelease date: july&#39;,
+ &#39;2008 [ebook #600]\r\nrelease date: july, 1&#39;,
+ &#39;8 [ebook #600]\r\nrelease date: july, 1996&#39;,
+ &#39;ebook #600]\r\nrelease date: july, 1996\r\n\r&#39;,
+ &#39;ok #600]\r\nrelease date: july, 1996\r\n\r\nla&#39;,
+ &#39;#600]\r\nrelease date: july, 1996\r\n\r\nlangu&#39;,
+ &#39;0]\r\nrelease date: july, 1996\r\n\r\nlanguage&#39;,
+ &#39;\nrelease date: july, 1996\r\n\r\nlanguage: e&#39;,
+ &#39;lease date: july, 1996\r\n\r\nlanguage: engl&#39;,
+ &#39;se date: july, 1996\r\n\r\nlanguage: english&#39;,
+ &#39;date: july, 1996\r\n\r\nlanguage: english\r\n\r&#39;,
+ &#39;e: july, 1996\r\n\r\nlanguage: english\r\n\r\n\r\n&#39;,
+ &#39;july, 1996\r\n\r\nlanguage: english\r\n\r\n\r\n***&#39;,
+ &#39;y, 1996\r\n\r\nlanguage: english\r\n\r\n\r\n*** st&#39;,
+ &#39;1996\r\n\r\nlanguage: english\r\n\r\n\r\n*** start&#39;,
+ &#39;6\r\n\r\nlanguage: english\r\n\r\n\r\n*** start of&#39;,
+ &#39;\r\nlanguage: english\r\n\r\n\r\n*** start of th&#39;,
+ &#39;anguage: english\r\n\r\n\r\n*** start of this &#39;,
+ &#39;uage: english\r\n\r\n\r\n*** start of this pro&#39;,
+ &#39;e: english\r\n\r\n\r\n*** start of this projec&#39;,
+ &#39;english\r\n\r\n\r\n*** start of this project g&#39;,
+ &#39;lish\r\n\r\n\r\n*** start of this project gute&#39;,
+ &#39;h\r\n\r\n\r\n*** start of this project gutenbe&#39;,
+ &#39;\r\n\r\n*** start of this project gutenberg &#39;,
+ &#39;\n*** start of this project gutenberg ebo&#39;,
+ &#39;* start of this project gutenberg ebook &#39;,
+ &#39;tart of this project gutenberg ebook not&#39;,
+ &#39;t of this project gutenberg ebook notes &#39;,
+ &#39;f this project gutenberg ebook notes fro&#39;,
+ &#39;his project gutenberg ebook notes from t&#39;,
+ &#39; project gutenberg ebook notes from the &#39;,
+ &#39;oject gutenberg ebook notes from the und&#39;,
+ &#39;ct gutenberg ebook notes from the underg&#39;,
+ &#39;gutenberg ebook notes from the undergrou&#39;,
+ &#39;enberg ebook notes from the underground &#39;,
+ &#39;erg ebook notes from the underground ***&#39;,
+ &#39; ebook notes from the underground ***\r\n\r&#39;,
+ &#39;ook notes from the underground ***\r\n\r\n\r\n&#39;,
+ &#39; notes from the underground ***\r\n\r\n\r\n\r\n\r&#39;,
+ &#39;tes from the underground ***\r\n\r\n\r\n\r\n\r\npr&#39;,
+ &#39; from the underground ***\r\n\r\n\r\n\r\n\r\nprodu&#39;,
+ &#39;om the underground ***\r\n\r\n\r\n\r\n\r\nproduced&#39;,
+ &#39;the underground ***\r\n\r\n\r\n\r\n\r\nproduced by&#39;,
+ &#39; underground ***\r\n\r\n\r\n\r\n\r\nproduced by ju&#39;,
+ &#39;derground ***\r\n\r\n\r\n\r\n\r\nproduced by judit&#39;,
+ &#39;ground ***\r\n\r\n\r\n\r\n\r\nproduced by judith b&#39;,
+ &#39;und ***\r\n\r\n\r\n\r\n\r\nproduced by judith boss&#39;,
+ &#39; ***\r\n\r\n\r\n\r\n\r\nproduced by judith boss.  &#39;,
+ &#39;*\r\n\r\n\r\n\r\n\r\nproduced by judith boss.  htm&#39;,
+ &#39;\r\n\r\n\r\n\r\nproduced by judith boss.  html v&#39;,
+ &#39;\n\r\n\r\nproduced by judith boss.  html vers&#39;,
+ &#39;\r\nproduced by judith boss.  html version&#39;,
+ &#39;roduced by judith boss.  html version by&#39;,
+ &#39;uced by judith boss.  html version by al&#39;,
+ &#39;d by judith boss.  html version by al ha&#39;,
+ &#39;y judith boss.  html version by al haine&#39;,
+ &#39;udith boss.  html version by al haines.\r&#39;,
+ &#39;th boss.  html version by al haines.\r\n\r\n&#39;,
+ &#39;boss.  html version by al haines.\r\n\r\n\r\n\r&#39;,
+ &#39;s.  html version by al haines.\r\n\r\n\r\n\r\n\r\n&#39;,
+ &#39; html version by al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r&#39;,
+ &#39;ml version by al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n&#39;,
+ &#39;version by al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nn&#39;,
+ &#39;sion by al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnote&#39;,
+ &#39;n by al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes f&#39;,
+ &#39;y al haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from&#39;,
+ &#39;l haines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from th&#39;,
+ &#39;aines.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from the u&#39;,
+ &#39;es.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from the unde&#39;,
+ &#39;\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from the undergr&#39;,
+ &#39;\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nnotes from the undergroun&#39;,
+ &#39;\r\n\r\n\r\n\r\n\r\n\r\nnotes from the underground\r\n&#39;,
+ &#39;\n\r\n\r\n\r\n\r\nnotes from the underground\r\n\r\nf&#39;,
+ &#39;\r\n\r\n\r\nnotes from the underground\r\n\r\nfyod&#39;,
+ &#39;\n\r\nnotes from the underground\r\n\r\nfyodor &#39;,
+ &#39;notes from the underground\r\n\r\nfyodor dos&#39;,
+ &#39;es from the underground\r\n\r\nfyodor dostoy&#39;,
+ &#39;from the underground\r\n\r\nfyodor dostoyevs&#39;,
+ &#39;m the underground\r\n\r\nfyodor dostoyevsky\r&#39;,
+ &#39;he underground\r\n\r\nfyodor dostoyevsky\r\n\r\n&#39;,
+ &#39;underground\r\n\r\nfyodor dostoyevsky\r\n\r\n\r\n\r&#39;,
+ &#39;erground\r\n\r\nfyodor dostoyevsky\r\n\r\n\r\n\r\n\r\n&#39;,
+ &#39;round\r\n\r\nfyodor dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\np&#39;,
+ &#39;nd\r\n\r\nfyodor dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart&#39;,
+ &#39;\n\r\nfyodor dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r&#39;,
+ &#39;fyodor dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\n&#39;,
+ &#39;dor dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nund&#39;,
+ &#39; dostoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nunderg&#39;,
+ &#39;stoyevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nundergrou&#39;,
+ &#39;yevsky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nunderground*&#39;,
+ &#39;sky\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nunderground*\r\n\r&#39;,
+ &#39;\r\n\r\n\r\n\r\n\r\n\r\npart i\r\n\r\nunderground*\r\n\r\n  &#39;,
+ &#39;\n\r\n\r\n\r\n\r\npart i\r\n\r\nunderground*\r\n\r\n     &#39;,
+ &#39;\r\n\r\n\r\npart i\r\n\r\nunderground*\r\n\r\n     *th&#39;,
+ &#39;\n\r\npart i\r\n\r\nunderground*\r\n\r\n     *the a&#39;,
+ &#39;part i\r\n\r\nunderground*\r\n\r\n     *the auth&#39;,
+ &#39;t i\r\n\r\nunderground*\r\n\r\n     *the author &#39;,
+ &#39;\r\n\r\nunderground*\r\n\r\n     *the author of &#39;,
+ &#39;\nunderground*\r\n\r\n     *the author of the&#39;,
+ &#39;derground*\r\n\r\n     *the author of the di&#39;,
+ &#39;ground*\r\n\r\n     *the author of the diary&#39;,
+ &#39;und*\r\n\r\n     *the author of the diary an&#39;,
+ &#39;*\r\n\r\n     *the author of the diary and t&#39;,
+ &#39;\r\n     *the author of the diary and the &#39;,
+ &#39;    *the author of the diary and the dia&#39;,
+ &#39; *the author of the diary and the diary &#39;,
+ &#39;he author of the diary and the diary its&#39;,
+ &#39;author of the diary and the diary itself&#39;,
+ &#39;hor of the diary and the diary itself\r\n &#39;,
+ &#39; of the diary and the diary itself\r\n    &#39;,
+ &#39; the diary and the diary itself\r\n     ar&#39;,
+ &#39;e diary and the diary itself\r\n     are, &#39;,
+ &#39;iary and the diary itself\r\n     are, of &#39;,
+ &#39;y and the diary itself\r\n     are, of cou&#39;,
+ &#39;nd the diary itself\r\n     are, of course&#39;,
+ &#39;the diary itself\r\n     are, of course, i&#39;,
+ &#39; diary itself\r\n     are, of course, imag&#39;,
+ &#39;ary itself\r\n     are, of course, imagina&#39;,
+ &#39; itself\r\n     are, of course, imaginary.&#39;,
+ &#39;self\r\n     are, of course, imaginary.  n&#39;,
+ &#39;f\r\n     are, of course, imaginary.  neve&#39;,
+ &#39;     are, of course, imaginary.  neverth&#39;,
+ &#39;  are, of course, imaginary.  neverthele&#39;,
+ &#39;re, of course, imaginary.  nevertheless &#39;,
+ &#39; of course, imaginary.  nevertheless it &#39;,
+ &#39; course, imaginary.  nevertheless it is &#39;,
+ &#39;urse, imaginary.  nevertheless it is cle&#39;,
+ &#39;e, imaginary.  nevertheless it is clear\r&#39;,
+ &#39;imaginary.  nevertheless it is clear\r\n  &#39;,
+ &#39;ginary.  nevertheless it is clear\r\n     &#39;,
+ &#39;ary.  nevertheless it is clear\r\n     tha&#39;,
+ &#39;.  nevertheless it is clear\r\n     that s&#39;,
+ &#39;nevertheless it is clear\r\n     that such&#39;,
+ &#39;ertheless it is clear\r\n     that such pe&#39;,
+ &#39;heless it is clear\r\n     that such perso&#39;,
+ &#39;ess it is clear\r\n     that such persons &#39;,
+ &#39; it is clear\r\n     that such persons as &#39;,
+ &#39; is clear\r\n     that such persons as the&#39;,
+ &#39; clear\r\n     that such persons as the wr&#39;,
+ &#39;ear\r\n     that such persons as the write&#39;,
+ &#39;\r\n     that such persons as the writer o&#39;,
+ &#39;    that such persons as the writer of t&#39;,
+ &#39; that such persons as the writer of thes&#39;,
+ &#39;at such persons as the writer of these n&#39;,
+ &#39;such persons as the writer of these note&#39;,
+ &#39;h persons as the writer of these notes\r\n&#39;,
+ &#39;ersons as the writer of these notes\r\n   &#39;,
+ &#39;ons as the writer of these notes\r\n     n&#39;,
+ &#39; as the writer of these notes\r\n     not &#39;,
+ &#39; the writer of these notes\r\n     not onl&#39;,
+ &#39;e writer of these notes\r\n     not only m&#39;,
+ &#39;riter of these notes\r\n     not only may,&#39;,
+ &#39;er of these notes\r\n     not only may, bu&#39;,
+ &#39;of these notes\r\n     not only may, but p&#39;,
+ &#39;these notes\r\n     not only may, but posi&#39;,
+ &#39;se notes\r\n     not only may, but positiv&#39;,
+ &#39;notes\r\n     not only may, but positively&#39;,
+ &#39;es\r\n     not only may, but positively mu&#39;,
+ &#39;\n     not only may, but positively must,&#39;,
+ &#39;   not only may, but positively must, ex&#39;,
+ &#39;not only may, but positively must, exist&#39;,
+ &#39; only may, but positively must, exist in&#39;,
+ &#39;ly may, but positively must, exist in ou&#39;,
+ &#39;may, but positively must, exist in our\r\n&#39;,
+ &#39;, but positively must, exist in our\r\n   &#39;,
+ &#39;ut positively must, exist in our\r\n     s&#39;,
+ &#39;positively must, exist in our\r\n     soci&#39;,
+ &#39;itively must, exist in our\r\n     society&#39;,
+ &#39;vely must, exist in our\r\n     society, w&#39;,
+ &#39;y must, exist in our\r\n     society, when&#39;,
+ &#39;ust, exist in our\r\n     society, when we&#39;,
+ &#39;, exist in our\r\n     society, when we co&#39;,
+ &#39;xist in our\r\n     society, when we consi&#39;,
+ &#39;t in our\r\n     society, when we consider&#39;,
+ &#39;n our\r\n     society, when we consider th&#39;,
+ &#39;ur\r\n     society, when we consider the c&#39;,
+ &#39;\n     society, when we consider the circ&#39;,
+ &#39;   society, when we consider the circums&#39;,
+ &#39;society, when we consider the circumstan&#39;,
+ &#39;iety, when we consider the circumstances&#39;,
+ &#39;y, when we consider the circumstances in&#39;,
+ &#39;when we consider the circumstances in\r\n &#39;,
+ &#39;n we consider the circumstances in\r\n    &#39;,
+ &#39;e consider the circumstances in\r\n     th&#39;,
+ &#39;onsider the circumstances in\r\n     the m&#39;,
+ &#39;ider the circumstances in\r\n     the mids&#39;,
+ &#39;r the circumstances in\r\n     the midst o&#39;,
+ &#39;he circumstances in\r\n     the midst of w&#39;,
+ &#39;circumstances in\r\n     the midst of whic&#39;,
+ &#39;cumstances in\r\n     the midst of which o&#39;,
+ &#39;stances in\r\n     the midst of which our &#39;,
+ &#39;nces in\r\n     the midst of which our soc&#39;,
+ &#39;s in\r\n     the midst of which our societ&#39;,
+ &#39;n\r\n     the midst of which our society i&#39;,
+ &#39;     the midst of which our society is f&#39;,
+ &#39;  the midst of which our society is form&#39;,
+ &#39;he midst of which our society is formed.&#39;,
+ &#39;midst of which our society is formed.  i&#39;,
+ &#39;st of which our society is formed.  i ha&#39;,
+ &#39;of which our society is formed.  i have\r&#39;,
+ &#39;which our society is formed.  i have\r\n  &#39;,
+ &#39;ch our society is formed.  i have\r\n     &#39;,
+ &#39;our society is formed.  i have\r\n     tri&#39;,
+ &#39; society is formed.  i have\r\n     tried &#39;,
+ &#39;ciety is formed.  i have\r\n     tried to &#39;,
+ &#39;ty is formed.  i have\r\n     tried to exp&#39;,
+ &#39;is formed.  i have\r\n     tried to expose&#39;,
+ &#39;formed.  i have\r\n     tried to expose to&#39;,
+ &#39;med.  i have\r\n     tried to expose to th&#39;,
+ &#39;.  i have\r\n     tried to expose to the v&#39;,
+ &#39;i have\r\n     tried to expose to the view&#39;,
+ &#39;ave\r\n     tried to expose to the view of&#39;,
+ &#39;\r\n     tried to expose to the view of th&#39;,
+ &#39;    tried to expose to the view of the p&#39;,
+ &#39; tried to expose to the view of the publ&#39;,
+ &#39;ied to expose to the view of the public &#39;,
+ &#39; to expose to the view of the public mor&#39;,
+ &#39; expose to the view of the public more\r\n&#39;,
+ &#39;pose to the view of the public more\r\n   &#39;,
+ &#39;e to the view of the public more\r\n     d&#39;,
+ &#39;o the view of the public more\r\n     dist&#39;,
+ &#39;he view of the public more\r\n     distinc&#39;,
+ &#39;view of the public more\r\n     distinctly&#39;,
+ &#39;w of the public more\r\n     distinctly th&#39;,
+ &#39;f the public more\r\n     distinctly than &#39;,
+ &#39;he public more\r\n     distinctly than is &#39;,
+ &#39;public more\r\n     distinctly than is com&#39;,
+ &#39;lic more\r\n     distinctly than is common&#39;,
+ &#39; more\r\n     distinctly than is commonly &#39;,
+ &#39;re\r\n     distinctly than is commonly don&#39;,
+ &#39;\n     distinctly than is commonly done, &#39;,
+ &#39;   distinctly than is commonly done, one&#39;,
+ &#39;distinctly than is commonly done, one of&#39;,
+ &#39;tinctly than is commonly done, one of th&#39;,
+ &#39;ctly than is commonly done, one of the\r\n&#39;,
+ &#39;y than is commonly done, one of the\r\n   &#39;,
+ &#39;han is commonly done, one of the\r\n     c&#39;,
+ &#39; is commonly done, one of the\r\n     char&#39;,
+ &#39; commonly done, one of the\r\n     charact&#39;,
+ &#39;mmonly done, one of the\r\n     characters&#39;,
+ &#39;nly done, one of the\r\n     characters of&#39;,
+ &#39; done, one of the\r\n     characters of th&#39;,
+ &#39;ne, one of the\r\n     characters of the r&#39;,
+ &#39; one of the\r\n     characters of the rece&#39;,
+ &#39;e of the\r\n     characters of the recent &#39;,
+ &#39;f the\r\n     characters of the recent pas&#39;,
+ &#39;he\r\n     characters of the recent past. &#39;,
+ &#39;\n     characters of the recent past.  he&#39;,
+ &#39;   characters of the recent past.  he is&#39;,
+ &#39;characters of the recent past.  he is on&#39;,
+ &#39;racters of the recent past.  he is one o&#39;,
+ &#39;ters of the recent past.  he is one of t&#39;,
+ &#39;s of the recent past.  he is one of the\r&#39;,
+ &#39;f the recent past.  he is one of the\r\n  &#39;,
+ &#39;he recent past.  he is one of the\r\n     &#39;,
+ &#39;recent past.  he is one of the\r\n     rep&#39;,
+ &#39;ent past.  he is one of the\r\n     repres&#39;,
+ &#39; past.  he is one of the\r\n     represent&#39;,
+ &#39;st.  he is one of the\r\n     representati&#39;,
+ &#39;  he is one of the\r\n     representatives&#39;,
+ &#39;e is one of the\r\n     representatives of&#39;,
+ &#39;s one of the\r\n     representatives of a &#39;,
+ &#39;ne of the\r\n     representatives of a gen&#39;,
+ &#39;of the\r\n     representatives of a genera&#39;,
+ &#39;the\r\n     representatives of a generatio&#39;,
+ &#39;\r\n     representatives of a generation s&#39;,
+ &#39;    representatives of a generation stil&#39;,
+ &#39; representatives of a generation still l&#39;,
+ &#39;presentatives of a generation still livi&#39;,
+ &#39;sentatives of a generation still living.&#39;,
+ &#39;tatives of a generation still living.  i&#39;,
+ &#39;ives of a generation still living.  in t&#39;,
+ &#39;s of a generation still living.  in this&#39;,
+ &#39;f a generation still living.  in this\r\n &#39;,
+ &#39; generation still living.  in this\r\n    &#39;,
+ &#39;neration still living.  in this\r\n     fr&#39;,
+ &#39;ation still living.  in this\r\n     fragm&#39;,
+ &#39;on still living.  in this\r\n     fragment&#39;,
+ &#39;still living.  in this\r\n     fragment, e&#39;,
+ &#39;ll living.  in this\r\n     fragment, enti&#39;,
+ &#39;living.  in this\r\n     fragment, entitle&#39;,
+ &#39;ing.  in this\r\n     fragment, entitled &#34;&#39;,
+ &#39;.  in this\r\n     fragment, entitled &#34;und&#39;,
+ &#39;in this\r\n     fragment, entitled &#34;underg&#39;,
+ &#39;this\r\n     fragment, entitled &#34;undergrou&#39;,
+ &#39;s\r\n     fragment, entitled &#34;underground,&#39;,
+ &#39;     fragment, entitled &#34;underground,&#34; t&#39;,
+ &#39;  fragment, entitled &#34;underground,&#34; this&#39;,
+ &#39;ragment, entitled &#34;underground,&#34; this pe&#39;,
+ &#39;ment, entitled &#34;underground,&#34; this perso&#39;,
+ &#39;t, entitled &#34;underground,&#34; this person\r\n&#39;,
+ &#39;entitled &#34;underground,&#34; this person\r\n   &#39;,
+ &#39;itled &#34;underground,&#34; this person\r\n     i&#39;,
+ &#39;ed &#34;underground,&#34; this person\r\n     intr&#39;,
+ &#39;&#34;underground,&#34; this person\r\n     introdu&#39;,
+ &#39;derground,&#34; this person\r\n     introduces&#39;,
+ &#39;ground,&#34; this person\r\n     introduces hi&#39;,
+ &#39;und,&#34; this person\r\n     introduces himse&#39;,
+ &#39;,&#34; this person\r\n     introduces himself &#39;,
+ &#39;this person\r\n     introduces himself and&#39;,
+ &#39;s person\r\n     introduces himself and hi&#39;,
+ &#39;erson\r\n     introduces himself and his v&#39;,
+ &#39;on\r\n     introduces himself and his view&#39;,
+ &#39;\n     introduces himself and his views, &#39;,
+ &#39;   introduces himself and his views, and&#39;,
+ &#39;introduces himself and his views, and, a&#39;,
+ &#39;roduces himself and his views, and, as i&#39;,
+ &#39;uces himself and his views, and, as it w&#39;,
+ &#39;s himself and his views, and, as it were&#39;,
+ &#39;imself and his views, and, as it were,\r\n&#39;,
+ &#39;elf and his views, and, as it were,\r\n   &#39;,
+ &#39; and his views, and, as it were,\r\n     t&#39;,
+ &#39;d his views, and, as it were,\r\n     trie&#39;,
+ &#39;is views, and, as it were,\r\n     tries t&#39;,
+ &#39;views, and, as it were,\r\n     tries to e&#39;,
+ &#39;ws, and, as it were,\r\n     tries to expl&#39;,
+ &#39; and, as it were,\r\n     tries to explain&#39;,
+ &#39;d, as it were,\r\n     tries to explain th&#39;,
+ &#39;as it were,\r\n     tries to explain the c&#39;,
+ &#39;it were,\r\n     tries to explain the caus&#39;,
+ &#39;were,\r\n     tries to explain the causes &#39;,
+ &#39;e,\r\n     tries to explain the causes owi&#39;,
+ &#39;\n     tries to explain the causes owing &#39;,
+ &#39;   tries to explain the causes owing to &#39;,
+ &#39;tries to explain the causes owing to whi&#39;,
+ &#39;es to explain the causes owing to which &#39;,
+ &#39;to explain the causes owing to which he &#39;,
+ &#39;explain the causes owing to which he has&#39;,
+ &#39;lain the causes owing to which he has\r\n &#39;,
+ &#39;n the causes owing to which he has\r\n    &#39;,
+ &#39;he causes owing to which he has\r\n     ma&#39;,
+ &#39;causes owing to which he has\r\n     made &#39;,
+ &#39;ses owing to which he has\r\n     made his&#39;,
+ &#39; owing to which he has\r\n     made his ap&#39;,
+ &#39;ing to which he has\r\n     made his appea&#39;,
+ &#39; to which he has\r\n     made his appearan&#39;,
+ &#39; which he has\r\n     made his appearance &#39;,
+ &#39;ich he has\r\n     made his appearance and&#39;,
+ &#39; he has\r\n     made his appearance and wa&#39;,
+ &#39; has\r\n     made his appearance and was b&#39;,
+ &#39;s\r\n     made his appearance and was boun&#39;,
+ &#39;     made his appearance and was bound t&#39;,
+ &#39;  made his appearance and was bound to m&#39;,
+ &#39;ade his appearance and was bound to make&#39;,
+ &#39; his appearance and was bound to make hi&#39;,
+ &#39;s appearance and was bound to make his\r\n&#39;,
+ &#39;ppearance and was bound to make his\r\n   &#39;,
+ &#39;arance and was bound to make his\r\n     a&#39;,
+ &#39;nce and was bound to make his\r\n     appe&#39;,
+ &#39; and was bound to make his\r\n     appeara&#39;,
+ &#39;d was bound to make his\r\n     appearance&#39;,
+ &#39;as bound to make his\r\n     appearance in&#39;,
+ &#39;bound to make his\r\n     appearance in ou&#39;,
+ &#39;nd to make his\r\n     appearance in our m&#39;,
+ &#39;to make his\r\n     appearance in our mids&#39;,
+ &#39;make his\r\n     appearance in our midst. &#39;,
+ &#39;e his\r\n     appearance in our midst.  in&#39;,
+ &#39;is\r\n     appearance in our midst.  in th&#39;,
+ &#39;\n     appearance in our midst.  in the s&#39;,
+ &#39;   appearance in our midst.  in the seco&#39;,
+ &#39;appearance in our midst.  in the second &#39;,
+ &#39;earance in our midst.  in the second fra&#39;,
+ &#39;ance in our midst.  in the second fragme&#39;,
+ &#39;e in our midst.  in the second fragment\r&#39;,
+ &#39;n our midst.  in the second fragment\r\n  &#39;,
+ &#39;ur midst.  in the second fragment\r\n     &#39;,
+ &#39;midst.  in the second fragment\r\n     the&#39;,
+ &#39;st.  in the second fragment\r\n     there &#39;,
+ &#39;  in the second fragment\r\n     there are&#39;,
+ &#39;n the second fragment\r\n     there are ad&#39;,
+ &#39;he second fragment\r\n     there are added&#39;,
+ &#39;second fragment\r\n     there are added th&#39;,
+ &#39;ond fragment\r\n     there are added the a&#39;,
+ &#39; fragment\r\n     there are added the actu&#39;,
+ &#39;agment\r\n     there are added the actual &#39;,
+ &#39;ent\r\n     there are added the actual not&#39;,
+ &#39;\r\n     there are added the actual notes &#39;,
+ &#39;    there are added the actual notes of &#39;,
+ &#39; there are added the actual notes of thi&#39;,
+ &#39;ere are added the actual notes of this p&#39;,
+ &#39; are added the actual notes of this pers&#39;,
+ &#39;e added the actual notes of this person\r&#39;,
+ &#39;dded the actual notes of this person\r\n  &#39;,
+ &#39;d the actual notes of this person\r\n     &#39;,
+ &#39;he actual notes of this person\r\n     con&#39;,
+ &#39;actual notes of this person\r\n     concer&#39;,
+ &#39;ual notes of this person\r\n     concernin&#39;,
+ &#39; notes of this person\r\n     concerning c&#39;,
+ &#39;tes of this person\r\n     concerning cert&#39;,
+ &#39; of this person\r\n     concerning certain&#39;,
+ &#39; this person\r\n     concerning certain ev&#39;,
+ &#39;is person\r\n     concerning certain event&#39;,
+ &#39;person\r\n     concerning certain events i&#39;,
+ &#39;son\r\n     concerning certain events in h&#39;,
+ &#39;\r\n     concerning certain events in his &#39;,
+ &#39;    concerning certain events in his lif&#39;,
+ &#39; concerning certain events in his life.-&#39;,
+ &#39;ncerning certain events in his life.--au&#39;,
+ &#39;rning certain events in his life.--autho&#39;,
+ &#34;ng certain events in his life.--author&#39;s&#34;,
+ &#34;certain events in his life.--author&#39;s no&#34;,
+ &#34;tain events in his life.--author&#39;s note.&#34;,
+ &#34;n events in his life.--author&#39;s note.\r\n\r&#34;,
+ &#34;vents in his life.--author&#39;s note.\r\n\r\n\r\n&#34;,
+ &#34;ts in his life.--author&#39;s note.\r\n\r\n\r\n\r\ni&#34;,
+ &#34;in his life.--author&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r&#34;,
+ &#34;his life.--author&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni &#34;,
+ &#34; life.--author&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am &#34;,
+ &#34;fe.--author&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am a s&#34;,
+ &#34;--author&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick&#34;,
+ &#34;uthor&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick ma&#34;,
+ &#34;or&#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick man..&#34;,
+ &#39;s note.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick man.... &#39;,
+ &#39;ote.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick man....  i &#39;,
+ &#39;.\r\n\r\n\r\n\r\ni\r\n\r\ni am a sick man....  i am &#39;,
+ &#39;\r\n\r\n\r\ni\r\n\r\ni am a sick man....  i am a s&#39;,
+ &#39;\n\r\ni\r\n\r\ni am a sick man....  i am a spit&#39;,
+ &#39;i\r\n\r\ni am a sick man....  i am a spitefu&#39;,
+ &#39;\r\ni am a sick man....  i am a spiteful m&#39;,
+ &#39; am a sick man....  i am a spiteful man.&#39;,
+ &#39; a sick man....  i am a spiteful man.  i&#39;,
+ &#39;sick man....  i am a spiteful man.  i am&#39;,
+ &#39;k man....  i am a spiteful man.  i am an&#39;,
+ &#39;an....  i am a spiteful man.  i am an un&#39;,
+ &#39;...  i am a spiteful man.  i am an unatt&#39;,
+ &#39;  i am a spiteful man.  i am an unattrac&#39;,
+ &#39; am a spiteful man.  i am an unattractiv&#39;,
+ &#39; a spiteful man.  i am an unattractive m&#39;,
+ &#39;spiteful man.  i am an unattractive man.&#39;,
+ &#39;teful man.  i am an unattractive man.  i&#39;,
+ &#39;ul man.  i am an unattractive man.  i\r\nb&#39;,
+ &#39;man.  i am an unattractive man.  i\r\nbeli&#39;,
+ &#39;.  i am an unattractive man.  i\r\nbelieve&#39;,
+ &#39;i am an unattractive man.  i\r\nbelieve my&#39;,
+ &#39;m an unattractive man.  i\r\nbelieve my li&#39;,
+ &#39;n unattractive man.  i\r\nbelieve my liver&#39;,
+ &#39;nattractive man.  i\r\nbelieve my liver is&#39;,
+ &#39;tractive man.  i\r\nbelieve my liver is di&#39;,
+ &#39;ctive man.  i\r\nbelieve my liver is disea&#39;,
+ &#39;ve man.  i\r\nbelieve my liver is diseased&#39;,
+ &#39;man.  i\r\nbelieve my liver is diseased.  &#39;,
+ &#39;.  i\r\nbelieve my liver is diseased.  how&#39;,
+ &#39;i\r\nbelieve my liver is diseased.  howeve&#39;,
+ &#39;believe my liver is diseased.  however, &#39;,
+ &#39;ieve my liver is diseased.  however, i k&#39;,
+ &#39;e my liver is diseased.  however, i know&#39;,
+ &#39;y liver is diseased.  however, i know no&#39;,
+ &#39;iver is diseased.  however, i know nothi&#39;,
+ &#39;r is diseased.  however, i know nothing &#39;,
+ &#39;s diseased.  however, i know nothing at &#39;,
+ &#39;iseased.  however, i know nothing at all&#39;,
+ &#39;ased.  however, i know nothing at all ab&#39;,
+ &#39;d.  however, i know nothing at all about&#39;,
+ &#39; however, i know nothing at all about my&#39;,
+ &#39;wever, i know nothing at all about my\r\nd&#39;,
+ &#39;er, i know nothing at all about my\r\ndise&#39;,
+ &#39; i know nothing at all about my\r\ndisease&#39;,
+ &#39;know nothing at all about my\r\ndisease, a&#39;,
+ &#39;w nothing at all about my\r\ndisease, and &#39;,
+ &#39;othing at all about my\r\ndisease, and do &#39;,
+ &#39;ing at all about my\r\ndisease, and do not&#39;,
+ &#39; at all about my\r\ndisease, and do not kn&#39;,
+ &#39; all about my\r\ndisease, and do not know &#39;,
+ &#39;l about my\r\ndisease, and do not know for&#39;,
+ &#39;bout my\r\ndisease, and do not know for ce&#39;,
+ &#39;t my\r\ndisease, and do not know for certa&#39;,
+ &#39;y\r\ndisease, and do not know for certain &#39;,
+ &#39;disease, and do not know for certain wha&#39;,
+ &#39;ease, and do not know for certain what a&#39;,
+ &#39;e, and do not know for certain what ails&#39;,
+ &#39;and do not know for certain what ails me&#39;,
+ &#39; do not know for certain what ails me.  &#39;,
+ &#39; not know for certain what ails me.  i d&#39;,
+ &#34;t know for certain what ails me.  i don&#39;&#34;,
+ &#34;now for certain what ails me.  i don&#39;t c&#34;,
+ &#34; for certain what ails me.  i don&#39;t cons&#34;,
+ &#34;r certain what ails me.  i don&#39;t consult&#34;,
+ &#34;ertain what ails me.  i don&#39;t consult a\r&#34;,
+ &#34;ain what ails me.  i don&#39;t consult a\r\ndo&#34;,
+ &#34; what ails me.  i don&#39;t consult a\r\ndocto&#34;,
+ &#34;at ails me.  i don&#39;t consult a\r\ndoctor f&#34;,
+ &#34;ails me.  i don&#39;t consult a\r\ndoctor for &#34;,
+ &#34;s me.  i don&#39;t consult a\r\ndoctor for it,&#34;,
+ &#34;e.  i don&#39;t consult a\r\ndoctor for it, an&#34;,
+ &#34; i don&#39;t consult a\r\ndoctor for it, and n&#34;,
+ &#34;don&#39;t consult a\r\ndoctor for it, and neve&#34;,
+ &#34;&#39;t consult a\r\ndoctor for it, and never h&#34;,
+ &#39;consult a\r\ndoctor for it, and never have&#39;,
+ &#39;sult a\r\ndoctor for it, and never have, t&#39;,
+ &#39;t a\r\ndoctor for it, and never have, thou&#39;,
+ &#39;\r\ndoctor for it, and never have, though &#39;,
+ &#39;octor for it, and never have, though i h&#39;,
+ &#39;or for it, and never have, though i have&#39;,
+ &#39;for it, and never have, though i have a &#39;,
+ &#39; it, and never have, though i have a res&#39;,
+ &#39;, and never have, though i have a respec&#39;,
+ &#39;nd never have, though i have a respect f&#39;,
+ &#39;never have, though i have a respect for &#39;,
+ &#39;er have, though i have a respect for med&#39;,
+ &#39;have, though i have a respect for medici&#39;,
+ &#39;e, though i have a respect for medicine &#39;,
+ &#39;though i have a respect for medicine and&#39;,
+ &#39;ugh i have a respect for medicine and\r\nd&#39;,
+ &#39; i have a respect for medicine and\r\ndoct&#39;,
+ &#39;have a respect for medicine and\r\ndoctors&#39;,
+ &#39;e a respect for medicine and\r\ndoctors. b&#39;,
+ &#39; respect for medicine and\r\ndoctors. besi&#39;,
+ &#39;spect for medicine and\r\ndoctors. besides&#39;,
+ &#39;ct for medicine and\r\ndoctors. besides, i&#39;,
+ &#39;for medicine and\r\ndoctors. besides, i am&#39;,
+ &#39; medicine and\r\ndoctors. besides, i am ex&#39;,
+ &#39;dicine and\r\ndoctors. besides, i am extre&#39;,
+ &#39;ine and\r\ndoctors. besides, i am extremel&#39;,
+ &#39; and\r\ndoctors. besides, i am extremely s&#39;,
+ &#39;d\r\ndoctors. besides, i am extremely supe&#39;,
+ &#39;doctors. besides, i am extremely superst&#39;,
+ &#39;tors. besides, i am extremely superstiti&#39;,
+ &#39;s. besides, i am extremely superstitious&#39;,
+ &#39;besides, i am extremely superstitious, s&#39;,
+ &#39;ides, i am extremely superstitious, suff&#39;,
+ &#39;s, i am extremely superstitious, suffici&#39;,
+ &#39;i am extremely superstitious, sufficient&#39;,
+ &#39;m extremely superstitious, sufficiently &#39;,
+ &#39;xtremely superstitious, sufficiently so &#39;,
+ &#39;emely superstitious, sufficiently so to\r&#39;,
+ &#39;ly superstitious, sufficiently so to\r\nre&#39;,
+ &#39;superstitious, sufficiently so to\r\nrespe&#39;,
+ &#39;erstitious, sufficiently so to\r\nrespect &#39;,
+ &#39;titious, sufficiently so to\r\nrespect med&#39;,
+ &#39;ious, sufficiently so to\r\nrespect medici&#39;,
+ &#39;s, sufficiently so to\r\nrespect medicine,&#39;,
+ &#39;sufficiently so to\r\nrespect medicine, an&#39;,
+ &#39;ficiently so to\r\nrespect medicine, anywa&#39;,
+ &#39;iently so to\r\nrespect medicine, anyway (&#39;,
+ &#39;tly so to\r\nrespect medicine, anyway (i a&#39;,
+ &#39; so to\r\nrespect medicine, anyway (i am w&#39;,
+ &#39; to\r\nrespect medicine, anyway (i am well&#39;,
+ &#39;\r\nrespect medicine, anyway (i am well-ed&#39;,
+ &#39;espect medicine, anyway (i am well-educa&#39;,
+ &#39;ect medicine, anyway (i am well-educated&#39;,
+ &#39; medicine, anyway (i am well-educated en&#39;,
+ &#39;dicine, anyway (i am well-educated enoug&#39;,
+ &#39;ine, anyway (i am well-educated enough n&#39;,
+ &#39;, anyway (i am well-educated enough not &#39;,
+ &#39;nyway (i am well-educated enough not to &#39;,
+ &#39;ay (i am well-educated enough not to be\r&#39;,
+ &#39;(i am well-educated enough not to be\r\nsu&#39;,
+ &#39;am well-educated enough not to be\r\nsuper&#39;,
+ &#39;well-educated enough not to be\r\nsupersti&#39;,
+ &#39;l-educated enough not to be\r\nsuperstitio&#39;,
+ &#39;ducated enough not to be\r\nsuperstitious,&#39;,
+ &#39;ated enough not to be\r\nsuperstitious, bu&#39;,
+ &#39;d enough not to be\r\nsuperstitious, but i&#39;,
+ &#39;nough not to be\r\nsuperstitious, but i am&#39;,
+ &#39;gh not to be\r\nsuperstitious, but i am su&#39;,
+ &#39;not to be\r\nsuperstitious, but i am super&#39;,
+ &#39; to be\r\nsuperstitious, but i am supersti&#39;,
+ &#39; be\r\nsuperstitious, but i am superstitio&#39;,
+ &#39;\r\nsuperstitious, but i am superstitious)&#39;,
+ &#39;uperstitious, but i am superstitious).  &#39;,
+ &#39;rstitious, but i am superstitious).  no,&#39;,
+ &#39;itious, but i am superstitious).  no, i &#39;,
+ &#39;ous, but i am superstitious).  no, i ref&#39;,
+ &#39;, but i am superstitious).  no, i refuse&#39;,
+ &#39;ut i am superstitious).  no, i refuse to&#39;,
+ &#39;i am superstitious).  no, i refuse to co&#39;,
+ &#39;m superstitious).  no, i refuse to consu&#39;,
+ &#39;uperstitious).  no, i refuse to consult &#39;,
+ &#39;rstitious).  no, i refuse to consult a\r\n&#39;,
+ &#39;itious).  no, i refuse to consult a\r\ndoc&#39;,
+ &#39;ous).  no, i refuse to consult a\r\ndoctor&#39;,
+ &#39;).  no, i refuse to consult a\r\ndoctor fr&#39;,
+ &#39; no, i refuse to consult a\r\ndoctor from &#39;,
+ &#39;, i refuse to consult a\r\ndoctor from spi&#39;,
+ &#39; refuse to consult a\r\ndoctor from spite.&#39;,
+ &#39;fuse to consult a\r\ndoctor from spite.  t&#39;,
+ &#39;e to consult a\r\ndoctor from spite.  that&#39;,
+ &#39;o consult a\r\ndoctor from spite.  that yo&#39;,
+ &#39;onsult a\r\ndoctor from spite.  that you p&#39;,
+ &#39;ult a\r\ndoctor from spite.  that you prob&#39;,
+ &#39; a\r\ndoctor from spite.  that you probabl&#39;,
+ &#39;\ndoctor from spite.  that you probably w&#39;,
+ &#39;ctor from spite.  that you probably will&#39;,
+ &#39;r from spite.  that you probably will no&#39;,
+ &#39;rom spite.  that you probably will not u&#39;,
+ &#39; spite.  that you probably will not unde&#39;,
+ &#39;ite.  that you probably will not underst&#39;,
+ &#39;.  that you probably will not understand&#39;,
+ &#39;that you probably will not understand.  &#39;,
+ &#39;t you probably will not understand.  wel&#39;,
+ &#39;ou probably will not understand.  well, &#39;,
+ &#39;probably will not understand.  well, i\r\n&#39;,
+ &#39;bably will not understand.  well, i\r\nund&#39;,
+ &#39;ly will not understand.  well, i\r\nunders&#39;,
+ &#39;will not understand.  well, i\r\nunderstan&#39;,
+ &#39;l not understand.  well, i\r\nunderstand i&#39;,
+ &#39;ot understand.  well, i\r\nunderstand it, &#39;,
+ &#39;understand.  well, i\r\nunderstand it, tho&#39;,
+ &#39;erstand.  well, i\r\nunderstand it, though&#39;,
+ &#39;tand.  well, i\r\nunderstand it, though.  &#39;,
+ &#39;d.  well, i\r\nunderstand it, though.  of &#39;,
+ &#39; well, i\r\nunderstand it, though.  of cou&#39;,
+ &#39;ll, i\r\nunderstand it, though.  of course&#39;,
+ &#39; i\r\nunderstand it, though.  of course, i&#39;,
+ &#39;\nunderstand it, though.  of course, i ca&#39;,
+ &#34;derstand it, though.  of course, i can&#39;t&#34;,
+ &#34;stand it, though.  of course, i can&#39;t ex&#34;,
+ &#34;nd it, though.  of course, i can&#39;t expla&#34;,
+ &#34;it, though.  of course, i can&#39;t explain &#34;,
+ &#34; though.  of course, i can&#39;t explain who&#34;,
+ &#34;ough.  of course, i can&#39;t explain who it&#34;,
+ &#34;h.  of course, i can&#39;t explain who it is&#34;,
+ &#34; of course, i can&#39;t explain who it is pr&#34;,
+ &#34; course, i can&#39;t explain who it is preci&#34;,
+ &#34;urse, i can&#39;t explain who it is precisel&#34;,
+ &#34;e, i can&#39;t explain who it is precisely\r\n&#34;,
+ &#34;i can&#39;t explain who it is precisely\r\ntha&#34;,
+ &#34;an&#39;t explain who it is precisely\r\nthat i&#34;,
+ &#39;t explain who it is precisely\r\nthat i am&#39;,
+ &#39;xplain who it is precisely\r\nthat i am mo&#39;,
+ &#39;ain who it is precisely\r\nthat i am morti&#39;,
+ &#39; who it is precisely\r\nthat i am mortifyi&#39;,
+ &#39;o it is precisely\r\nthat i am mortifying &#39;,
+ &#39;t is precisely\r\nthat i am mortifying in &#39;,
+ &#39;s precisely\r\nthat i am mortifying in thi&#39;,
+ &#39;recisely\r\nthat i am mortifying in this c&#39;,
+ &#39;isely\r\nthat i am mortifying in this case&#39;,
+ &#39;ly\r\nthat i am mortifying in this case by&#39;,
+ &#39;\nthat i am mortifying in this case by my&#39;,
+ &#39;at i am mortifying in this case by my sp&#39;,
+ &#39;i am mortifying in this case by my spite&#39;,
+ &#39;m mortifying in this case by my spite: i&#39;,
+ &#39;ortifying in this case by my spite: i am&#39;,
+ &#39;ifying in this case by my spite: i am pe&#39;,
+ &#39;ing in this case by my spite: i am perfe&#39;,
+ &#39; in this case by my spite: i am perfectl&#39;,
+ &#39; this case by my spite: i am perfectly w&#39;,
+ &#39;is case by my spite: i am perfectly well&#39;,
+ &#39;case by my spite: i am perfectly well\r\na&#39;,
+ &#39;e by my spite: i am perfectly well\r\nawar&#39;,
+ &#39;y my spite: i am perfectly well\r\naware t&#39;,
+ &#39;y spite: i am perfectly well\r\naware that&#39;,
+ &#39;pite: i am perfectly well\r\naware that i &#39;,
+ &#39;e: i am perfectly well\r\naware that i can&#39;,
+ &#39;i am perfectly well\r\naware that i cannot&#39;,
+ &#39;m perfectly well\r\naware that i cannot &#34;p&#39;,
+ &#39;erfectly well\r\naware that i cannot &#34;pay &#39;,
+ &#39;ectly well\r\naware that i cannot &#34;pay out&#39;,
+ &#39;ly well\r\naware that i cannot &#34;pay out&#34; t&#39;,
+ &#39;well\r\naware that i cannot &#34;pay out&#34; the &#39;,
+ &#39;l\r\naware that i cannot &#34;pay out&#34; the doc&#39;,
+ &#39;aware that i cannot &#34;pay out&#34; the doctor&#39;,
+ &#39;re that i cannot &#34;pay out&#34; the doctors b&#39;,
+ &#39;that i cannot &#34;pay out&#34; the doctors by n&#39;,
+ &#39;t i cannot &#34;pay out&#34; the doctors by not &#39;,
+ &#39; cannot &#34;pay out&#34; the doctors by not con&#39;,
+ &#39;nnot &#34;pay out&#34; the doctors by not consul&#39;,
+ &#39;t &#34;pay out&#34; the doctors by not consultin&#39;,
+ &#39;pay out&#34; the doctors by not consulting t&#39;,
+ &#39; out&#34; the doctors by not consulting them&#39;,
+ &#39;t&#34; the doctors by not consulting them; i&#39;,
+ &#39;the doctors by not consulting them; i\r\nk&#39;,
+ &#39; doctors by not consulting them; i\r\nknow&#39;,
+ &#39;ctors by not consulting them; i\r\nknow be&#39;,
+ &#39;rs by not consulting them; i\r\nknow bette&#39;,
+ &#39;by not consulting them; i\r\nknow better t&#39;,
+ &#39;not consulting them; i\r\nknow better than&#39;,
+ &#39; consulting them; i\r\nknow better than an&#39;,
+ &#39;nsulting them; i\r\nknow better than anyon&#39;,
+ &#39;lting them; i\r\nknow better than anyone t&#39;,
+ &#39;ng them; i\r\nknow better than anyone that&#39;,
+ &#39;them; i\r\nknow better than anyone that by&#39;,
+ &#39;m; i\r\nknow better than anyone that by al&#39;,
+ &#39;i\r\nknow better than anyone that by all t&#39;,
+ &#39;know better than anyone that by all this&#39;,
+ &#39;w better than anyone that by all this i &#39;,
+ &#39;etter than anyone that by all this i am &#39;,
+ &#39;er than anyone that by all this i am onl&#39;,
+ &#39;than anyone that by all this i am only i&#39;,
+ &#39;n anyone that by all this i am only inju&#39;,
+ &#39;nyone that by all this i am only injurin&#39;,
+ &#39;ne that by all this i am only injuring m&#39;,
+ &#39;that by all this i am only injuring myse&#39;,
+ &#39;t by all this i am only injuring myself &#39;,
+ &#39;y all this i am only injuring myself and&#39;,
+ &#39;ll this i am only injuring myself and\r\nn&#39;,
+ &#39;this i am only injuring myself and\r\nno o&#39;,
+ &#39;s i am only injuring myself and\r\nno one &#39;,
+ &#39; am only injuring myself and\r\nno one els&#39;,
+ &#39; only injuring myself and\r\nno one else. &#39;,
+ &#39;ly injuring myself and\r\nno one else.  bu&#39;,
+ &#39;injuring myself and\r\nno one else.  but s&#39;,
+ &#39;uring myself and\r\nno one else.  but stil&#39;,
+ &#39;ng myself and\r\nno one else.  but still, &#39;,
+ &#39;myself and\r\nno one else.  but still, if &#39;,
+ &#39;elf and\r\nno one else.  but still, if i d&#39;,
+ &#34; and\r\nno one else.  but still, if i don&#39;&#34;,
+ &#34;d\r\nno one else.  but still, if i don&#39;t c&#34;,
+ &#34;no one else.  but still, if i don&#39;t cons&#34;,
+ &#34;one else.  but still, if i don&#39;t consult&#34;,
+ &#34; else.  but still, if i don&#39;t consult a &#34;,
+ &#34;se.  but still, if i don&#39;t consult a doc&#34;,
+ &#34;  but still, if i don&#39;t consult a doctor&#34;,
+ &#34;ut still, if i don&#39;t consult a doctor it&#34;,
+ &#34;still, if i don&#39;t consult a doctor it is&#34;,
+ &#34;ll, if i don&#39;t consult a doctor it is fr&#34;,
+ &#34; if i don&#39;t consult a doctor it is from &#34;,
+ &#34; i don&#39;t consult a doctor it is from spi&#34;,
+ &#34;don&#39;t consult a doctor it is from spite.&#34;,
+ &#34;&#39;t consult a doctor it is from spite.\r\nm&#34;,
+ &#39;consult a doctor it is from spite.\r\nmy l&#39;,
+ &#39;sult a doctor it is from spite.\r\nmy live&#39;,
+ &#39;t a doctor it is from spite.\r\nmy liver i&#39;,
+ &#39; doctor it is from spite.\r\nmy liver is b&#39;,
+ &#39;ctor it is from spite.\r\nmy liver is bad,&#39;,
+ &#39;r it is from spite.\r\nmy liver is bad, we&#39;,
+ &#39;t is from spite.\r\nmy liver is bad, well-&#39;,
+ &#39;s from spite.\r\nmy liver is bad, well--le&#39;,
+ &#39;rom spite.\r\nmy liver is bad, well--let i&#39;,
+ &#39; spite.\r\nmy liver is bad, well--let it g&#39;,
+ &#39;ite.\r\nmy liver is bad, well--let it get &#39;,
+ &#39;.\r\nmy liver is bad, well--let it get wor&#39;,
+ &#39;my liver is bad, well--let it get worse!&#39;,
+ &#39;liver is bad, well--let it get worse!\r\n\r&#39;,
+ &#39;er is bad, well--let it get worse!\r\n\r\ni &#39;,
+ &#39;is bad, well--let it get worse!\r\n\r\ni hav&#39;,
+ &#39;bad, well--let it get worse!\r\n\r\ni have b&#39;,
+ &#39;, well--let it get worse!\r\n\r\ni have been&#39;,
+ &#39;ell--let it get worse!\r\n\r\ni have been go&#39;,
+ &#39;--let it get worse!\r\n\r\ni have been going&#39;,
+ &#39;et it get worse!\r\n\r\ni have been going on&#39;,
+ &#39;it get worse!\r\n\r\ni have been going on li&#39;,
+ &#39;get worse!\r\n\r\ni have been going on like &#39;,
+ &#39; worse!\r\n\r\ni have been going on like tha&#39;,
+ &#39;rse!\r\n\r\ni have been going on like that f&#39;,
+ &#39;!\r\n\r\ni have been going on like that for &#39;,
+ &#39;\r\ni have been going on like that for a l&#39;,
+ &#39; have been going on like that for a long&#39;,
+ &#39;ve been going on like that for a long ti&#39;,
+ &#39;been going on like that for a long time-&#39;,
+ &#39;n going on like that for a long time--tw&#39;,
+ &#39;oing on like that for a long time--twent&#39;,
+ &#39;g on like that for a long time--twenty y&#39;,
+ &#39;n like that for a long time--twenty year&#39;,
+ &#39;ike that for a long time--twenty years. &#39;,
+ &#39; that for a long time--twenty years.  no&#39;,
+ &#39;at for a long time--twenty years.  now i&#39;,
+ &#39;for a long time--twenty years.  now i am&#39;,
+ &#39; a long time--twenty years.  now i am\r\nf&#39;,
+ &#39;long time--twenty years.  now i am\r\nfort&#39;,
+ &#39;g time--twenty years.  now i am\r\nforty. &#39;,
+ &#39;ime--twenty years.  now i am\r\nforty.  i &#39;,
+ &#39;--twenty years.  now i am\r\nforty.  i use&#39;,
+ &#39;wenty years.  now i am\r\nforty.  i used t&#39;,
+ &#39;ty years.  now i am\r\nforty.  i used to b&#39;,
+ &#39;years.  now i am\r\nforty.  i used to be i&#39;,
+ &#39;rs.  now i am\r\nforty.  i used to be in t&#39;,
+ &#39;  now i am\r\nforty.  i used to be in the &#39;,
+ &#39;ow i am\r\nforty.  i used to be in the gov&#39;,
+ &#39;i am\r\nforty.  i used to be in the govern&#39;,
+ &#39;m\r\nforty.  i used to be in the governmen&#39;,
+ &#39;forty.  i used to be in the government s&#39;,
+ &#39;ty.  i used to be in the government serv&#39;,
+ &#39;  i used to be in the government service&#39;,
+ &#39; used to be in the government service, b&#39;,
+ &#39;ed to be in the government service, but &#39;,
+ &#39;to be in the government service, but am &#39;,
+ &#39;be in the government service, but am no &#39;,
+ &#39;in the government service, but am no lon&#39;,
+ &#39;the government service, but am no longer&#39;,
+ &#39; government service, but am no longer.  &#39;,
+ &#39;vernment service, but am no longer.  i\r\n&#39;,
+ &#39;nment service, but am no longer.  i\r\nwas&#39;,
+ &#39;nt service, but am no longer.  i\r\nwas a &#39;,
+ &#39;service, but am no longer.  i\r\nwas a spi&#39;,
+ &#39;vice, but am no longer.  i\r\nwas a spitef&#39;,
+ &#39;e, but am no longer.  i\r\nwas a spiteful &#39;,
+ &#39;but am no longer.  i\r\nwas a spiteful off&#39;,
+ &#39; am no longer.  i\r\nwas a spiteful offici&#39;,
+ &#39; no longer.  i\r\nwas a spiteful official.&#39;,
+ &#39; longer.  i\r\nwas a spiteful official.  i&#39;,
+ &#39;nger.  i\r\nwas a spiteful official.  i wa&#39;,
+ &#39;r.  i\r\nwas a spiteful official.  i was r&#39;,
+ &#39; i\r\nwas a spiteful official.  i was rude&#39;,
+ &#39;\nwas a spiteful official.  i was rude an&#39;,
+ &#39;s a spiteful official.  i was rude and t&#39;,
+ &#39; spiteful official.  i was rude and took&#39;,
+ &#39;iteful official.  i was rude and took pl&#39;,
+ &#39;ful official.  i was rude and took pleas&#39;,
+ &#39; official.  i was rude and took pleasure&#39;,
+ &#39;ficial.  i was rude and took pleasure in&#39;,
+ &#39;ial.  i was rude and took pleasure in be&#39;,
+ &#39;.  i was rude and took pleasure in being&#39;,
+ &#39;i was rude and took pleasure in being so&#39;,
+ &#39;as rude and took pleasure in being so.  &#39;,
+ &#39;rude and took pleasure in being so.  i\r\n&#39;,
+ &#39;e and took pleasure in being so.  i\r\ndid&#39;,
+ &#39;nd took pleasure in being so.  i\r\ndid no&#39;,
+ &#39;took pleasure in being so.  i\r\ndid not t&#39;,
+ &#39;k pleasure in being so.  i\r\ndid not take&#39;,
+ &#39;leasure in being so.  i\r\ndid not take br&#39;,
+ &#39;sure in being so.  i\r\ndid not take bribe&#39;,
+ &#39;e in being so.  i\r\ndid not take bribes, &#39;,
+ &#39;n being so.  i\r\ndid not take bribes, you&#39;,
+ &#39;eing so.  i\r\ndid not take bribes, you se&#39;,
+ &#39;g so.  i\r\ndid not take bribes, you see, &#39;,
+ &#39;o.  i\r\ndid not take bribes, you see, so &#39;,
+ &#39; i\r\ndid not take bribes, you see, so i w&#39;,
+ &#39;\ndid not take bribes, you see, so i was &#39;,
+ &#39;d not take bribes, you see, so i was bou&#39;,
+ &#39;ot take bribes, you see, so i was bound &#39;,
+ &#39;take bribes, you see, so i was bound to &#39;,
+ &#39;e bribes, you see, so i was bound to fin&#39;,
+ &#39;ribes, you see, so i was bound to find a&#39;,
+ &#39;es, you see, so i was bound to find a re&#39;,
+ &#39; you see, so i was bound to find a recom&#39;,
+ &#39;u see, so i was bound to find a recompen&#39;,
+ &#39;ee, so i was bound to find a recompense &#39;,
+ &#39; so i was bound to find a recompense in\r&#39;,
+ &#39; i was bound to find a recompense in\r\nth&#39;,
+ &#39;was bound to find a recompense in\r\nthat,&#39;,
+ &#39; bound to find a recompense in\r\nthat, at&#39;,
+ &#39;und to find a recompense in\r\nthat, at le&#39;,
+ &#39; to find a recompense in\r\nthat, at least&#39;,
+ &#39; find a recompense in\r\nthat, at least.  &#39;,
+ &#39;nd a recompense in\r\nthat, at least.  (a &#39;,
+ &#39;a recompense in\r\nthat, at least.  (a poo&#39;,
+ &#39;ecompense in\r\nthat, at least.  (a poor j&#39;,
+ &#39;mpense in\r\nthat, at least.  (a poor jest&#39;,
+ &#39;nse in\r\nthat, at least.  (a poor jest, b&#39;,
+ &#39; in\r\nthat, at least.  (a poor jest, but &#39;,
+ &#39;\r\nthat, at least.  (a poor jest, but i w&#39;,
+ &#39;hat, at least.  (a poor jest, but i will&#39;,
+ &#39;, at least.  (a poor jest, but i will no&#39;,
+ &#39;t least.  (a poor jest, but i will not s&#39;,
+ &#39;east.  (a poor jest, but i will not scra&#39;,
+ &#39;t.  (a poor jest, but i will not scratch&#39;,
+ &#39; (a poor jest, but i will not scratch it&#39;,
+ &#39; poor jest, but i will not scratch it ou&#39;,
+ &#39;or jest, but i will not scratch it out. &#39;,
+ &#39;jest, but i will not scratch it out.  i &#39;,
+ &#39;t, but i will not scratch it out.  i wro&#39;,
+ &#39;but i will not scratch it out.  i wrote\r&#39;,
+ &#39; i will not scratch it out.  i wrote\r\nit&#39;,
+ &#39;will not scratch it out.  i wrote\r\nit th&#39;,
+ &#39;l not scratch it out.  i wrote\r\nit think&#39;,
+ &#39;ot scratch it out.  i wrote\r\nit thinking&#39;,
+ &#39;scratch it out.  i wrote\r\nit thinking it&#39;,
+ &#39;atch it out.  i wrote\r\nit thinking it wo&#39;,
+ &#39;h it out.  i wrote\r\nit thinking it would&#39;,
+ &#39;t out.  i wrote\r\nit thinking it would so&#39;,
+ &#39;ut.  i wrote\r\nit thinking it would sound&#39;,
+ &#39;  i wrote\r\nit thinking it would sound ve&#39;,
+ &#39; wrote\r\nit thinking it would sound very &#39;,
+ &#39;ote\r\nit thinking it would sound very wit&#39;,
+ &#39;\r\nit thinking it would sound very witty;&#39;,
+ &#39;t thinking it would sound very witty; bu&#39;,
+ &#39;hinking it would sound very witty; but n&#39;,
+ &#39;king it would sound very witty; but now &#39;,
+ &#39;g it would sound very witty; but now tha&#39;,
+ ...]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Vectorization...&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="n">maxlen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentences</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentence</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">char_indices</span><span class="p">[</span><span class="n">char</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">char_indices</span><span class="p">[</span><span class="n">next_chars</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Vectorization...
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(88514, 40, 58)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(88514, 58)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False,  True, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False,  True, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False,  True, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False,  True, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+         True, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False,  True, False, False, False, False, False, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False,  True,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False,  True, False, False,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False,  True,
+        False, False, False, False],
+       [False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False, False, False, False, False, False, False, False,
+        False, False,  True, False]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># build the model: a single LSTM</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Build model...&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">maxlen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">))))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Build model...
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Model: &#34;sequential&#34;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+lstm (LSTM)                  (None, 128)               95744     
+_________________________________________________________________
+dense (Dense)                (None, 58)                7482      
+=================================================================
+Total params: 103,226
+Trainable params: 103,226
+Non-trainable params: 0
+_________________________________________________________________
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="c1"># helper function to sample an index from a probability array</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span> <span class="o">/</span> <span class="n">temperature</span>
+    <span class="n">exp_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">exp_preds</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">exp_preds</span><span class="p">)</span>
+    <span class="n">probas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">probas</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="c1"># Function invoked at end of each epoch. Prints generated text.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;******************************************************&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- Generating text after Epoch: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">epoch</span><span class="p">)</span>
+
+    <span class="n">start_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_text</span><span class="p">)</span> <span class="o">-</span> <span class="n">maxlen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">temperature</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- temperature:&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+
+        <span class="n">generated</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">sentence</span> <span class="o">=</span> <span class="n">processed_text</span><span class="p">[</span><span class="n">start_index</span><span class="p">:</span> <span class="n">start_index</span> <span class="o">+</span> <span class="n">maxlen</span><span class="p">]</span>
+        <span class="n">generated</span> <span class="o">+=</span> <span class="n">sentence</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----- Generating with seed: &quot;&#39;</span> <span class="o">+</span> <span class="n">sentence</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">generated</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">400</span><span class="p">):</span>
+            <span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sentence</span><span class="p">):</span>
+                <span class="n">x_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">char_indices</span><span class="p">[</span><span class="n">char</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">1.</span>
+
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">next_index</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+            <span class="n">next_char</span> <span class="o">=</span> <span class="n">indices_char</span><span class="p">[</span><span class="n">next_index</span><span class="p">]</span>
+
+            <span class="n">generated</span> <span class="o">+=</span> <span class="n">next_char</span>
+            <span class="n">sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">next_char</span>
+
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">next_char</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Ignore useless W0819 warnings generated by TensorFlow 2.0.  Hopefully can remove this ignore in the future.</span>
+<span class="c1"># See https://github.com/tensorflow/tensorflow/issues/31308</span>
+<span class="kn">import</span> <span class="nn">logging</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TF_CPP_MIN_LOG_LEVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;3&quot;</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">print_callback</span> <span class="o">=</span> <span class="n">LambdaCallback</span><span class="p">(</span><span class="n">on_epoch_end</span><span class="o">=</span><span class="n">on_epoch_end</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+          <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+          <span class="n">epochs</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+          <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">print_callback</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Epoch 1/60
+692/692 [==============================] - ETA: 0s - loss: 2.1576******************************************************
+----- Generating text after Epoch: 0
+----- temperature: 0.2
+----- Generating with seed: &#34;cried.  &#34;but i
+will make up for it or p&#34;
+cried.  &#34;but i
+will make up for it or pored the stine the derent of the dook and the stand to the store and the doon the sare the dong the dened to the dook the sare the stare the street of the seres at all the sall the deared the derent of the street in i am in the derent to the stan to the street the stine the sered to the dran that is all the stan the stare the dook the forest of the stan stand of the dook all the stand the streed t
+----- temperature: 0.5
+----- Generating with seed: &#34;cried.  &#34;but i
+will make up for it or p&#34;
+cried.  &#34;but i
+
+
+
+he know conse the lake the s
+----- temperature: 1.0
+----- Generating with seed: &#34;cried.  &#34;but i
+will make up for it or p&#34;
+cried.  &#34;but i
+
+
+
+
+
+
+
+&#34;yes kle the lafine as the prosies netc
+----- temperature: 1.2
+----- Generating with seed: &#34;cried.  &#34;but i
+will make up for it or p&#34;
+cried.  &#34;but i
+
+
+
+
+
+
+
+
+
+
+
+
+anp, !
+692/692 [==============================] - 155s 224ms/step - loss: 2.1576
+Epoch 2/60
+572/692 [=======================&gt;......] - ETA: 13s - loss: 1.7386</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/11/14/Text_Generation_LSTM_Dostoevsky.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
