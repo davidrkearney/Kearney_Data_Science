@@ -32,6 +32,13 @@ title: Data Science Content
 [Principal Component Analysis (PCA) with Scikit-learn](https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0)
 
 
+
+## Deep Learning
+
+https://udemy.com/course/deeplearning/
+https://udemy.com/course/complete-tensorflow-2-and-keras-deep-learning-bootcamp
+
+
 ## Data Engineering Resources
 
 
