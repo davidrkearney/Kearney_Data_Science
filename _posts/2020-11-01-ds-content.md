@@ -37,7 +37,7 @@ title: Data Science Content
 
 https://udemy.com/course/deeplearning/
 https://udemy.com/course/complete-tensorflow-2-and-keras-deep-learning-bootcamp
-
+https://github.com/jeffheaton/t81_558_deep_learning
 
 ## Data Engineering Resources
 
