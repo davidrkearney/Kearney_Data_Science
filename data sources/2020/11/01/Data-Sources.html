@@ -114,6 +114,15 @@ df = pd.read_csv(url, error_bad_lines=False)
 df
 </code></pre></div></div>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
+url = 'https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv'
+df = pd.read_csv(url, error_bad_lines=False)
+df
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df = h2o.import_file("https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv", destination_frame="df")
+</code></pre></div></div>
+
 
   </div><a class="u-url" href="/Kearney_Data_Science/data%20sources/2020/11/01/Data-Sources.html" hidden></a>
 </article>

@@ -234,7 +234,7 @@
     
         ,"post21": {
             "title": "Data Sources",
-            "content": "import pandas as pd url = &#39;https://raw.githubusercontent.com/davidrkearney/Kearney_Data_Science/master/_notebooks/df_panel_fix.csv&#39; df = pd.read_csv(url, error_bad_lines=False) df .",
+            "content": "import pandas as pd url = &#39;https://raw.githubusercontent.com/davidrkearney/Kearney_Data_Science/master/_notebooks/df_panel_fix.csv&#39; df = pd.read_csv(url, error_bad_lines=False) df . import pandas as pd url = &#39;https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv&#39; df = pd.read_csv(url, error_bad_lines=False) df . df = h2o.import_file(&quot;https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv&quot;, destination_frame=&quot;df&quot;) .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/data%20sources/2020/11/01/Data-Sources.html",
             "relUrl": "/data%20sources/2020/11/01/Data-Sources.html",
             "date": " • Nov 1, 2020"
