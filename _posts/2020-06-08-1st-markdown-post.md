@@ -1,8 +1,8 @@
 ---
 toc: true
 layout: post
-description: 1st Markdown Post
-categories: [markdown]
+description: Data Science Content
+categories: [Data Science Content]
 title: Data Science, Big Data and Healthcare Research
 ---
 # Data Science, Big Data and Healthcare Research
