@@ -14,3 +14,19 @@ df
 ```
 
 
+
+```
+import pandas as pd
+url = 'https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv'
+df = pd.read_csv(url, error_bad_lines=False)
+df
+```
+
+
+```
+df = h2o.import_file("https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv", destination_frame="df")
+```
+
+
+
+
