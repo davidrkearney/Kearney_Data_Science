@@ -179,7 +179,7 @@
     
         ,"post16": {
             "title": "Data Science Content",
-            "content": "Machine Learning . Pyspark Content . Pyspark Style Guide . | Spark Joins . | . Style Guides . Python Style Guide | . Reinforcement Learning . Reinforcement Learning Project | . Principal Component Analysis (PCA) . Principal Component Analysis (PCA) with Scikit-learn . Deep Learning . https://udemy.com/course/deeplearning/ https://udemy.com/course/complete-tensorflow-2-and-keras-deep-learning-bootcamp https://github.com/jeffheaton/t81_558_deep_learning . Data Engineering Resources . Data Engineering Resources | . NLP . BERT Using BERT for Unlabeled Data | | . | . Docker . Using Docker for Data Science | | . Github Roadmaps . VS Code Roadmap | . APIs . News API | . Startups . Startup Financial Modeling | . Content . Explainable Machine Learning . LIME explanations for classification results | . Mapping with Python . Hex Maps for Spatial Data . | Choropleth using the Plot.ly . | . Organization . Organizing Folders with Python . Economics and Data Science . An Economist’s Value in Data Science Covers Econometrics. Economists ‘have a unique set of skills that allows them to apply statistics in a very similar fashion to data scientists, while also being able to evaluate bias, externalities, and comprehend the math behind algorithms. Additionally, their experience analyzing businesses provide an ability to question and discuss the value of models relative to business goals.’ . Statistics .",
+            "content": "Machine Learning . Pyspark Content . Pyspark Style Guide . | Spark Joins . | . Style Guides . Python Style Guide | . Reinforcement Learning . Reinforcement Learning Project | . Principal Component Analysis (PCA) . Principal Component Analysis (PCA) with Scikit-learn . Deep Learning . https://www.fast.ai/ https://udemy.com/course/deeplearning/ https://udemy.com/course/complete-tensorflow-2-and-keras-deep-learning-bootcamp https://github.com/jeffheaton/t81_558_deep_learning . Data Engineering Resources . Data Engineering Resources | . NLP . BERT Using BERT for Unlabeled Data | | . | . Docker . Using Docker for Data Science | | . Github Roadmaps . VS Code Roadmap | . APIs . News API | . Startups . Startup Financial Modeling | . Content . Explainable Machine Learning . LIME explanations for classification results | . Mapping with Python . Hex Maps for Spatial Data . | Choropleth using the Plot.ly . | . Organization . Organizing Folders with Python . Economics and Data Science . An Economist’s Value in Data Science Covers Econometrics. Economists ‘have a unique set of skills that allows them to apply statistics in a very similar fashion to data scientists, while also being able to evaluate bias, externalities, and comprehend the math behind algorithms. Additionally, their experience analyzing businesses provide an ability to question and discuss the value of models relative to business goals.’ . Statistics .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/data%20science%20content/2020/11/01/ds-content.html",
             "relUrl": "/data%20science%20content/2020/11/01/ds-content.html",
             "date": " • Nov 1, 2020"
@@ -387,7 +387,7 @@
   
     
         ,"post35": {
-            "title": "Friday Links",
+            "title": "Friday links",
             "content": "Spacy V3 . | why-congress-should-invest-in-open-source-software . | National Research Cloud AI/ML . | Favicons . | Babies’ random choices become their preferences: “We assume we choose things that we like, but research suggests that’s sometimes backward: We like things because we choose them, and we dislike things that we don’t choose.” . | .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/16/links.html",
             "relUrl": "/links/2020/10/16/links.html",
@@ -442,7 +442,7 @@
   
     
         ,"post40": {
-            "title": "Monday Links",
+            "title": "Monday links",
             "content": "Nobel Prize in Economics 2020, Auction Theory . | The Promise of Prediction Markets . | ENTRY DETERRENCE by Milgrom and John Roberts (1981) . | Auction Theory by Milgrom . | How Computer Science Informs Modern Auction Design . | .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/12/links.html",
             "relUrl": "/links/2020/10/12/links.html",
@@ -552,7 +552,7 @@
   
     
         ,"post50": {
-            "title": "Friday Links",
+            "title": "Friday links",
             "content": "Escaping strings in Bash using !:q / | . bash # This string ‘has single’ “and double” quotes and a $ bash !:q .",
             "url": "https://davidrkearney.github.io/Kearney_Data_Science/links/2020/10/02/links2.html",
             "relUrl": "/links/2020/10/02/links2.html",
