@@ -301,10 +301,6 @@
 <lastmod>2020-11-05T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/11/06/_11_17_diab_prediction_with_h2o.html</loc>
-<lastmod>2020-11-06T00:00:00-06:00</lastmod>
-</url>
-<url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/11/06/example_kaggle_project_submission.html</loc>
 <lastmod>2020-11-06T00:00:00-06:00</lastmod>
 </url>
@@ -351,6 +347,10 @@
 <url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html</loc>
 <lastmod>2020-11-16T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/11/17/diab_prediction_with_h2o.html</loc>
+<lastmod>2020-11-17T00:00:00-06:00</lastmod>
 </url>
 <url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/about/</loc>
