@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>AutoML, Xgboost and H2O | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="AutoML, Xgboost and H2O" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-16T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-16T00:00:00-06:00","dateModified":"2020-11-16T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html","headline":"AutoML, Xgboost and H2O","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>AutoML, Xgboost and H2O | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="AutoML, Xgboost and H2O" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-16T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-16T00:00:00-06:00","dateModified":"2020-11-16T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html","headline":"AutoML, Xgboost and H2O","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">AutoML, Xgboost and H2O</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-16T00:00:00-06:00" itemprop="datePublished">
+        Nov 16, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-11-16-automl-capabilities-of-h2o-library.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-11-16-automl-capabilities-of-h2o-library.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-11-16-automl-capabilities-of-h2o-library.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-16-automl-capabilities-of-h2o-library.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Credit: code from <a href="https://www.kaggle.com/paradiselost/tutorial-automl-capabilities-of-h2o-library">https://www.kaggle.com/paradiselost/tutorial-automl-capabilities-of-h2o-library</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="https://avatars0.githubusercontent.com/u/1402695?s=200&amp;v=4" alt="h2o.ai" /></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Automated machine learning (AutoML)</strong> is the process of automating the end-to-end process of applying machine learning to real-world problems. In a typical machine learning application, the typical stages (and sub-stages) of work are the following:</p>
+<ol>
+<li>Data preparation<ul>
+<li>data pre-processing</li>
+<li>feature engineering</li>
+<li>feature extraction</li>
+<li>feature selection</li>
+</ul>
+</li>
+<li>Model selection</li>
+<li>Hyperparameter optimization (to maximize the performance of the final model)</li>
+</ol>
+<p>Many of these steps are often beyond the abilities of non-experts. <strong>AutoML</strong> was proposed as an artificial intelligence-based solution to the ever-growing challenge of applying machine learning.</p>
+<p>Some of the notable platforms tackling various stages of AutoML are the following:</p>
+<ul>
+<li><a href="https://automl.github.io/auto-sklearn/stable/">auto-sklearn</a> is a Bayesian hyperparameter optimization layer on top of <a href="https://scikit-learn.org/">scikit-learn</a>.</li>
+<li><a href="https://github.com/EpistasisLab/tpot">TPOT</a> (TeaPOT) is a Python library that automatically creates and optimizes full machine learning pipelines using genetic programming.</li>
+<li><a href="https://github.com/salesforce/TransmogrifAI">TransmogrifAI</a> is a Scala/SparkML library created by <a href="http://salesforce.com/">Salesforce</a> for automated data cleansing, feature engineering, model selection, and hyperparameter optimization.</li>
+<li><a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html">H2O AutoML</a> performs (simple) data preprocessing, automates the process of training a large selection of candidate models, tunes hyperparameters of the models and creates stacked ensembles.</li>
+<li><a href="https://www.h2o.ai/products/h2o-driverless-ai/">H2O Driverless AI</a> is a commercial software package that automates lots of aspects of machine learning applications. It has a strong focus on automatic feature engineering. </li>
+</ul>
+<p>An overview of AutoML capabilities of H2O library is presented in this tutorial. The library can be installed simply by</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="ch">#!pip install h2o</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's import the required packages and call <code>h2o.init()</code>. The specified arguments (<code>nthreads</code> and <code>max_mem_size</code>) are optional.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">import</span> <span class="nn">h2o</span>
+<span class="kn">from</span> <span class="nn">h2o.automl</span> <span class="kn">import</span> <span class="n">H2OAutoML</span>
+
+<span class="n">h2o</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+    <span class="n">nthreads</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>     <span class="c1"># number of threads when launching a new H2O server</span>
+    <span class="n">max_mem_size</span><span class="o">=</span><span class="mi">12</span>  <span class="c1"># in gigabytes</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Example 1: a classification task</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's apply the power of H2O AutoML to the <a href="https://www.kaggle.com/c/flight-delays-fall-2018">"Flight delays" competition</a> (it's a binary classification task) from <a href="https://mlcourse.ai/">mlcourse.ai</a>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../input/mlcourse/flight_delays_train.csv&#39;</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../input/mlcourse/flight_delays_test.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;train_df cols:&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test_df cols: &#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">test_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="n">train_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The features <code>Month</code>, <code>DayofMonth</code>, <code>DayOfWeek</code>, <code>DepTime</code>, <code>Distance</code> can be represented as numbers. Let's convert those features to numerical type (a new feature <code>HourFloat</code> is added):</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="p">[</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">]:</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DayofMonth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DayofMonth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DayOfWeek&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DayOfWeek&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+    
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;HourFloat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;DepTime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">(</span><span class="n">t</span> <span class="o">//</span> <span class="mi">100</span><span class="p">)</span> <span class="o">%</span> <span class="mi">24</span> <span class="o">+</span> <span class="p">((</span><span class="n">t</span> <span class="o">%</span> <span class="mi">100</span><span class="p">)</span> <span class="o">%</span> <span class="mi">60</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's also introduce a new feature <code>Route</code> that is the concatenation of <code>Origin</code> and <code>Dest</code>:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="p">[</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">]:</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Route&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;Dest&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">pair</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">pair</span><span class="p">]),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will not use the column <code>DepTime</code> anymore. Split the target column from the features columns in <code>train_df</code>:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+<span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="s1">&#39;DayofMonth&#39;</span><span class="p">,</span> <span class="s1">&#39;DayOfWeek&#39;</span><span class="p">,</span> <span class="s1">&#39;HourFloat&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;UniqueCarrier&#39;</span><span class="p">,</span> <span class="s1">&#39;Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;Dest&#39;</span><span class="p">,</span> <span class="s1">&#39;Route&#39;</span><span class="p">,</span> <span class="s1">&#39;Distance&#39;</span><span class="p">,]</span>
+<span class="n">train_df_modif</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span>
+<span class="n">test_df_modif</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The features <code>UniqueCarrier</code>, <code>Origin</code>, <code>Dest</code>, <code>Route</code> should be categorical:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">N_train</span> <span class="o">=</span> <span class="n">train_df_modif</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">train_test_X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_df_modif</span><span class="p">,</span> <span class="n">test_df_modif</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;UniqueCarrier&#39;</span><span class="p">,</span> <span class="s1">&#39;Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;Dest&#39;</span><span class="p">,</span> <span class="s1">&#39;Route&#39;</span><span class="p">]:</span>
+    <span class="n">train_test_X</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_test_X</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">train_test_X</span><span class="p">[:</span><span class="n">N_train</span><span class="p">]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">train_test_X</span><span class="p">[</span><span class="n">N_train</span><span class="p">:]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">target</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Pandas DataFrames should be converted to H2O dataframes before calling <code>H2OAutoML()</code>.</p>
+<p>Note: if you don't have to preprocess the data, you can get H2O dataframes directly from the data files by a call like <code>df = h2o.import_file(datafile_path)</code> (where <code>datafile_path</code> is a filesystem path or a URL).</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_y_train_h</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">H2OFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">))</span>
+<span class="n">X_y_train_h</span><span class="p">[</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_y_train_h</span><span class="p">[</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+<span class="c1"># ^ the target column should have categorical type for classification tasks</span>
+<span class="c1">#   (numerical type for regression tasks)</span>
+
+<span class="n">X_test_h</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">H2OFrame</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">X_y_train_h</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aml</span> <span class="o">=</span> <span class="n">H2OAutoML</span><span class="p">(</span>
+    <span class="n">max_runtime_secs</span><span class="o">=</span><span class="p">(</span><span class="mi">3600</span> <span class="o">*</span> <span class="mi">8</span><span class="p">),</span>  <span class="c1"># 8 hours</span>
+    <span class="n">max_models</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># no limit</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">17</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Among the most important arguments (with their default values) of <code>H2OAutoML()</code> are the following:</p>
+<ul>
+<li><code>nfolds=5</code> -- number of folds for k-fold cross-validation (<code>nfolds=0</code> disables cross-validation)</li>
+<li><code>balance_classes=False</code> -- balance training data class counts via over/under-sampling</li>
+<li><code>max_runtime_secs=3600</code> -- how long the AutoML run will execute (in seconds)</li>
+<li><code>max_models=None</code> -- the maximum number of models to build in an AutoML run (<code>None</code> means no limitation)</li>
+<li><code>include_algos=None</code> -- list of algorithms to restrict to during the model-building phase (cannot be used in combination with <code>exclude_algos</code> parameter; <code>None</code> means that all appropriate H2O algorithms will be used)</li>
+<li><code>exclude_algos=None</code> -- list of algorithms to skip during the model-building phase (<code>None</code> means that all appropriate H2O algorithms will be used)</li>
+<li><code>seed=None</code> -- a random seed for reproducibility (AutoML can only guarantee reproducibility if <code>max_models</code> or
+early stopping is used because <code>max_runtime_secs</code> is resource limited, meaning that if the resources are
+not the same between runs, AutoML may be able to train more models on one run vs another)</li>
+</ul>
+<p>H2O AutoML trains and cross-validates:</p>
+<ul>
+<li>a default Random Forest (DRF), </li>
+<li>an Extremely-Randomized Forest (XRT),</li>
+<li>a random grid of Generalized Linear Models (GLM),</li>
+<li>a random grid of XGBoost (XGBoost),</li>
+<li>a random grid of Gradient Boosting Machines (GBM), </li>
+<li>a random grid of Deep Neural Nets (DeepLearning), </li>
+<li>and 2 Stacked Ensembles, one of all the models, and one of only the best models of each kind.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the cell below, I call <code>aml.train()</code>, save the leaderboard and all individual models. The running time is about 8 hours, so after running it once I saved the output files as a new dataset, connected the dataset to this kernel and commented out the code in the cell.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="c1"># aml.train(</span>
+<span class="c1">#     x=feature_cols,</span>
+<span class="c1">#     y=&#39;dep_delayed_15min&#39;,</span>
+<span class="c1">#     training_frame=X_y_train_h</span>
+<span class="c1"># )</span>
+
+<span class="c1"># lb = aml.leaderboard</span>
+<span class="c1"># model_ids = list(lb[&#39;model_id&#39;].as_data_frame().iloc[:,0])</span>
+<span class="c1"># out_path = &quot;.&quot;</span>
+
+<span class="c1"># for m_id in model_ids:</span>
+<span class="c1">#     mdl = h2o.get_model(m_id)</span>
+<span class="c1">#     h2o.save_model(model=mdl, path=out_path, force=True)</span>
+
+<span class="c1"># h2o.export_file(lb, os.path.join(out_path, &#39;aml_leaderboard.h2o&#39;), force=True)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some of the arguments for <code>H2OAutoML.train()</code> are the following:</p>
+<ul>
+<li><code>training_frame</code> -- the H2OFrame having the columns indicated by <code>x</code> and <code>y</code></li>
+<li><code>x</code> -- list of feature column names in <code>training_frame</code></li>
+<li><code>y</code> -- a column name indicating the target</li>
+<li><code>validation_frame</code> -- the H2OFrame with validation data (by default and when <code>nfolds</code> &gt; 1, <code>validation_frame</code> will be ignored)</li>
+<li><code>leaderboard_frame</code> -- the H2OFrame with test data for scoring the leaderboard (optinal; by default (<code>leaderboard_frame=None</code>) the cross-validation metric on <code>training_frame</code> will be used to generate the leaderboard rankings)</li>
+</ul>
+<p>Let's take a look at the leaderboard:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">models_path</span> <span class="o">=</span> <span class="s2">&quot;../input/h2o-automl-saved-models-classif/&quot;</span>
+
+<span class="n">lb</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">import_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;aml_leaderboard.h2o&quot;</span><span class="p">))</span>
+
+<span class="n">lb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1">#lb.head(rows=lb.nrows)</span>
+<span class="c1"># ^ to see the entire leaderboard</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Among the individual models, XGBoost is the leader (auc = 0.749523) for this task. Best individual GBM has auc = 0.741785, best XRT has auc = 0.731317, best DRF has auc = 0.725166, best DNN has auc = 0.706676.</p>
+<p><code>StackedEnsemble_AllModels</code> is usually the leader, <code>StackedEnsemble_BestOfFamily</code> is usually at the 2nd place. Let's look inside the <code>StackedEnsemble_AllModels</code>. It is an ensemble of all of the individual models in the AutoML run.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">se_all</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;StackedEnsemble_AllModels_AutoML_20190414_112210&quot;</span><span class="p">))</span>
+<span class="c1"># Get the Stacked Ensemble metalearner model</span>
+<span class="n">metalearner</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">se_all</span><span class="o">.</span><span class="n">metalearner</span><span class="p">()[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The AutoML Stacked Ensembles use the GLM with non-negative weights as the default metalearner (combiner) algorithm. Let's examine the variable importance of the metalearner algorithm in the ensemble. This shows us how much each base learner is contributing to the ensemble. <code>Intercept</code> represents the constant term in a linear model.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">metalearner</span><span class="o">.</span><span class="n">std_coef_plot</span><span class="p">(</span><span class="n">num_of_features</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="c1"># ^ all importance values starting from the 16th are zero</span>
+
+<span class="c1">#metalearner.coef_norm()</span>
+<span class="c1"># ^ to see the table in the text form</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>StackedEnsemble_BestOfFamily</code> shows the following:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">se_best_of_family</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;StackedEnsemble_BestOfFamily_AutoML_20190414_112210&quot;</span><span class="p">))</span>
+<span class="c1"># Get the Stacked Ensemble metalearner model</span>
+<span class="n">metalearner</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">se_best_of_family</span><span class="o">.</span><span class="n">metalearner</span><span class="p">()[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">metalearner</span><span class="o">.</span><span class="n">std_coef_plot</span><span class="p">(</span><span class="n">num_of_features</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1">#metalearner.coef_norm()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's reproduce the result (auc) of a few best individual models.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">h2o.estimators.xgboost</span> <span class="kn">import</span> <span class="n">H2OXGBoostEstimator</span>
+
+<span class="n">model_01</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;XGBoost_grid_1_AutoML_20190414_112210_model_19&quot;</span><span class="p">))</span>
+
+<span class="n">excluded_params</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">,</span> <span class="s1">&#39;response_column&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_columns&#39;</span><span class="p">]</span>
+<span class="n">model_01_actual_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model_01</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_params</span><span class="p">}</span>
+
+<span class="n">reprod_model_01</span> <span class="o">=</span> <span class="n">H2OXGBoostEstimator</span><span class="p">(</span><span class="o">**</span><span class="n">model_01_actual_params</span><span class="p">)</span>
+<span class="n">reprod_model_01</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">feature_cols</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">,</span>
+    <span class="n">training_frame</span><span class="o">=</span><span class="n">X_y_train_h</span>
+<span class="p">)</span>
+<span class="n">reprod_model_01</span><span class="o">.</span><span class="n">auc</span><span class="p">(</span><span class="n">xval</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># ^ 0.749453, slightly worse compared to the leaderboard value</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">h2o.estimators.gbm</span> <span class="kn">import</span> <span class="n">H2OGradientBoostingEstimator</span>
+
+<span class="n">model_12</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;GBM_grid_1_AutoML_20190414_112210_model_85&quot;</span><span class="p">))</span>
+
+<span class="n">excluded_params</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">,</span> <span class="s1">&#39;response_column&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_columns&#39;</span><span class="p">]</span>
+<span class="n">model_12_actual_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model_12</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_params</span><span class="p">}</span>
+
+<span class="n">reprod_model_12</span> <span class="o">=</span> <span class="n">H2OGradientBoostingEstimator</span><span class="p">(</span><span class="o">**</span><span class="n">model_12_actual_params</span><span class="p">)</span>
+<span class="n">reprod_model_12</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">feature_cols</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">,</span>
+    <span class="n">training_frame</span><span class="o">=</span><span class="n">X_y_train_h</span>
+<span class="p">)</span>
+<span class="n">reprod_model_12</span><span class="o">.</span><span class="n">auc</span><span class="p">(</span><span class="n">xval</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># ^ 0.741785, the same as at the leaderboard</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">h2o.estimators.glm</span> <span class="kn">import</span> <span class="n">H2OGeneralizedLinearEstimator</span>
+<span class="kn">from</span> <span class="nn">h2o.grid.grid_search</span> <span class="kn">import</span> <span class="n">H2OGridSearch</span>
+
+<span class="n">model_93</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;GLM_grid_1_AutoML_20190414_112210_model_1&quot;</span><span class="p">))</span>
+
+<span class="n">excluded_params</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">,</span> <span class="s1">&#39;response_column&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_columns&#39;</span><span class="p">,</span> <span class="s1">&#39;lambda&#39;</span><span class="p">]</span>
+<span class="n">model_93_actual_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model_93</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_params</span><span class="p">}</span>
+
+<span class="n">reprod_model_93</span> <span class="o">=</span> <span class="n">H2OGeneralizedLinearEstimator</span><span class="p">(</span><span class="o">**</span><span class="n">model_93_actual_params</span><span class="p">)</span>
+<span class="n">reprod_model_93</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">feature_cols</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;dep_delayed_15min&#39;</span><span class="p">,</span>
+    <span class="n">training_frame</span><span class="o">=</span><span class="n">X_y_train_h</span>
+<span class="p">)</span>
+<span class="n">reprod_model_93</span><span class="o">.</span><span class="n">auc</span><span class="p">(</span><span class="n">xval</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># ^ 0.699418, the same as at the leaderboard</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's train the CatBoostClassifier with the default parameters and compare its results with AutoML run results.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">catboost</span> <span class="kn">import</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">CatBoostClassifier</span><span class="p">,</span> <span class="n">cv</span>
+
+<span class="n">cb_model</span> <span class="o">=</span> <span class="n">CatBoostClassifier</span><span class="p">(</span>
+    <span class="n">eval_metric</span><span class="o">=</span><span class="s1">&#39;AUC&#39;</span><span class="p">,</span>
+    <span class="n">use_best_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">17</span>
+<span class="p">)</span>
+
+<span class="n">cv_data</span> <span class="o">=</span> <span class="n">cv</span><span class="p">(</span>
+    <span class="n">Pool</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">]),</span>
+    <span class="n">cb_model</span><span class="o">.</span><span class="n">get_params</span><span class="p">(),</span>
+    <span class="n">fold_count</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CatBoostClassifier: the best cv auc is&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;test-AUC-mean&#39;</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The CatBoostClassifier cross-validation auc result is 0.749009. This value falls between the 2nd (auc = 0.749523) and 3rd (auc = 0.749192) places among the individual models at the leaderboard.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Example 2: a regression task</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's consider a regression task from the <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration">"New York City Taxi Trip Duration" competition</a>. The challenge is to build a model that predicts the total ride duration of taxi trips in New York City. The features include pickup time, geo-coordinates, number of passengers, and a few other variables.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../input/nyc-taxi-trip-duration/train.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df_test</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../input/nyc-taxi-trip-duration/test.csv&#39;</span><span class="p">,</span>  <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will use only <code>df_train</code> (perform 5-fold cross-validation on it). Convert the date- and time-related features to the <code>datetime</code> format; take the logarithm (<code>log(1 + x)</code>) of the target value (trip duration). After the logarithm transform, the distribution of the target variable is close to normal (see this <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-367">kernel</a>).</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;pickup_datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">pickup_datetime</span><span class="p">)</span>
+<span class="n">df_train</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;pickup_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;pickup_datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;dropoff_datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">dropoff_datetime</span><span class="p">)</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;store_and_fwd_flag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">store_and_fwd_flag</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;check_trip_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;dropoff_datetime&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;pickup_datetime&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;log_trip_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;trip_duration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">cnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;check_trip_duration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="o">-</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;trip_duration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="n">duration_difference</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">cnd</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">duration_difference</span><span class="p">[[</span><span class="s1">&#39;pickup_datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;dropoff_datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;trip_duration&#39;</span><span class="p">,</span> <span class="s1">&#39;check_trip_duration&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Trip_duration and datetimes are ok.&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ooops.&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Select the columns common to the train set and test set; convert <code>pd.DataFrame</code> to <code>H2OFrame</code>:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">common_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;vendor_id&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;pickup_datetime&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;passenger_count&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;pickup_longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;pickup_latitude&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;dropoff_longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;dropoff_latitude&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;store_and_fwd_flag&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">X_y_train_h</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">H2OFrame</span><span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="n">common_cols</span><span class="p">],</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;log_trip_duration&#39;</span><span class="p">]],</span>
+        <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ft</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vendor_id&#39;</span><span class="p">,</span> <span class="s1">&#39;store_and_fwd_flag&#39;</span><span class="p">]:</span>
+    <span class="n">X_y_train_h</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_y_train_h</span><span class="p">[</span><span class="n">ft</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+    
+<span class="n">X_y_train_h</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I have run the cell below (~8 hours), saved all models and the leaderboard, then commented out the code:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># aml = H2OAutoML(</span>
+<span class="c1">#     max_runtime_secs=(3600 * 8),  # 8 hours</span>
+<span class="c1">#     max_models=None,  # no limit</span>
+<span class="c1">#     seed=SEED,</span>
+<span class="c1"># )</span>
+
+<span class="c1"># aml.train(</span>
+<span class="c1">#     x=common_cols,</span>
+<span class="c1">#     y=&#39;log_trip_duration&#39;,</span>
+<span class="c1">#     training_frame=X_y_train_h</span>
+<span class="c1"># )</span>
+
+<span class="c1"># lb = aml.leaderboard</span>
+<span class="c1"># model_ids = list(lb[&#39;model_id&#39;].as_data_frame().iloc[:,0])</span>
+<span class="c1"># out_path = &quot;.&quot;</span>
+
+<span class="c1"># for m_id in model_ids:</span>
+<span class="c1">#     mdl = h2o.get_model(m_id)</span>
+<span class="c1">#     h2o.save_model(model=mdl, path=out_path, force=True)</span>
+
+<span class="c1"># h2o.export_file(lb, os.path.join(out_path, &#39;aml_leaderboard.h2o&#39;), force=True)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Interestingly, there is only one model at the leaderboard:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">models_path</span> <span class="o">=</span> <span class="s2">&quot;../input/h2o-automl-saved-models-regress/&quot;</span>
+
+<span class="n">lb</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">import_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models_path</span><span class="p">,</span> <span class="s2">&quot;aml_leaderboard.h2o&quot;</span><span class="p">))</span>
+<span class="n">lb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's compare the result of the model <code>XGBoost_1_AutoML_20190417_212831</code> with that of the CatBoostRegressor with the default parameters.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">catboost</span> <span class="kn">import</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">cv</span>
+
+<span class="n">cb_model</span> <span class="o">=</span> <span class="n">CatBoostRegressor</span><span class="p">(</span>
+    <span class="n">eval_metric</span><span class="o">=</span><span class="s1">&#39;RMSE&#39;</span><span class="p">,</span>
+    <span class="n">use_best_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">17</span>
+<span class="p">)</span>
+
+<span class="n">cv_data</span> <span class="o">=</span> <span class="n">cv</span><span class="p">(</span>
+    <span class="n">Pool</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="n">common_cols</span><span class="p">],</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;log_trip_duration&#39;</span><span class="p">],</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">]),</span>
+    <span class="n">cb_model</span><span class="o">.</span><span class="n">get_params</span><span class="p">(),</span>
+    <span class="n">fold_count</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CatBoostRegressor: the best cv rmse is&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;test-RMSE-mean&#39;</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Default CatBoost's RMSE is slightly worse than that of the XGBoost model from the H2O AutoML run.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Conclusion</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I think that H2O AutoML is worth a try. And I hope you have found this tutorial useful.</p>
+<p>There are extremely useful "H2O AutoML Pro Tips" in the presentation "Scalable Automatic Machine Learning in H2O" mentioned in the References below.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>References</strong></p>
+<ul>
+<li><a href="https://www.h2o.ai/">H2O.ai</a></li>
+<li><a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html">H2O AutoML documentation</a></li>
+<li><a href="https://github.com/h2oai/h2o-tutorials/tree/master/h2o-world-2017/automl">AutoML Tutorial</a>: R and Python notebooks</li>
+<li>Intro to AutoML + Hands-on Lab: <a href="https://www.youtube.com/watch?v=42Oo8TOl85I">1 hour video</a>, <a href="https://www.slideshare.net/0xdata/intro-to-automl-handson-lab-erin-ledell-machine-learning-scientist-h2oai">slides</a></li>
+<li>Scalable Automatic Machine Learning in H2O: <a href="https://www.youtube.com/watch?v=j6rqrEYQNdo">1 hour video</a>, <a href="https://www.slideshare.net/0xdata/scalable-automatic-machine-learning-in-h2o-89130971">slides</a></li>
+<li><a href="https://www.h2o.ai/products/h2o4gpu/">H2O for GPU</a> (H2O4GPU)</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/11/16/automl-capabilities-of-h2o-library.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
