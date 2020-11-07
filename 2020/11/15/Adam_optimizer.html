@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Adam optimizer | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Adam optimizer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-15T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-15T00:00:00-06:00","dateModified":"2020-11-15T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html","headline":"Adam optimizer","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Adam optimizer | Data Science Notebooks</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Adam optimizer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html" />
+<meta property="og:site_name" content="Data Science Notebooks" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-15T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-11-15T00:00:00-06:00","dateModified":"2020-11-15T00:00:00-06:00","description":"Notebooks and notes on data science work.","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html"},"@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/11/15/Adam_optimizer.html","headline":"Adam optimizer","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="Data Science Notebooks" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">Data Science Notebooks</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Adam optimizer</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-15T00:00:00-06:00" itemprop="datePublished">
+        Nov 15, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      13 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2020-11-15-Adam_optimizer.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2020-11-15-Adam_optimizer.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2020-11-15-Adam_optimizer.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-15-Adam_optimizer.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>credit: code from <a href="https://github.com/enochkan/building-from-scratch/blob/main/adam-optimizer-from-scratch.ipynb">https://github.com/enochkan/building-from-scratch/blob/main/adam-optimizer-from-scratch.ipynb</a>
+<a href="https://arxiv.org/abs/1412.6980">https://arxiv.org/abs/1412.6980</a></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">AdamOptim</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mf">0.999</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_dw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_dw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_db</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_db</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+        <span class="c1">## dw, db are from current minibatch</span>
+        <span class="c1">## momentum beta 1</span>
+        <span class="c1"># *** weights *** #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_dw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m_dw</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="p">)</span><span class="o">*</span><span class="n">dw</span>
+        <span class="c1"># *** biases *** #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">m_db</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="p">)</span><span class="o">*</span><span class="n">db</span>
+
+        <span class="c1">## rms beta 2</span>
+        <span class="c1"># *** weights *** #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_dw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v_dw</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">dw</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># *** biases *** #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v_db</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+
+        <span class="c1">## bias correction</span>
+        <span class="n">m_dw_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_dw</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="o">**</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">m_db_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_db</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="o">**</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">v_dw_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_dw</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="o">**</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">v_db_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_db</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="o">**</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1">## update weights and biases</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="n">m_dw_corr</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_dw_corr</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="n">m_db_corr</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_db_corr</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## define loss functions and gradient descent. We don&#39;t really use the loss function here.</span>
+<span class="k">def</span> <span class="nf">loss_function</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">m</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span>
+<span class="c1">## take derivative</span>
+<span class="k">def</span> <span class="nf">grad_function</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span>
+<span class="k">def</span> <span class="nf">check_convergence</span><span class="p">(</span><span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">w0</span> <span class="o">==</span> <span class="n">w1</span><span class="p">)</span>
+<span class="c1">## initialize weights and biases, and our optimizer</span>
+<span class="n">w_0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">b_0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">adam</span> <span class="o">=</span> <span class="n">AdamOptim</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">while</span> <span class="ow">not</span> <span class="n">converged</span><span class="p">:</span>
+    <span class="n">dw</span> <span class="o">=</span> <span class="n">grad_function</span><span class="p">(</span><span class="n">w_0</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">grad_function</span><span class="p">(</span><span class="n">b_0</span><span class="p">)</span>
+    <span class="n">w_0_old</span> <span class="o">=</span> <span class="n">w_0</span>
+    <span class="n">w_0</span><span class="p">,</span> <span class="n">b_0</span> <span class="o">=</span> <span class="n">adam</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="n">w_0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b_0</span><span class="p">,</span> <span class="n">dw</span><span class="o">=</span><span class="n">dw</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">check_convergence</span><span class="p">(</span><span class="n">w_0</span><span class="p">,</span> <span class="n">w_0_old</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;converged after &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; iterations&#39;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;iteration &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: weight=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">w_0</span><span class="p">))</span>
+        <span class="n">t</span><span class="o">+=</span><span class="mi">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>iteration 1: weight=0.009999999950000001
+iteration 2: weight=0.01999725400385255
+iteration 3: weight=0.029989900621600046
+iteration 4: weight=0.039976060276935343
+iteration 5: weight=0.049953839711732076
+iteration 6: weight=0.05992133621693422
+iteration 7: weight=0.06987664190678831
+iteration 8: weight=0.07981784795404925
+iteration 9: weight=0.08974304875491491
+iteration 10: weight=0.0996503459940126
+iteration 11: weight=0.10953785258172263
+iteration 12: weight=0.11940369643843479
+iteration 13: weight=0.12924602410293135
+iteration 14: weight=0.13906300414491304
+iteration 15: weight=0.14885283036466956
+iteration 16: weight=0.15861372476597732
+iteration 17: weight=0.1683439402914239
+iteration 18: weight=0.17804176331244895
+iteration 19: weight=0.1877055158694015
+iteration 20: weight=0.19733355765979776
+iteration 21: weight=0.2069242877756729
+iteration 22: weight=0.21647614619342795
+iteration 23: weight=0.22598761502184558
+iteration 24: weight=0.23545721951596985
+iteration 25: weight=0.24488352886630008
+iteration 26: weight=0.25426515677423506
+iteration 27: weight=0.26360076182591813
+iteration 28: weight=0.2728890476775851
+iteration 29: weight=0.2821287630662142
+iteration 30: weight=0.2913187016597368
+iteration 31: weight=0.3004577017613055
+iteration 32: weight=0.30954464588215314
+iteration 33: weight=0.3185784601974346
+iteration 34: weight=0.32755811389914286
+iteration 35: weight=0.3364826184597571
+iteration 36: weight=0.3453510268197323
+iteration 37: weight=0.3541624325113025
+iteration 38: weight=0.36291596873035775
+iteration 39: weight=0.3716108073673929
+iteration 40: weight=0.38024615800772815
+iteration 41: weight=0.3888212669103811
+iteration 42: weight=0.3973354159741451
+iteration 43: weight=0.405787921698609
+iteration 44: weight=0.4141781341470465
+iteration 45: weight=0.42250543591732403
+iteration 46: weight=0.4307692411262221
+iteration 47: weight=0.4389689944118521
+iteration 48: weight=0.44710416995817326
+iteration 49: weight=0.455174270544982
+iteration 50: weight=0.4631788266261575
+iteration 51: weight=0.47111739543840325
+iteration 52: weight=0.47898956014222716
+iteration 53: weight=0.4867949289964492
+iteration 54: weight=0.4945331345671171
+iteration 55: weight=0.502203832971342
+iteration 56: weight=0.5098067031562412
+iteration 57: weight=0.5173414462128868
+iteration 58: weight=0.5248077847249037
+iteration 59: weight=0.5322054621511477
+iteration 60: weight=0.5395342422417011
+iteration 61: weight=0.5467939084862693
+iteration 62: weight=0.5539842635939275
+iteration 63: weight=0.5611051290030595
+iteration 64: weight=0.568156344420244
+iteration 65: weight=0.5751377673867769
+iteration 66: weight=0.5820492728714711
+iteration 67: weight=0.5888907528883383
+iteration 68: weight=0.5956621161377404
+iteration 69: weight=0.6023632876695909
+iteration 70: weight=0.6089942085671857
+iteration 71: weight=0.615554835650261
+iteration 72: weight=0.6220451411958915
+iteration 73: weight=0.6284651126758695
+iteration 74: weight=0.6348147525092407
+iteration 75: weight=0.641094077828706
+iteration 76: weight=0.6473031202596423
+iteration 77: weight=0.653441925710538
+iteration 78: weight=0.6595105541736849
+iteration 79: weight=0.6655090795350186
+iteration 80: weight=0.6714375893920466
+iteration 81: weight=0.6772961848788547
+iteration 82: weight=0.6830849804972335
+iteration 83: weight=0.6888041039530174
+iteration 84: weight=0.6944536959967778
+iteration 85: weight=0.7000339102680659
+iteration 86: weight=0.7055449131424467
+iteration 87: weight=0.7109868835806149
+iteration 88: weight=0.7163600129789347
+iteration 89: weight=0.7216645050207873
+iteration 90: weight=0.7269005755281592
+iteration 91: weight=0.7320684523129467
+iteration 92: weight=0.7371683750274948
+iteration 93: weight=0.7422005950139324
+iteration 94: weight=0.7471653751519031
+iteration 95: weight=0.7520629897043302
+iteration 96: weight=0.7568937241608946
+iteration 97: weight=0.7616578750789351
+iteration 98: weight=0.7663557499215196
+iteration 99: weight=0.7709876668924653
+iteration 100: weight=0.7755539547681211
+iteration 101: weight=0.7800549527257501
+iteration 102: weight=0.7844910101683854
+iteration 103: weight=0.7888624865460541
+iteration 104: weight=0.7931697511732935
+iteration 105: weight=0.7974131830429079
+iteration 106: weight=0.8015931706359366
+iteration 107: weight=0.8057101117278274
+iteration 108: weight=0.8097644131908287
+iteration 109: weight=0.8137564907926365
+iteration 110: weight=0.8176867689913462
+iteration 111: weight=0.8215556807267823
+iteration 112: weight=0.8253636672082894
+iteration 113: weight=0.8291111776990878
+iteration 114: weight=0.8327986692973092
+iteration 115: weight=0.8364266067138391
+iteration 116: weight=0.8399954620471094
+iteration 117: weight=0.8435057145549907
+iteration 118: weight=0.846957850423946
+iteration 119: weight=0.8503523625356184
+iteration 120: weight=0.8536897502310298
+iteration 121: weight=0.8569705190725782
+iteration 122: weight=0.860195180604026
+iteration 123: weight=0.8633642521086788
+iteration 124: weight=0.8664782563659569
+iteration 125: weight=0.8695377214065675
+iteration 126: weight=0.8725431802664898
+iteration 127: weight=0.8754951707399848
+iteration 128: weight=0.8783942351318468
+iteration 129: weight=0.8812409200091125
+iteration 130: weight=0.8840357759524461
+iteration 131: weight=0.8867793573074179
+iteration 132: weight=0.8894722219358927
+iteration 133: weight=0.8921149309677457
+iteration 134: weight=0.8947080485531188
+iteration 135: weight=0.8972521416154303
+iteration 136: weight=0.8997477796053487
+iteration 137: weight=0.9021955342559357
+iteration 138: weight=0.9045959793391636
+iteration 139: weight=0.9069496904240053
+iteration 140: weight=0.9092572446362935
+iteration 141: weight=0.9115192204205393
+iteration 142: weight=0.9137361973038962
+iteration 143: weight=0.9159087556624508
+iteration 144: weight=0.918037476490016
+iteration 145: weight=0.9201229411695963
+iteration 146: weight=0.9221657312476885
+iteration 147: weight=0.9241664282115778
+iteration 148: weight=0.9261256132697787
+iteration 149: weight=0.9280438671357686
+iteration 150: weight=0.9299217698151505
+iteration 151: weight=0.9317599003963796
+iteration 152: weight=0.933558836845177
+iteration 153: weight=0.9353191558027519
+iteration 154: weight=0.9370414323879417
+iteration 155: weight=0.938726240003377
+iteration 156: weight=0.9403741501457696
+iteration 157: weight=0.9419857322204138
+iteration 158: weight=0.9435615533599866
+iteration 159: weight=0.9451021782477242
+iteration 160: weight=0.946608168945046
+iteration 161: weight=0.9480800847236891
+iteration 162: weight=0.9495184819024132
+iteration 163: weight=0.950923913688324
+iteration 164: weight=0.9522969300228624
+iteration 165: weight=0.9536380774324956
+iteration 166: weight=0.9549478988841421
+iteration 167: weight=0.9562269336453583
+iteration 168: weight=0.9574757171493036
+iteration 169: weight=0.9586947808645
+iteration 170: weight=0.9598846521693933
+iteration 171: weight=0.9610458542317184
+iteration 172: weight=0.9621789058926664
+iteration 173: weight=0.9632843215558446
+iteration 174: weight=0.9643626110810171
+iteration 175: weight=0.9654142796826064
+iteration 176: weight=0.9664398278329352
+iteration 177: weight=0.9674397511701782
+iteration 178: weight=0.9684145404109944
+iteration 179: weight=0.9693646812678026
+iteration 180: weight=0.9702906543706602
+iteration 181: weight=0.9711929351937009
+iteration 182: weight=0.9720719939860842
+iteration 183: weight=0.9729282957074055
+iteration 184: weight=0.9737622999675106
+iteration 185: weight=0.9745744609706605
+iteration 186: weight=0.9753652274639815
+iteration 187: weight=0.9761350426901402
+iteration 188: weight=0.9768843443441767
+iteration 189: weight=0.9776135645344266
+iteration 190: weight=0.9783231297474617
+iteration 191: weight=0.9790134608169765
+iteration 192: weight=0.9796849728965454
+iteration 193: weight=0.9803380754361745
+iteration 194: weight=0.9809731721625682
+iteration 195: weight=0.9815906610630333
+iteration 196: weight=0.9821909343729368
+iteration 197: weight=0.9827743785666372
+iteration 198: weight=0.9833413743518047
+iteration 199: weight=0.9838922966670466
+iteration 200: weight=0.984427514682753
+iteration 201: weight=0.9849473918050764
+iteration 202: weight=0.98545228568296
+iteration 203: weight=0.985942548218127
+iteration 204: weight=0.9864185255779455
+iteration 205: weight=0.9868805582110803
+iteration 206: weight=0.9873289808658458
+iteration 207: weight=0.9877641226111719
+iteration 208: weight=0.9881863068600975
+iteration 209: weight=0.988595851395703
+iteration 210: weight=0.9889930683993977
+iteration 211: weight=0.9893782644814731
+iteration 212: weight=0.9897517407138409
+iteration 213: weight=0.9901137926648667
+iteration 214: weight=0.9904647104362185
+iteration 215: weight=0.9908047787016447
+iteration 216: weight=0.9911342767475994
+iteration 217: weight=0.9914534785156336
+iteration 218: weight=0.9917626526464719
+iteration 219: weight=0.9920620625256936
+iteration 220: weight=0.9923519663309407
+iteration 221: weight=0.9926326170805743
+iteration 222: weight=0.9929042626837034
+iteration 223: weight=0.9931671459915103
+iteration 224: weight=0.9934215048497993
+iteration 225: weight=0.993667572152694
+iteration 226: weight=0.993905575897414
+iteration 227: weight=0.9941357392400594
+iteration 228: weight=0.9943582805523336
+iteration 229: weight=0.9945734134791384
+iteration 230: weight=0.9947813469969744
+iteration 231: weight=0.9949822854730818
+iteration 232: weight=0.9951764287252586
+iteration 233: weight=0.995363972082295
+iteration 234: weight=0.9955451064449625
+iteration 235: weight=0.9957200183474998
+iteration 236: weight=0.9958888900195372
+iteration 237: weight=0.9960518994484044
+iteration 238: weight=0.9962092204417675
+iteration 239: weight=0.9963610226905409
+iteration 240: weight=0.9965074718320245
+iteration 241: weight=0.9966487295132145
+iteration 242: weight=0.9967849534542412
+iteration 243: weight=0.9969162975118857
+iteration 244: weight=0.99704291174313
+iteration 245: weight=0.9971649424686971
+iteration 246: weight=0.9972825323365392
+iteration 247: weight=0.9973958203852304
+iteration 248: weight=0.9975049421072285
+iteration 249: weight=0.9976100295119631
+iteration 250: weight=0.9977112111887169
+iteration 251: weight=0.997808612369263
+iteration 252: weight=0.9979023549902253
+iteration 253: weight=0.997992557755128
+iteration 254: weight=0.9980793361961048
+iteration 255: weight=0.9981628027352366
+iteration 256: weight=0.9982430667454899
+iteration 257: weight=0.9983202346112277
+iteration 258: weight=0.9983944097882684
+iteration 259: weight=0.9984656928634669
+iteration 260: weight=0.998534181613794
+iteration 261: weight=0.9985999710648938
+iteration 262: weight=0.9986631535490955
+iteration 263: weight=0.9987238187628614
+iteration 264: weight=0.9987820538236523
+iteration 265: weight=0.9988379433261909
+iteration 266: weight=0.9988915693981099
+iteration 267: weight=0.9989430117549652
+iteration 268: weight=0.9989923477546039
+iteration 269: weight=0.9990396524508698
+iteration 270: weight=0.9990849986466379
+iteration 271: weight=0.9991284569461627
+iteration 272: weight=0.9991700958067327
+iteration 273: weight=0.9992099815896199
+iteration 274: weight=0.9992481786103167
+iteration 275: weight=0.9992847491880505
+iteration 276: weight=0.9993197536945726
+iteration 277: weight=0.9993532506022106
+iteration 278: weight=0.9993852965311832
+iteration 279: weight=0.999415946296171
+iteration 280: weight=0.9994452529521384
+iteration 281: weight=0.9994732678394059
+iteration 282: weight=0.999500040627969
+iteration 283: weight=0.9995256193610621
+iteration 284: weight=0.9995500504979664
+iteration 285: weight=0.9995733789560621
+iteration 286: weight=0.9995956481521241
+iteration 287: weight=0.9996169000428623
+iteration 288: weight=0.9996371751647086
+iteration 289: weight=0.9996565126728514
+iteration 290: weight=0.9996749503795203
+iteration 291: weight=0.9996925247915246
+iteration 292: weight=0.9997092711470486
+iteration 293: weight=0.9997252234517061
+iteration 294: weight=0.9997404145138615
+iteration 295: weight=0.9997548759792192
+iteration 296: weight=0.9997686383646873
+iteration 297: weight=0.9997817310915225
+iteration 298: weight=0.9997941825177595
+iteration 299: weight=0.9998060199699335
+iteration 300: weight=0.9998172697740993
+iteration 301: weight=0.9998279572861581
+iteration 302: weight=0.9998381069214939
+iteration 303: weight=0.9998477421839309
+iteration 304: weight=0.9998568856940179
+iteration 305: weight=0.9998655592166464
+iteration 306: weight=0.9998737836880133
+iteration 307: weight=0.9998815792419323
+iteration 308: weight=0.9998889652355071
+iteration 309: weight=0.9998959602741706
+iteration 310: weight=0.9999025822361022
+iteration 311: weight=0.9999088482960293
+iteration 312: weight=0.9999147749484246
+iteration 313: weight=0.999920378030106
+iteration 314: weight=0.9999256727422497
+iteration 315: weight=0.9999306736718255
+iteration 316: weight=0.9999353948124632
+iteration 317: weight=0.9999398495847598
+iteration 318: weight=0.9999440508560381
+iteration 319: weight=0.9999480109595638
+iteration 320: weight=0.9999517417132329
+iteration 321: weight=0.9999552544377384
+iteration 322: weight=0.9999585599742249
+iteration 323: weight=0.9999616687014424
+iteration 324: weight=0.9999645905524075
+iteration 325: weight=0.999967335030582
+iteration 326: weight=0.9999699112255794
+iteration 327: weight=0.9999723278284075
+iteration 328: weight=0.9999745931462574
+iteration 329: weight=0.9999767151168482
+iteration 330: weight=0.9999787013223368
+iteration 331: weight=0.9999805590028027
+iteration 332: weight=0.9999822950693158
+iteration 333: weight=0.9999839161165983
+iteration 334: weight=0.9999854284352881
+iteration 335: weight=0.9999868380238144
+iteration 336: weight=0.9999881505998927
+iteration 337: weight=0.9999893716116505
+iteration 338: weight=0.9999905062483903
+iteration 339: weight=0.9999915594509997
+iteration 340: weight=0.9999925359220176
+iteration 341: weight=0.9999934401353642
+iteration 342: weight=0.9999942763457434
+iteration 343: weight=0.9999950485977274
+iteration 344: weight=0.9999957607345287
+iteration 345: weight=0.999996416406471
+iteration 346: weight=0.9999970190791647
+iteration 347: weight=0.9999975720413955
+iteration 348: weight=0.9999980784127344
+iteration 349: weight=0.9999985411508757
+iteration 350: weight=0.9999989630587119
+iteration 351: weight=0.9999993467911512
+iteration 352: weight=0.9999996948616862
+iteration 353: weight=1.0000000096487203
+iteration 354: weight=1.0000002934016596
+iteration 355: weight=1.0000005482467753
+iteration 356: weight=1.0000007761928456
+iteration 357: weight=1.0000009791365825
+iteration 358: weight=1.0000011588678495
+iteration 359: weight=1.0000013170746784
+iteration 360: weight=1.0000014553480892
+iteration 361: weight=1.0000015751867204
+iteration 362: weight=1.0000016780012766
+iteration 363: weight=1.0000017651187962
+iteration 364: weight=1.0000018377867486
+iteration 365: weight=1.0000018971769635
+iteration 366: weight=1.0000019443894
+iteration 367: weight=1.0000019804557585
+iteration 368: weight=1.0000020063429436
+iteration 369: weight=1.0000020229563793
+iteration 370: weight=1.0000020311431854
+iteration 371: weight=1.0000020316952167
+iteration 372: weight=1.0000020253519715
+iteration 373: weight=1.0000020128033733
+iteration 374: weight=1.0000019946924315
+iteration 375: weight=1.0000019716177821
+iteration 376: weight=1.0000019441361176
+iteration 377: weight=1.0000019127645048
+iteration 378: weight=1.000001877982599
+iteration 379: weight=1.0000018402347561
+iteration 380: weight=1.0000017999320474
+iteration 381: weight=1.000001757454179
+iteration 382: weight=1.0000017131513226
+iteration 383: weight=1.0000016673458578
+iteration 384: weight=1.000001620334032
+iteration 385: weight=1.0000015723875386
+iteration 386: weight=1.0000015237550193
+iteration 387: weight=1.0000014746634915
+iteration 388: weight=1.0000014253197047
+iteration 389: weight=1.0000013759114286
+iteration 390: weight=1.0000013266086762
+iteration 391: weight=1.0000012775648637
+iteration 392: weight=1.0000012289179103
+iteration 393: weight=1.0000011807912805
+iteration 394: weight=1.0000011332949712
+iteration 395: weight=1.000001086526446
+iteration 396: weight=1.000001040571519
+iteration 397: weight=1.0000009955051905
+iteration 398: weight=1.0000009513924366
+iteration 399: weight=1.0000009082889536
+iteration 400: weight=1.0000008662418622
+iteration 401: weight=1.0000008252903696
+iteration 402: weight=1.0000007854663946
+iteration 403: weight=1.0000007467951555
+iteration 404: weight=1.000000709295723
+iteration 405: weight=1.0000006729815407
+iteration 406: weight=1.0000006378609128
+iteration 407: weight=1.0000006039374625
+iteration 408: weight=1.0000005712105615
+iteration 409: weight=1.0000005396757328
+iteration 410: weight=1.0000005093250262
+iteration 411: weight=1.0000004801473712
+iteration 412: weight=1.0000004521289048
+iteration 413: weight=1.0000004252532784
+iteration 414: weight=1.0000003995019433
+iteration 415: weight=1.000000374854416
+iteration 416: weight=1.0000003512885252
+iteration 417: weight=1.000000328780641
+iteration 418: weight=1.0000003073058867
+iteration 419: weight=1.0000002868383355
+iteration 420: weight=1.0000002673511916
+iteration 421: weight=1.000000248816957
+iteration 422: weight=1.000000231207586
+iteration 423: weight=1.0000002144946256
+iteration 424: weight=1.0000001986493454
+iteration 425: weight=1.0000001836428556
+iteration 426: weight=1.0000001694462146
+iteration 427: weight=1.0000001560305274
+iteration 428: weight=1.0000001433670334
+iteration 429: weight=1.0000001314271876
+iteration 430: weight=1.0000001201827318
+iteration 431: weight=1.0000001096057591
+iteration 432: weight=1.000000099668772
+iteration 433: weight=1.000000090344732
+iteration 434: weight=1.000000081607105
+iteration 435: weight=1.0000000734299008
+iteration 436: weight=1.0000000657877053
+iteration 437: weight=1.0000000586557103
+iteration 438: weight=1.0000000520097374
+iteration 439: weight=1.0000000458262583
+iteration 440: weight=1.0000000400824103
+iteration 441: weight=1.000000034756009
+iteration 442: weight=1.0000000298255576
+iteration 443: weight=1.0000000252702532
+iteration 444: weight=1.0000000210699902
+iteration 445: weight=1.0000000172053607
+iteration 446: weight=1.0000000136576537
+iteration 447: weight=1.0000000104088511
+iteration 448: weight=1.000000007441623
+iteration 449: weight=1.0000000047393205
+iteration 450: weight=1.0000000022859659
+iteration 451: weight=1.0000000000662446
+iteration 452: weight=0.9999999980654928
+iteration 453: weight=0.9999999962696857
+iteration 454: weight=0.9999999946654243
+iteration 455: weight=0.9999999932399216
+iteration 456: weight=0.9999999919809877
+iteration 457: weight=0.9999999908770149
+iteration 458: weight=0.999999989916962
+iteration 459: weight=0.9999999890903385
+iteration 460: weight=0.9999999883871876
+iteration 461: weight=0.9999999877980703
+iteration 462: weight=0.9999999873140484
+iteration 463: weight=0.9999999869266677
+iteration 464: weight=0.9999999866279413
+iteration 465: weight=0.9999999864103329
+iteration 466: weight=0.9999999862667397
+iteration 467: weight=0.9999999861904763
+iteration 468: weight=0.9999999861752578
+iteration 469: weight=0.9999999862151839
+iteration 470: weight=0.9999999863047233
+iteration 471: weight=0.9999999864386969
+iteration 472: weight=0.9999999866122634
+iteration 473: weight=0.9999999868209039
+iteration 474: weight=0.9999999870604066
+iteration 475: weight=0.9999999873268534
+iteration 476: weight=0.9999999876166047
+iteration 477: weight=0.9999999879262865
+iteration 478: weight=0.9999999882527769
+iteration 479: weight=0.999999988593193
+iteration 480: weight=0.9999999889448784
+iteration 481: weight=0.9999999893053915
+iteration 482: weight=0.9999999896724932
+iteration 483: weight=0.9999999900441359
+iteration 484: weight=0.9999999904184526
+iteration 485: weight=0.9999999907937464
+iteration 486: weight=0.9999999911684802
+iteration 487: weight=0.9999999915412672
+iteration 488: weight=0.9999999919108616
+iteration 489: weight=0.9999999922761498
+iteration 490: weight=0.9999999926361411
+iteration 491: weight=0.9999999929899606
+iteration 492: weight=0.9999999933368405
+iteration 493: weight=0.9999999936761135
+iteration 494: weight=0.9999999940072047
+iteration 495: weight=0.9999999943296259
+iteration 496: weight=0.9999999946429682
+iteration 497: weight=0.9999999949468965
+iteration 498: weight=0.9999999952411437
+iteration 499: weight=0.999999995525505
+iteration 500: weight=0.9999999957998327
+iteration 501: weight=0.9999999960640314
+iteration 502: weight=0.9999999963180537
+iteration 503: weight=0.999999996561895
+iteration 504: weight=0.9999999967955902
+iteration 505: weight=0.9999999970192094
+iteration 506: weight=0.9999999972328546
+iteration 507: weight=0.9999999974366559
+iteration 508: weight=0.9999999976307687
+iteration 509: weight=0.9999999978153705
+iteration 510: weight=0.9999999979906583
+iteration 511: weight=0.9999999981568457
+iteration 512: weight=0.999999998314161
+iteration 513: weight=0.9999999984628445
+iteration 514: weight=0.9999999986031467
+iteration 515: weight=0.9999999987353264
+iteration 516: weight=0.9999999988596489
+iteration 517: weight=0.9999999989763841
+iteration 518: weight=0.9999999990858058
+iteration 519: weight=0.9999999991881894
+iteration 520: weight=0.9999999992838112
+iteration 521: weight=0.9999999993729474
+iteration 522: weight=0.9999999994558726
+iteration 523: weight=0.9999999995328595
+iteration 524: weight=0.9999999996041773
+iteration 525: weight=0.9999999996700918
+iteration 526: weight=0.9999999997308642
+iteration 527: weight=0.9999999997867507
+iteration 528: weight=0.999999999838002
+iteration 529: weight=0.9999999998848629
+iteration 530: weight=0.9999999999275718
+iteration 531: weight=0.9999999999663607
+iteration 532: weight=1.0000000000014544
+iteration 533: weight=1.0000000000330709
+iteration 534: weight=1.0000000000614209
+iteration 535: weight=1.0000000000867075
+iteration 536: weight=1.0000000001091267
+iteration 537: weight=1.000000000128867
+iteration 538: weight=1.0000000001461087
+iteration 539: weight=1.0000000001610256
+iteration 540: weight=1.0000000001737834
+iteration 541: weight=1.0000000001845408
+iteration 542: weight=1.0000000001934488
+iteration 543: weight=1.0000000002006517
+iteration 544: weight=1.0000000002062863
+iteration 545: weight=1.0000000002104827
+iteration 546: weight=1.0000000002133642
+iteration 547: weight=1.0000000002150473
+iteration 548: weight=1.0000000002156426
+iteration 549: weight=1.0000000002152538
+iteration 550: weight=1.0000000002139788
+iteration 551: weight=1.0000000002119098
+iteration 552: weight=1.0000000002091332
+iteration 553: weight=1.0000000002057299
+iteration 554: weight=1.0000000002017755
+iteration 555: weight=1.0000000001973406
+iteration 556: weight=1.000000000192491
+iteration 557: weight=1.0000000001872875
+iteration 558: weight=1.0000000001817868
+iteration 559: weight=1.0000000001760414
+iteration 560: weight=1.0000000001700993
+iteration 561: weight=1.000000000164005
+iteration 562: weight=1.0000000001577996
+iteration 563: weight=1.00000000015152
+iteration 564: weight=1.0000000001452
+iteration 565: weight=1.000000000138871
+iteration 566: weight=1.0000000001325604
+iteration 567: weight=1.0000000001262936
+iteration 568: weight=1.000000000120093
+iteration 569: weight=1.0000000001139786
+iteration 570: weight=1.000000000107968
+iteration 571: weight=1.0000000001020772
+iteration 572: weight=1.0000000000963196
+iteration 573: weight=1.0000000000907068
+iteration 574: weight=1.000000000085249
+iteration 575: weight=1.0000000000799543
+iteration 576: weight=1.0000000000748297
+iteration 577: weight=1.0000000000698805
+iteration 578: weight=1.0000000000651112
+iteration 579: weight=1.0000000000605247
+iteration 580: weight=1.0000000000561229
+iteration 581: weight=1.000000000051907
+iteration 582: weight=1.000000000047877
+iteration 583: weight=1.0000000000440323
+iteration 584: weight=1.0000000000403715
+iteration 585: weight=1.0000000000368925
+iteration 586: weight=1.0000000000335927
+iteration 587: weight=1.000000000030469
+iteration 588: weight=1.0000000000275175
+iteration 589: weight=1.0000000000247347
+iteration 590: weight=1.000000000022116
+iteration 591: weight=1.0000000000196572
+iteration 592: weight=1.000000000017353
+iteration 593: weight=1.0000000000151987
+iteration 594: weight=1.000000000013189
+iteration 595: weight=1.0000000000113185
+iteration 596: weight=1.000000000009582
+iteration 597: weight=1.0000000000079738
+iteration 598: weight=1.0000000000064888
+iteration 599: weight=1.0000000000051212
+iteration 600: weight=1.0000000000038658
+iteration 601: weight=1.0000000000027172
+iteration 602: weight=1.0000000000016698
+iteration 603: weight=1.0000000000007185
+iteration 604: weight=0.9999999999998581
+iteration 605: weight=0.9999999999990835
+iteration 606: weight=0.9999999999983898
+iteration 607: weight=0.9999999999977722
+iteration 608: weight=0.999999999997226
+iteration 609: weight=0.9999999999967466
+iteration 610: weight=0.9999999999963296
+iteration 611: weight=0.9999999999959708
+iteration 612: weight=0.999999999995666
+iteration 613: weight=0.9999999999954114
+iteration 614: weight=0.9999999999952033
+iteration 615: weight=0.999999999995038
+iteration 616: weight=0.999999999994912
+iteration 617: weight=0.999999999994822
+iteration 618: weight=0.999999999994765
+iteration 619: weight=0.9999999999947379
+iteration 620: weight=0.999999999994738
+iteration 621: weight=0.9999999999947625
+iteration 622: weight=0.999999999994809
+iteration 623: weight=0.9999999999948752
+iteration 624: weight=0.9999999999949587
+iteration 625: weight=0.9999999999950575
+iteration 626: weight=0.9999999999951696
+iteration 627: weight=0.9999999999952933
+iteration 628: weight=0.9999999999954268
+iteration 629: weight=0.9999999999955685
+iteration 630: weight=0.9999999999957171
+iteration 631: weight=0.9999999999958711
+iteration 632: weight=0.9999999999960292
+iteration 633: weight=0.9999999999961904
+iteration 634: weight=0.9999999999963536
+iteration 635: weight=0.9999999999965179
+iteration 636: weight=0.9999999999966823
+iteration 637: weight=0.9999999999968462
+iteration 638: weight=0.9999999999970088
+iteration 639: weight=0.9999999999971695
+iteration 640: weight=0.9999999999973277
+iteration 641: weight=0.9999999999974829
+iteration 642: weight=0.9999999999976348
+iteration 643: weight=0.9999999999977829
+iteration 644: weight=0.9999999999979269
+iteration 645: weight=0.9999999999980665
+iteration 646: weight=0.9999999999982015
+iteration 647: weight=0.9999999999983318
+iteration 648: weight=0.9999999999984571
+iteration 649: weight=0.9999999999985775
+iteration 650: weight=0.9999999999986927
+iteration 651: weight=0.9999999999988028
+iteration 652: weight=0.9999999999989078
+iteration 653: weight=0.9999999999990076
+iteration 654: weight=0.9999999999991023
+iteration 655: weight=0.999999999999192
+iteration 656: weight=0.9999999999992767
+iteration 657: weight=0.9999999999993565
+iteration 658: weight=0.9999999999994316
+iteration 659: weight=0.9999999999995018
+iteration 660: weight=0.9999999999995676
+iteration 661: weight=0.999999999999629
+iteration 662: weight=0.999999999999686
+iteration 663: weight=0.999999999999739
+iteration 664: weight=0.999999999999788
+iteration 665: weight=0.9999999999998331
+iteration 666: weight=0.9999999999998747
+iteration 667: weight=0.9999999999999126
+iteration 668: weight=0.9999999999999473
+iteration 669: weight=0.9999999999999788
+iteration 670: weight=1.0000000000000073
+iteration 671: weight=1.0000000000000329
+iteration 672: weight=1.0000000000000557
+iteration 673: weight=1.0000000000000762
+iteration 674: weight=1.0000000000000941
+iteration 675: weight=1.00000000000011
+iteration 676: weight=1.0000000000001235
+iteration 677: weight=1.0000000000001352
+iteration 678: weight=1.000000000000145
+iteration 679: weight=1.0000000000001532
+iteration 680: weight=1.0000000000001599
+iteration 681: weight=1.000000000000165
+iteration 682: weight=1.0000000000001688
+iteration 683: weight=1.0000000000001714
+iteration 684: weight=1.000000000000173
+iteration 685: weight=1.0000000000001734
+iteration 686: weight=1.000000000000173
+iteration 687: weight=1.0000000000001716
+iteration 688: weight=1.0000000000001696
+iteration 689: weight=1.000000000000167
+iteration 690: weight=1.0000000000001639
+iteration 691: weight=1.00000000000016
+iteration 692: weight=1.0000000000001559
+iteration 693: weight=1.0000000000001514
+iteration 694: weight=1.0000000000001465
+iteration 695: weight=1.0000000000001414
+iteration 696: weight=1.0000000000001361
+iteration 697: weight=1.0000000000001306
+iteration 698: weight=1.000000000000125
+iteration 699: weight=1.0000000000001195
+iteration 700: weight=1.0000000000001137
+iteration 701: weight=1.000000000000108
+iteration 702: weight=1.0000000000001021
+iteration 703: weight=1.0000000000000966
+iteration 704: weight=1.000000000000091
+iteration 705: weight=1.0000000000000855
+iteration 706: weight=1.0000000000000802
+iteration 707: weight=1.0000000000000748
+iteration 708: weight=1.0000000000000697
+iteration 709: weight=1.0000000000000648
+iteration 710: weight=1.00000000000006
+iteration 711: weight=1.0000000000000553
+iteration 712: weight=1.0000000000000508
+iteration 713: weight=1.0000000000000466
+iteration 714: weight=1.0000000000000426
+iteration 715: weight=1.0000000000000386
+iteration 716: weight=1.0000000000000349
+iteration 717: weight=1.0000000000000313
+iteration 718: weight=1.000000000000028
+iteration 719: weight=1.0000000000000249
+iteration 720: weight=1.000000000000022
+iteration 721: weight=1.000000000000019
+iteration 722: weight=1.0000000000000164
+iteration 723: weight=1.000000000000014
+iteration 724: weight=1.0000000000000118
+iteration 725: weight=1.0000000000000098
+iteration 726: weight=1.0000000000000078
+iteration 727: weight=1.000000000000006
+iteration 728: weight=1.0000000000000044
+iteration 729: weight=1.0000000000000029
+iteration 730: weight=1.0000000000000016
+iteration 731: weight=1.0000000000000002
+iteration 732: weight=0.9999999999999991
+iteration 733: weight=0.9999999999999981
+iteration 734: weight=0.9999999999999972
+iteration 735: weight=0.9999999999999964
+iteration 736: weight=0.9999999999999958
+iteration 737: weight=0.9999999999999952
+iteration 738: weight=0.9999999999999947
+iteration 739: weight=0.9999999999999942
+iteration 740: weight=0.9999999999999939
+iteration 741: weight=0.9999999999999936
+iteration 742: weight=0.9999999999999933
+iteration 743: weight=0.9999999999999931
+iteration 744: weight=0.999999999999993
+iteration 745: weight=0.9999999999999929
+converged after 746 iterations
+/opt/venv/lib/python3.7/site-packages/ipykernel_launcher.py:31: RuntimeWarning: invalid value encountered in sqrt
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2020/11/15/Adam_optimizer.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
