@@ -108,27 +108,12 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h2"><a href="#fiscal-transfer-data">Fiscal Transfer Data</a></li>
-<li class="toc-entry toc-h2"><a href="#stroke-data">Stroke Data</a></li>
-<li class="toc-entry toc-h2"><a href="#diabetes">Diabetes</a></li>
-</ul><h2 id="fiscal-transfer-data">
-<a class="anchor" href="#fiscal-transfer-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fiscal Transfer Data</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
+</ul><div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
 url = 'https://raw.githubusercontent.com/davidrkearney/Kearney_Data_Science/master/_notebooks/df_panel_fix.csv'
 df = pd.read_csv(url, error_bad_lines=False)
 df
 </code></pre></div></div>
 
-<h2 id="stroke-data">
-<a class="anchor" href="#stroke-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stroke Data</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
-url = 'https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/strokes_training.csv'
-df = pd.read_csv(url, error_bad_lines=False)
-df
-</code></pre></div></div>
-
-<h2 id="diabetes">
-<a class="anchor" href="#diabetes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Diabetes</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import pandas as pd
 url = 'https://raw.githubusercontent.com/davidrkearney/colab-notebooks/main/datasets/diabetes.csv'
 df = pd.read_csv(url, error_bad_lines=False)
