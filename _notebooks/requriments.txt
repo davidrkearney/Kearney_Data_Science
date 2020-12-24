@@ -1,0 +1,24 @@
+backcall==0.2.0
+certifi==2020.12.5
+decorator==4.4.2
+ipykernel @ file:///tmp/build/80754af9/ipykernel_1607452791405/work/dist/ipykernel-5.3.4-py3-none-any.whl
+ipython @ file:///tmp/build/80754af9/ipython_1607355356713/work
+ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
+jedi @ file:///tmp/build/80754af9/jedi_1606932531272/work
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1601311786391/work
+jupyter-core @ file:///tmp/build/80754af9/jupyter_core_1606834024211/work
+numpy==1.19.4
+pandas==1.1.5
+parso==0.7.0
+pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
+pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
+prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1602688806899/work
+ptyprocess @ file:///tmp/build/80754af9/ptyprocess_1605560620615/work/dist/ptyprocess-0.6.0-py2.py3-none-any.whl
+Pygments @ file:///tmp/build/80754af9/pygments_1607368905949/work
+python-dateutil==2.8.1
+pytz==2020.4
+pyzmq==20.0.0
+six @ file:///tmp/build/80754af9/six_1605205306277/work
+tornado @ file:///tmp/build/80754af9/tornado_1606942317143/work
+traitlets @ file:///tmp/build/80754af9/traitlets_1602787416690/work
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
