@@ -1127,19 +1127,6 @@
   
 
   
-      ,"page2": {
-          "title": "On contacting me",
-          "content": "The best way to reach me is via email. .",
-          "url": "https://davidrkearney.github.io/Kearney_Data_Science/contact/",
-          "relUrl": "/contact/",
-          "date": ""
-      }
-      
-  
-
-  
-
-  
 
   
   
@@ -1170,7 +1157,7 @@
   
 
   
-      ,"page17": {
+      ,"page15": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://davidrkearney.github.io/Kearney_Data_Science/robots.txt",
