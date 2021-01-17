@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Advice on contacting me 
+title: Advice on contacting me
 permalink: /contact/
 ---
 
