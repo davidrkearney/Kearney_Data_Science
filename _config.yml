@@ -7,6 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: David Raymond Kearney
+email: david@davidraymondkearney.com
 description: Notebooks and notes on data science work.
 github_username: davidrkearney
 # you can comment the below line out if your repo name is not different than your baseurl
