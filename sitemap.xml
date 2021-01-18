@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/family%20letters/2020/01/01/viet-letter-1.html</loc>
+<lastmod>2020-01-01T00:00:00-06:00</lastmod>
+</url>
+<url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/2020/06/07/kwargs-decorators.html</loc>
 <lastmod>2020-06-07T00:00:00-05:00</lastmod>
 </url>
@@ -385,24 +389,24 @@
 <lastmod>2021-01-15T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/16/_EDA_Health_Data.html</loc>
-<lastmod>2021-01-16T00:00:00-06:00</lastmod>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/17/_EDA_Health_Data.html</loc>
+<lastmod>2021-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/16/_Healthcare_Modeling-Copy1.html</loc>
-<lastmod>2021-01-16T00:00:00-06:00</lastmod>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/17/_Healthcare_Modeling-Copy1.html</loc>
+<lastmod>2021-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/16/_Healthcare_Modeling_app-Copy1.html</loc>
-<lastmod>2021-01-16T00:00:00-06:00</lastmod>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/17/_Healthcare_Modeling_app-Copy1.html</loc>
+<lastmod>2021-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/16/_Healthcare_Modeling_app.html</loc>
-<lastmod>2021-01-16T00:00:00-06:00</lastmod>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/17/_Healthcare_Modeling_app.html</loc>
+<lastmod>2021-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
-<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/16/_Xgboost_Health_data.html</loc>
-<lastmod>2021-01-16T00:00:00-06:00</lastmod>
+<loc>https://davidrkearney.github.io/Kearney_Data_Science/2021/01/17/_Xgboost_Health_data.html</loc>
+<lastmod>2021-01-17T00:00:00-06:00</lastmod>
 </url>
 <url>
 <loc>https://davidrkearney.github.io/Kearney_Data_Science/about/</loc>
