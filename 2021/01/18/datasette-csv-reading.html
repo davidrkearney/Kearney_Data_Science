@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Reading CSV from Datasette SQL Database | David Raymond Kearney</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Reading CSV from Datasette SQL Database" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html" />
+<meta property="og:site_name" content="David Raymond Kearney" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-18T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2021-01-18T00:00:00-06:00","dateModified":"2021-01-18T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Reading CSV from Datasette SQL Database | David Raymond Kearney</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Reading CSV from Datasette SQL Database" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notebooks and notes on data science work." />
+<meta property="og:description" content="Notebooks and notes on data science work." />
+<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html" />
+<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html" />
+<meta property="og:site_name" content="David Raymond Kearney" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-18T00:00:00-06:00" />
+<script type="application/ld+json">
+{"datePublished":"2021-01-18T00:00:00-06:00","dateModified":"2021-01-18T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Kearney_Data_Science/">David Raymond Kearney</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Kearney_Data_Science/about/">About Me</a><a class="page-link" href="/Kearney_Data_Science/search/">Search</a><a class="page-link" href="/Kearney_Data_Science/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Reading CSV from Datasette SQL Database</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-01-18T00:00:00-06:00" itemprop="datePublished">
+        Jan 18, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/davidrkearney/Kearney_Data_Science/tree/master/_notebooks/2021-01-18-datasette-csv-reading.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/davidrkearney/Kearney_Data_Science/master?filepath=_notebooks%2F2021-01-18-datasette-csv-reading.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/davidrkearney/Kearney_Data_Science/blob/master/_notebooks/2021-01-18-datasette-csv-reading.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Kearney_Data_Science/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-01-18-datasette-csv-reading.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://stocks-snp-500.herokuapp.com/stocks/stocks_table.csv?_size=max&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rowid</th>
+      <th>Date</th>
+      <th>MSFT_stock</th>
+      <th>ZOOM_stock</th>
+      <th>SNOW_stock</th>
+      <th>FXAIX_stock</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2020-01-02 00:00:00.000000</td>
+      <td>158.779999</td>
+      <td>68.800003</td>
+      <td>NaN</td>
+      <td>112.980003</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>2020-01-03 00:00:00.000000</td>
+      <td>158.320007</td>
+      <td>67.620003</td>
+      <td>NaN</td>
+      <td>112.190002</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>2020-01-06 00:00:00.000000</td>
+      <td>157.080002</td>
+      <td>66.629997</td>
+      <td>NaN</td>
+      <td>112.589996</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>2020-01-07 00:00:00.000000</td>
+      <td>159.320007</td>
+      <td>70.290001</td>
+      <td>NaN</td>
+      <td>112.290001</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>2020-01-08 00:00:00.000000</td>
+      <td>158.929993</td>
+      <td>71.809998</td>
+      <td>NaN</td>
+      <td>112.839996</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>258</th>
+      <td>259</td>
+      <td>2021-01-11 00:00:00.000000</td>
+      <td>218.470001</td>
+      <td>344.980011</td>
+      <td>295.000000</td>
+      <td>131.750000</td>
+    </tr>
+    <tr>
+      <th>259</th>
+      <td>260</td>
+      <td>2021-01-12 00:00:00.000000</td>
+      <td>216.500000</td>
+      <td>333.200012</td>
+      <td>298.000000</td>
+      <td>131.800003</td>
+    </tr>
+    <tr>
+      <th>260</th>
+      <td>261</td>
+      <td>2021-01-13 00:00:00.000000</td>
+      <td>214.020004</td>
+      <td>360.000000</td>
+      <td>295.000000</td>
+      <td>132.100006</td>
+    </tr>
+    <tr>
+      <th>261</th>
+      <td>262</td>
+      <td>2021-01-14 00:00:00.000000</td>
+      <td>215.910004</td>
+      <td>371.000000</td>
+      <td>305.000000</td>
+      <td>131.619995</td>
+    </tr>
+    <tr>
+      <th>262</th>
+      <td>263</td>
+      <td>2021-01-15 00:00:00.000000</td>
+      <td>213.520004</td>
+      <td>397.709991</td>
+      <td>306.820007</td>
+      <td>130.679993</td>
+    </tr>
+  </tbody>
+</table>
+<p>263 rows × 6 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;FXAIX_stock&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;AxesSubplot:&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+" />
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Kearney_Data_Science/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Kearney_Data_Science/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notebooks and notes on data science work.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/davidrkearney" title="davidrkearney"><svg class="svg-icon grey"><use xlink:href="/Kearney_Data_Science/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
