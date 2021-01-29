@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-01-18T00:00:00-06:00" />
 <script type="application/ld+json">
-{"datePublished":"2021-01-18T00:00:00-06:00","dateModified":"2021-01-18T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
+{"dateModified":"2021-01-18T00:00:00-06:00","datePublished":"2021-01-18T00:00:00-06:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Reading CSV from Datasette SQL Database | David Raymond Kearney</title>
@@ -30,7 +30,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-01-18T00:00:00-06:00" />
 <script type="application/ld+json">
-{"datePublished":"2021-01-18T00:00:00-06:00","dateModified":"2021-01-18T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"description":"Notebooks and notes on data science work.","@type":"BlogPosting","url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
+{"dateModified":"2021-01-18T00:00:00-06:00","datePublished":"2021-01-18T00:00:00-06:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2021/01/18/datasette-csv-reading.html","headline":"Reading CSV from Datasette SQL Database","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -91,7 +91,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -166,10 +166,99 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://stocks-snp-500.herokuapp.com/stocks/stocks_table.csv?_size=max&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://stocks-snp-500.herokuapp.com/stocks/index_stock.csv?_size=max&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">HTTPError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-5-20c2aac4a670&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>df <span class="ansi-blue-fg">=</span> pd<span class="ansi-blue-fg">.</span>read_csv<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;https://stocks-snp-500.herokuapp.com/stocks/index_stock.csv?_size=max&#39;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/Timeseries/timeseries/lib/python3.8/site-packages/pandas/io/parsers.py</span> in <span class="ansi-cyan-fg">read_csv</span><span class="ansi-blue-fg">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, dialect, error_bad_lines, warn_bad_lines, delim_whitespace, low_memory, memory_map, float_precision)</span>
+<span class="ansi-green-intense-fg ansi-bold">    686</span>     )
+<span class="ansi-green-intense-fg ansi-bold">    687</span> 
+<span class="ansi-green-fg">--&gt; 688</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> _read<span class="ansi-blue-fg">(</span>filepath_or_buffer<span class="ansi-blue-fg">,</span> kwds<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    689</span> 
+<span class="ansi-green-intense-fg ansi-bold">    690</span> 
+
+<span class="ansi-green-fg">~/dev/Timeseries/timeseries/lib/python3.8/site-packages/pandas/io/parsers.py</span> in <span class="ansi-cyan-fg">_read</span><span class="ansi-blue-fg">(filepath_or_buffer, kwds)</span>
+<span class="ansi-green-intense-fg ansi-bold">    434</span>     <span class="ansi-red-fg"># though mypy handling of conditional imports is difficult.</span>
+<span class="ansi-green-intense-fg ansi-bold">    435</span>     <span class="ansi-red-fg"># See https://github.com/python/mypy/issues/1297</span>
+<span class="ansi-green-fg">--&gt; 436</span><span class="ansi-red-fg">     fp_or_buf, _, compression, should_close = get_filepath_or_buffer(
+</span><span class="ansi-green-intense-fg ansi-bold">    437</span>         filepath_or_buffer<span class="ansi-blue-fg">,</span> encoding<span class="ansi-blue-fg">,</span> compression
+<span class="ansi-green-intense-fg ansi-bold">    438</span>     )
+
+<span class="ansi-green-fg">~/dev/Timeseries/timeseries/lib/python3.8/site-packages/pandas/io/common.py</span> in <span class="ansi-cyan-fg">get_filepath_or_buffer</span><span class="ansi-blue-fg">(filepath_or_buffer, encoding, compression, mode, storage_options)</span>
+<span class="ansi-green-intense-fg ansi-bold">    181</span>     <span class="ansi-green-fg">if</span> isinstance<span class="ansi-blue-fg">(</span>filepath_or_buffer<span class="ansi-blue-fg">,</span> str<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> is_url<span class="ansi-blue-fg">(</span>filepath_or_buffer<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    182</span>         <span class="ansi-red-fg"># TODO: fsspec can also handle HTTP via requests, but leaving this unchanged</span>
+<span class="ansi-green-fg">--&gt; 183</span><span class="ansi-red-fg">         </span>req <span class="ansi-blue-fg">=</span> urlopen<span class="ansi-blue-fg">(</span>filepath_or_buffer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    184</span>         content_encoding <span class="ansi-blue-fg">=</span> req<span class="ansi-blue-fg">.</span>headers<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Content-Encoding&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    185</span>         <span class="ansi-green-fg">if</span> content_encoding <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#34;gzip&#34;</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/dev/Timeseries/timeseries/lib/python3.8/site-packages/pandas/io/common.py</span> in <span class="ansi-cyan-fg">urlopen</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    135</span>     <span class="ansi-green-fg">import</span> urllib<span class="ansi-blue-fg">.</span>request
+<span class="ansi-green-intense-fg ansi-bold">    136</span> 
+<span class="ansi-green-fg">--&gt; 137</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> urllib<span class="ansi-blue-fg">.</span>request<span class="ansi-blue-fg">.</span>urlopen<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    138</span> 
+<span class="ansi-green-intense-fg ansi-bold">    139</span> 
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">urlopen</span><span class="ansi-blue-fg">(url, data, timeout, cafile, capath, cadefault, context)</span>
+<span class="ansi-green-intense-fg ansi-bold">    220</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    221</span>         opener <span class="ansi-blue-fg">=</span> _opener
+<span class="ansi-green-fg">--&gt; 222</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> opener<span class="ansi-blue-fg">.</span>open<span class="ansi-blue-fg">(</span>url<span class="ansi-blue-fg">,</span> data<span class="ansi-blue-fg">,</span> timeout<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    223</span> 
+<span class="ansi-green-intense-fg ansi-bold">    224</span> <span class="ansi-green-fg">def</span> install_opener<span class="ansi-blue-fg">(</span>opener<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">open</span><span class="ansi-blue-fg">(self, fullurl, data, timeout)</span>
+<span class="ansi-green-intense-fg ansi-bold">    529</span>         <span class="ansi-green-fg">for</span> processor <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>process_response<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>protocol<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    530</span>             meth <span class="ansi-blue-fg">=</span> getattr<span class="ansi-blue-fg">(</span>processor<span class="ansi-blue-fg">,</span> meth_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 531</span><span class="ansi-red-fg">             </span>response <span class="ansi-blue-fg">=</span> meth<span class="ansi-blue-fg">(</span>req<span class="ansi-blue-fg">,</span> response<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    532</span> 
+<span class="ansi-green-intense-fg ansi-bold">    533</span>         <span class="ansi-green-fg">return</span> response
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">http_response</span><span class="ansi-blue-fg">(self, request, response)</span>
+<span class="ansi-green-intense-fg ansi-bold">    638</span>         <span class="ansi-red-fg"># request was successfully received, understood, and accepted.</span>
+<span class="ansi-green-intense-fg ansi-bold">    639</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">200</span> <span class="ansi-blue-fg">&lt;=</span> code <span class="ansi-blue-fg">&lt;</span> <span class="ansi-cyan-fg">300</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 640</span><span class="ansi-red-fg">             response = self.parent.error(
+</span><span class="ansi-green-intense-fg ansi-bold">    641</span>                 &#39;http&#39;, request, response, code, msg, hdrs)
+<span class="ansi-green-intense-fg ansi-bold">    642</span> 
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">error</span><span class="ansi-blue-fg">(self, proto, *args)</span>
+<span class="ansi-green-intense-fg ansi-bold">    567</span>         <span class="ansi-green-fg">if</span> http_err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    568</span>             args <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>dict<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;default&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;http_error_default&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> orig_args
+<span class="ansi-green-fg">--&gt; 569</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_call_chain<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    570</span> 
+<span class="ansi-green-intense-fg ansi-bold">    571</span> <span class="ansi-red-fg"># XXX probably also want an abstract factory that knows when it makes</span>
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">_call_chain</span><span class="ansi-blue-fg">(self, chain, kind, meth_name, *args)</span>
+<span class="ansi-green-intense-fg ansi-bold">    500</span>         <span class="ansi-green-fg">for</span> handler <span class="ansi-green-fg">in</span> handlers<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    501</span>             func <span class="ansi-blue-fg">=</span> getattr<span class="ansi-blue-fg">(</span>handler<span class="ansi-blue-fg">,</span> meth_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 502</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> func<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    503</span>             <span class="ansi-green-fg">if</span> result <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    504</span>                 <span class="ansi-green-fg">return</span> result
+
+<span class="ansi-green-fg">/usr/lib/python3.8/urllib/request.py</span> in <span class="ansi-cyan-fg">http_error_default</span><span class="ansi-blue-fg">(self, req, fp, code, msg, hdrs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    647</span> <span class="ansi-green-fg">class</span> HTTPDefaultErrorHandler<span class="ansi-blue-fg">(</span>BaseHandler<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    648</span>     <span class="ansi-green-fg">def</span> http_error_default<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> req<span class="ansi-blue-fg">,</span> fp<span class="ansi-blue-fg">,</span> code<span class="ansi-blue-fg">,</span> msg<span class="ansi-blue-fg">,</span> hdrs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 649</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> HTTPError<span class="ansi-blue-fg">(</span>req<span class="ansi-blue-fg">.</span>full_url<span class="ansi-blue-fg">,</span> code<span class="ansi-blue-fg">,</span> msg<span class="ansi-blue-fg">,</span> hdrs<span class="ansi-blue-fg">,</span> fp<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    650</span> 
+<span class="ansi-green-intense-fg ansi-bold">    651</span> <span class="ansi-green-fg">class</span> HTTPRedirectHandler<span class="ansi-blue-fg">(</span>BaseHandler<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">HTTPError</span>: HTTP Error 404: Not Found</pre>
+</div>
+</div>
+
 </div>
 </div>
 
