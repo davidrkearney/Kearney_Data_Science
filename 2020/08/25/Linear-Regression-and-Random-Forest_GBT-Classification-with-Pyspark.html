@@ -9,32 +9,32 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Notebooks and notes on data science work." />
 <meta property="og:description" content="Notebooks and notes on data science work." />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
+<link rel="canonical" href="https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
+<meta property="og:url" content="https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
 <meta property="og:site_name" content="David Raymond Kearney" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-25T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-08-25T00:00:00-05:00","datePublished":"2020-08-25T00:00:00-05:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html","headline":"Regression and Classification with Pyspark ML","@context":"https://schema.org"}</script>
+{"dateModified":"2020-08-25T00:00:00-05:00","datePublished":"2020-08-25T00:00:00-05:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html"},"url":"https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html","headline":"Regression and Classification with Pyspark ML","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<link rel="stylesheet" href="/Kearney_Data_Science/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://davidraymondkearney.com/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" /><link rel="shortcut icon" type="image/x-icon" href="/Kearney_Data_Science/images/favicon.svg"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Regression and Classification with Pyspark ML | David Raymond Kearney</title>
 <meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="Regression and Classification with Pyspark ML" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Notebooks and notes on data science work." />
 <meta property="og:description" content="Notebooks and notes on data science work." />
-<link rel="canonical" href="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
-<meta property="og:url" content="https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
+<link rel="canonical" href="https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
+<meta property="og:url" content="https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html" />
 <meta property="og:site_name" content="David Raymond Kearney" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-25T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-08-25T00:00:00-05:00","datePublished":"2020-08-25T00:00:00-05:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html"},"url":"https://davidrkearney.github.io/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html","headline":"Regression and Classification with Pyspark ML","@context":"https://schema.org"}</script>
+{"dateModified":"2020-08-25T00:00:00-05:00","datePublished":"2020-08-25T00:00:00-05:00","description":"Notebooks and notes on data science work.","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html"},"url":"https://davidraymondkearney.com/Kearney_Data_Science/2020/08/25/Linear-Regression-and-Random-Forest_GBT-Classification-with-Pyspark.html","headline":"Regression and Classification with Pyspark ML","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
-<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidrkearney.github.io/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://davidraymondkearney.com/Kearney_Data_Science/feed.xml" title="David Raymond Kearney" />
 
 <script>
 function wrap_img(fn) {
