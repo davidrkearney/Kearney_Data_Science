@@ -1,0 +1,4 @@
+artifact_location: file:///home/david/git-repos/Kearney_Data_Science/_notebooks/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: fiscal

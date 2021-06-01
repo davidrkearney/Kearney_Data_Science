@@ -1,0 +1,15 @@
+artifact_uri: file:///home/david/git-repos/Kearney_Data_Science/_notebooks/mlruns/1/3d09bf1e58c94eb1b6019c57f260cabc/artifacts
+end_time: 1622509248762
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 3d09bf1e58c94eb1b6019c57f260cabc
+run_uuid: 3d09bf1e58c94eb1b6019c57f260cabc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1622509248726
+status: 3
+tags: []
+user_id: david
